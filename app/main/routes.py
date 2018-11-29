@@ -5,8 +5,8 @@ from werkzeug.urls import url_parse
 from flask_babel import _, get_locale
 from app import db
 from app.main import bp
-from app.main.forms import EditProfileForm, PostForm, LocationForm, NetworkForm, CustomerForm, Post_r_Form, statistic_work_form
-from app.models import User, Post, Location, Customer, Network, Post_r
+from app.main.forms import EditProfileForm, PostForm, LocationForm, NetworkForm, CustomerForm, Post_r_Form, Statistic_Work_Form
+from app.models import User, Post, Location, Customer, Network, Post_r, Statistic
 from guess_language import guess_language
 from werkzeug.utils import secure_filename
 import os
@@ -182,18 +182,34 @@ def customers():
 def customersu(customername):
 
    
-    
+    available_statistics=Statistic.query.all()
+    groups_list=[(i.subcategory,i.subcategory) for i in available_statistics]
+
+    available_statistics2=Statistic.query.all()
+    groups_list2=[(i.adinfo,i.adinfo) for i in available_statistics2]
+
     form=NetworkForm()
-    form_work=statistic_work_form()
+    form_work=Statistic_Work_Form()
+
+    form_work.subcategory.choices=groups_list
+    form_work.adinfo.choices=groups_list2
     
     
 
     cust = Customer.query.filter_by(name=customername).first_or_404()
     lists=cust.locations
     if form_work.validate_on_submit():
-        s=form_work.category.data
-        print(s)
-        expy(s)
+        statistic_db=Statistic(category=form_work.category.data,technology=form_work.technology.data, time=form_work.time.data,customer=form_work.customer.data, contract=form_work.contract.data,
+            hardware=form_work.hardware.data, user=form_work.user.data, subcategory=form_work.subcategory.data, adinfo=form_work.adinfo.data)
+        db.session.add(statistic_db)
+        db.session.commit()
+        user=User.query.filter_by(username=current_user.username).first()
+        user.statistics.append(statistic_db)
+        db.session.commit()
+
+        #s=form_work.category.data
+        #print(s)
+        #expy(s)
         return redirect(url_for('main.customersu',customername=customername))
     
      
@@ -318,48 +334,6 @@ def router():
     return render_template('router.html', title=_('Router') ,posts_r=posts_r.items, next_url=next_url,
                            prev_url=prev_url, form=form)
 
-
-
-
-@bp.route('/scraper',methods=['GET', 'POST'])
-@login_required
-
-
-
-def scraper():
-    contract=request.args.get('contract')
-    login_url=os.environ.get('login_url_env')+contract
-    login_url2=os.environ.get('login_url2_env')+contract
-    username= os.environ.get('username_env')
-    password = os.environ.get('username_env')
-
-    req = requests.get(login_url2, auth=(username, password))
-    final_page = bs.BeautifulSoup(req.content, 'lxml')
-    #out=final_page.find_all('a', attrs={'class':'DetailInternalLink'})
-    out_match= final_page.find('td', class_='DetailName', text='Match-Code').findNext('td', class_="DetailText")
-    out_project= final_page.find('td', class_='DetailName', text='Projekt').findNext('td', class_="DetailText")
-    out_project=out_project.findNext('a', class_='DetailInternalLink')
-    out_technology= final_page.find('td', class_='pl-4').findNext('div', class_="h2 mt-1")
-    out_hardware=final_page.select_one("a[href*=hardware_show]")
-    out_customer=final_page.select_one("a[href*=client_show]")
-
-    if out_hardware is not None:
-        out_hardware=out_hardware.contents[0]
-        out_hardware=out_hardware.strip()
-    out_match=out_match.contents[0]
-    if out_project is not None:
-        out_project=out_project.contents[0]
-    out_technology=out_technology.contents[0]
-    out_technology=out_technology.strip()
-    out_technology= " ".join(out_technology.split())
-    out_customer=out_customer.contents[0]
-    print(out_hardware)
-    print(out_match)
-    print(out_project)
-    print(out_technology)
-    print(out_customer)
-        
-    return json.dumps({'match': out_match, 'project': out_project, 'technology': out_technology, 'hardware': out_hardware});
 
 @bp.route('/router_todo',methods=['GET', 'POST'])
 @login_required

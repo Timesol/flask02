@@ -76,7 +76,7 @@ class Post_r_Form(FlaskForm):
     post_r = TextAreaField(_l('Say something'), validators=[DataRequired()])
     submit = SubmitField(_l('Submit'))
 
-class statistic_work_form(FlaskForm):
+class Statistic_Work_Form(FlaskForm):
     category=SelectField('Category',
         choices=[('installation', 'Installation'), ('commissioning', 'Commissioning'), ('dismantling', 'Dismantling'),('mpls', 'MPLS'),('cia', 'CIA'),('hardware', 'Hardware'),('unlock', 'Unlock'),('disruption', 'Disruption')])
     technology=StringField(_l('Technology'))
@@ -84,6 +84,9 @@ class statistic_work_form(FlaskForm):
     customer=StringField(_l('Customer'))
     contract=StringField(_l('Contract'))
     hardware=StringField(_l('Hardware'))
+    user=StringField(_l('User'))
+    subcategory=SelectField(u'Subcategory',  validators=[InputRequired()])
+    adinfo=SelectField(u'adinfo', validators=[InputRequired()])
     submit = SubmitField(_l('Submit'))  
     
     
