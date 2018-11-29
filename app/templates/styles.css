@@ -1,0 +1,4 @@
+.tr-color-selected{
+background-color: hsla(196, 77%, 55%, 0.3) !important;
+transition: all .2s ease-in;
+}

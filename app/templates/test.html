@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block app_content %}
+<html>
+<head>
+	<script type="text/javascript">
+		function Change() {
+			var txt = parseInt(document.getElementById("txt").value)
+			alert(txt);
+			var tr = document.getElementById("tbl").getElementsByTagName("tr")
+			tr[txt].getElementsByTagName("td")[0].innerHTML = "change me"
+		}
+	</script>
+</head>
+	<body>
+		<table id="tbl">
+			<tr><td style="color:green"; >Explore</td></tr>
+			<tr><td>2</td></tr>
+			<tr><td>3</td></tr>
+		</table>
+		<input type="text" id="txt"/>
+		<input type="button" id="btn" value="Change" onclick="Change();"/>
+	</body>
+</html>
+{% endblock %}

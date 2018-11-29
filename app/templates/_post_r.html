@@ -1,0 +1,38 @@
+ <table class="table table-hover">
+        <tr>
+            <td width="70px">
+               
+                 <a href="{{ url_for('main.user', username=post_r.author_r.username) }}">
+                    <img src="{{ post_r.author_r.avatar(70) }}" />
+                </a>
+            </td>
+            <td>
+                {% set user_link %}
+                   <span class="user_popup">
+                       <a href="{{ url_for('main.user', username=post_r.author_r.username) }}">
+                           {{ post_r.author_r.username }}
+                       </a>
+                   </span>
+                {% endset %}
+                {{ _('%(username)s said %(when)s',
+                    username=user_link, when=moment(post_r.timestamp).fromNow()) }}
+                <br>
+                <span id="post{{ post_r.id }}" style="white-space: pre;">{{ post_r.body }}</span>
+                <div class="dropdown" id="dropdown{{post_r.id}}">
+                  <button class="btn btn-link dropdown-toggle" type="button" data-toggle="dropdown" id="drop_button{{post_r.id}}">Todo
+                  <span class="caret"></span></button>
+                  <ul class="dropdown-menu">
+                    <li><a href="javascript: change_color({{post_r.id}})">Hardwarekammer</a></li>
+                    <li><a href="#">Versendet</a></li>
+                    <li><a href="#">Todo</a></li>
+                  </ul>
+                </div>
+                {% if post_r.language and post_r.language != g.locale %}
+                <br><br>
+                <a href="#">{{ _('Translate') }}</a>
+                {% endif %}
+                
+                
+            </td>
+        </tr>
+</table>

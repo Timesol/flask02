@@ -1,0 +1,27 @@
+
+#ignore folders
+venv/
+__pycache__/
+logs/
+venv2/
+uploads/
+migrations/
+request-kerberus
+pymysql/
+
+
+#ignore files
+elasticsearch-2.3.1.deb
+killunicorn.sh
+.env
+env.flaskenv
+test7.txt
+
+
+
+#ignore type
+
+*.pyc
+
+
+
