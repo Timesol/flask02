@@ -14,7 +14,7 @@ from werkzeug.utils import secure_filename
 from flask import request
 from elasticsearch import Elasticsearch
 #  Variable for setting path  
-UPLOAD_FOLDER = '/home/ahoehne/flask01/uploads'
+
 
 
 
@@ -33,7 +33,6 @@ babel = Babel()
 def create_app(config_class=Config):
     app = Flask(__name__)
     app.config.from_object(config_class)
-#    app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://flask01:Katze7436!@localhost/flask01'
     app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
     db.init_app(app)
     migrate.init_app(app, db)
@@ -55,6 +54,12 @@ def create_app(config_class=Config):
 
     from app.main import bp as main_bp
     app.register_blueprint(main_bp)
+
+    from app.file import bp as file_bp
+    app.register_blueprint(file_bp)
+
+    from app.data import bp as data_bp
+    app.register_blueprint(data_bp)
 
     if not app.debug and not app.testing:
         if app.config['MAIL_SERVER']:
@@ -84,7 +89,7 @@ def create_app(config_class=Config):
         app.logger.addHandler(file_handler)
 
         app.logger.setLevel(logging.INFO)
-        app.logger.info('Microblog startup')
+        app.logger.info('Timesol startup')
 
         if app.config['LOG_TO_STDOUT']:
             stream_handler = logging.StreamHandler()

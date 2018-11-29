@@ -22,7 +22,7 @@
 
     {% for i in list %}
      <tr>
-    <td><a href="{{ url_for('main.return_files', filename=i ) }}" target="blank">{{i}}</a></td>
+    <td><a href="{{ url_for('file.return_files', filename=i ) }}" target="blank">{{i}}</a></td>
     </tr>
 {% endfor %}
 

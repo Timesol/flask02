@@ -15,28 +15,14 @@ from app.main.forms import SearchForm
 from bs4 import BeautifulSoup
 import requests
 from requests import Request, Session
-from os import listdir
-from os.path import isfile, join
-from flask import send_file
 import bs4 as bs
 import pandas as pd
-import openpyxl
-from openpyxl import load_workbook
-
-globvar=""
-
-UPLOAD_FOLDER = os.environ.get('UPLOAD_FOLDER_ENV')
-ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'xlsx','cfg'])
-ALLOWED_EXTENSIONS_PANDAS = set(['xlsx'])
-def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+from app.file.routes import expy
 
 
-def allowed_file_pandas(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS_PANDAS
-    return True   
+
+
+ 
 
 @bp.before_request
 def before_request():
@@ -205,7 +191,9 @@ def customersu(customername):
     cust = Customer.query.filter_by(name=customername).first_or_404()
     lists=cust.locations
     if form_work.validate_on_submit():
-        expy()
+        s=form_work.category.data
+        print(s)
+        expy(s)
         return redirect(url_for('main.customersu',customername=customername))
     
      
@@ -251,56 +239,6 @@ def customersu(customername):
     
 
 
-
-
-
-@bp.route('/uploads', methods=['GET', 'POST'])
-@login_required
-def uploads():
-    list=[]
-    for x in os.listdir(UPLOAD_FOLDER):
-        list.append(x)
-    print(list)
-
-        
-    
-
-    if request.method == 'POST':
-        # check if the post request has the file part
-        if 'file' not in request.files:
-            flash('No file part')
-            return redirect(request.url)
-        file = request.files['file']
-        # if user does not select file, browser also
-        # submit a empty part without filename
-        if file.filename == '':
-            flash('No selected file')
-            return redirect(request.url)
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            file.save(os.path.join(UPLOAD_FOLDER, filename))
-            flash(_('File uploaded!'))
-            if allowed_file_pandas(file.filename):
-                sendpandas(filename)
-                
-          
-
-            
-        return redirect(url_for('main.uploads',
-                            filename=filename, ))
-       
-
-    
-    return render_template('uploads.html', title=_('Uploads'), list=list)
-
-
-@bp.route('/return_files/<filename>')
-def return_files(filename):
-    try:
-        return send_file(UPLOAD_FOLDER+filename , attachment_filename=filename)
-    except Exception as e:
-        return str(e)
-    return render_template('uploads.html', title=_('Uploads'), list=list)
 
 @bp.route('/search')
 @login_required
@@ -438,46 +376,6 @@ def router_todo():
 
 
     return json.dumps({'status':'OK'});
-
-
-
-
-
-
-
-
-
-
-
-
-@bp.route('/expy',methods=['GET', 'POST'])
-@login_required
-
-
-
-
-def expy():
-
-    
-
-    srcfile = openpyxl.load_workbook(os.environ.get('EXCEL_FOLDER_ENV'),read_only=False)
-    sheetname = srcfile.get_sheet_by_name('Einrichtung')
-    
-    for cell in sheetname["B"]:
-        
-        if cell.value is None:
-            break
-        empty_row =(cell.row)
-            
-
-         
-
-    sheetname["B%d"  % empty_row]= str('Hallo Willi2')
-
-    srcfile.save(os.environ.get('EXCEL_FOLDER_ENV'))
-
-    return empty_row
-
 
 
 
