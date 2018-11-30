@@ -353,6 +353,30 @@ def router_todo():
 
 
 
+
+@bp.route('/statistics/<username>')
+@login_required
+def statistics(username):
+    user=User.query.filter_by(username=username).first_or_404()
+    stats=user.statistics
+
+
+
+    return render_template('statistics.html', user=user, stats=stats)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 @bp.route('/save',methods=['GET', 'POST'])
 @login_required
 
