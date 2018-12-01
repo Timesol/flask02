@@ -139,7 +139,7 @@ function get_id(id){
 }
 
 
-function get_data(technology, hardware){
+function get_data(technology, hardware,user,contract,customer){
 
 
 
@@ -147,10 +147,13 @@ function get_data(technology, hardware){
   
   document.getElementById('technology').value = technology;
   document.getElementById('hardware').value = hardware;
+  document.getElementById('customer').value = customer;
+  document.getElementById('user').value = user;
+  document.getElementById('contract').value = contract;
+  
   
 
-
-
+   
 
 }
 

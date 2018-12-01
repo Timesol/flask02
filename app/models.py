@@ -234,13 +234,34 @@ class Post_r(db.Model): # ,SearchableMixin needs to be added
 
 class Statistic(db.Model):
     id=db.Column(db.Integer, primary_key=True)
-    category=db.Column(db.String(140))
     technology=db.Column(db.String(140))
     time=db.Column(db.String(140))
     customer=db.Column(db.String(140))
     contract=db.Column(db.String(140))
     hardware=db.Column(db.String(140))
     user=db.Column(db.String(140))
-    subcategory=db.Column(db.String(140))
-    adinfo=db.Column(db.String(140))
     user_id_stat=db.Column(db.Integer, db.ForeignKey('user.id'))
+    category_id=db.Column(db.Integer, db.ForeignKey('category.id'))
+    subcategory_id=db.Column(db.Integer, db.ForeignKey('subcategory.id'))
+    
+
+
+
+
+class Category(db.Model):
+    id=db.Column(db.Integer, primary_key=True)
+    name= db.Column(db.String(140))
+    statistics= db.relationship('Statistic', backref='category')
+
+
+
+
+class Subcategory(db.Model):
+    id=db.Column(db.Integer, primary_key=True)
+    name= db.Column(db.String(140))
+    statistics= db.relationship('Statistic', backref='subcategory')
+
+
+
+
+

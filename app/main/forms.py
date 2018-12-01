@@ -1,7 +1,7 @@
 
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, \
-    TextAreaField, SelectField, HiddenField
+    TextAreaField, SelectField, HiddenField, IntegerField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, \
     Length, AnyOf, InputRequired
 from flask_babel import _, lazy_gettext as _l
@@ -77,16 +77,15 @@ class Post_r_Form(FlaskForm):
     submit = SubmitField(_l('Submit'))
 
 class Statistic_Work_Form(FlaskForm):
-    category=SelectField('Category',
-        choices=[('installation', 'Installation'), ('commissioning', 'Commissioning'), ('dismantling', 'Dismantling'),('mpls', 'MPLS'),('cia', 'CIA'),('hardware', 'Hardware'),('unlock', 'Unlock'),('disruption', 'Disruption')])
+    category=SelectField(u'Category', coerce=int, validators=[InputRequired()])
     technology=StringField(_l('Technology'))
-    time=StringField(_l('Time'))
+    time=IntegerField(_l('Time'))
     customer=StringField(_l('Customer'))
     contract=StringField(_l('Contract'))
     hardware=StringField(_l('Hardware'))
     user=StringField(_l('User'))
-    subcategory=SelectField(u'Subcategory',  validators=[InputRequired()])
-    adinfo=SelectField(u'adinfo', validators=[InputRequired()])
+    subcategory=SelectField(u'Subcategory', coerce=int, validators=[InputRequired()])
+    
     submit = SubmitField(_l('Submit'))  
     
     

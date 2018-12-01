@@ -94,24 +94,39 @@ def return_files(filename):
 
 
 
-def expy(sheet):
+def expy(cat,scat,hard,user,tech,cust,contr,time):
 
     
-    sheet=sheet.capitalize()
+    sheet=cat
+    print(cat)
     srcfile = openpyxl.load_workbook(os.environ.get('EXCEL_FOLDER_ENV'),read_only=False)
     sheetname = srcfile.get_sheet_by_name(sheet)
-    empty_row=1
-    for cell in sheetname["B"]:
-        
-        if cell.value is None:
-            break
-        empty_row =(cell.row)
-            
+    save("A",tech, sheetname)
+    save("B",cust, sheetname)
+    save("C",contr, sheetname)
+    save("D",hard, sheetname)
+    save("E",time, sheetname)
+    save("F",user, sheetname)
+    save("G",scat, sheetname)
 
-         
-
-    sheetname["B%d"  % empty_row]= str('Hallo Willi2')
 
     srcfile.save(os.environ.get('EXCEL_FOLDER_ENV'))
 
-    return empty_row
+    
+
+
+
+def save(l, t,sheetname):
+    
+    
+    for cell in sheetname[l]:
+        
+        if cell.value is None:
+            break
+        empty_row =(cell.row)+1
+            
+
+         
+    if t is None:
+        sheetname[l+"%d"  % empty_row]= str("/")
+    sheetname[l+"%d"  % empty_row]= str(t)

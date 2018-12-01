@@ -6,7 +6,7 @@ from flask_babel import _, get_locale
 from app import db
 from app.main import bp
 from app.main.forms import EditProfileForm, PostForm, LocationForm, NetworkForm, CustomerForm, Post_r_Form, Statistic_Work_Form
-from app.models import User, Post, Location, Customer, Network, Post_r, Statistic
+from app.models import User, Post, Location, Customer, Network, Post_r, Statistic, Category, Subcategory
 from guess_language import guess_language
 from werkzeug.utils import secure_filename
 import os
@@ -180,36 +180,55 @@ def customers():
 @login_required
 
 def customersu(customername):
+    available_categorys=Category.query.all()
+    category_list=[(i.id,i.name) for i in available_categorys]
 
+    available_subcategorys=Subcategory.query.all()
+    subcategory_list=[(i.id,i.name) for i in available_subcategorys]
    
-    available_statistics=Statistic.query.all()
-    groups_list=[(i.subcategory,i.subcategory) for i in available_statistics]
-
-    available_statistics2=Statistic.query.all()
-    groups_list2=[(i.adinfo,i.adinfo) for i in available_statistics2]
+    
 
     form=NetworkForm()
     form_work=Statistic_Work_Form()
 
-    form_work.subcategory.choices=groups_list
-    form_work.adinfo.choices=groups_list2
+    form_work.category.choices=category_list
+    form_work.subcategory.choices=subcategory_list
     
     
 
     cust = Customer.query.filter_by(name=customername).first_or_404()
     lists=cust.locations
     if form_work.validate_on_submit():
-        statistic_db=Statistic(category=form_work.category.data,technology=form_work.technology.data, time=form_work.time.data,customer=form_work.customer.data, contract=form_work.contract.data,
-            hardware=form_work.hardware.data, user=form_work.user.data, subcategory=form_work.subcategory.data, adinfo=form_work.adinfo.data)
+        statistic_db=Statistic(technology=form_work.technology.data, time=form_work.time.data,customer=form_work.customer.data, contract=form_work.contract.data,
+            hardware=form_work.hardware.data, user=form_work.user.data)
+
         db.session.add(statistic_db)
         db.session.commit()
         user=User.query.filter_by(username=current_user.username).first()
         user.statistics.append(statistic_db)
         db.session.commit()
 
-        #s=form_work.category.data
-        #print(s)
-        #expy(s)
+        category=Category.query.get(form_work.category.data)
+        subcategory=Subcategory.query.get(form_work.subcategory.data)
+
+        category.statistics.append(statistic_db)
+        subcategory.statistics.append(statistic_db)
+        db.session.commit()
+
+
+
+        cat=form_work.category.data
+        scat=form_work.subcategory.data
+        cat=Category.query.get(form_work.category.data).name
+        hard=form_work.hardware.data
+        user=form_work.user.data
+        tech=form_work.technology.data
+        cust=form_work.customer.data
+        contr=form_work.contract.data
+        time=form_work.time.data
+
+        
+        expy(cat,scat,hard,user,tech,cust,contr,time)
         return redirect(url_for('main.customersu',customername=customername))
     
      
