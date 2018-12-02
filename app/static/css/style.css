@@ -1,33 +1,10 @@
-#explore {
 
-color:green;
 
-    
+
+.navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
+    background-color: #b8cef9;
+    color: #FFC0CB;
 }
-
-
-#li_explore{
-
-
-color:green;
-
-}
-
-
-#button_1{
-
-
-background-color:green;
-
-
-}
-
-
-
-th {
-    font-weight: : normal;
-    }
-
 
 
 

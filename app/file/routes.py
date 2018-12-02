@@ -61,8 +61,8 @@ def uploads():
             filename = secure_filename(file.filename)
             file.save(os.path.join(UPLOAD_FOLDER, filename))
             flash(_('File uploaded!'))
-            if allowed_file_pandas(file.filename):
-                sendpandas(filename)
+            #if allowed_file_pandas(file.filename):
+                #sendpandas(filename)
                 
           
 
@@ -127,6 +127,9 @@ def save(l, t,sheetname):
             
 
          
-    if t is None:
+    if not t:
+        print('Object is none')
+
         sheetname[l+"%d"  % empty_row]= str("/")
+        return True
     sheetname[l+"%d"  % empty_row]= str(t)

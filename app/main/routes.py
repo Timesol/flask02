@@ -218,7 +218,7 @@ def customersu(customername):
 
 
         cat=form_work.category.data
-        scat=form_work.subcategory.data
+        scat=Subcategory.query.get(form_work.subcategory.data).name
         cat=Category.query.get(form_work.category.data).name
         hard=form_work.hardware.data
         user=form_work.user.data
