@@ -86,6 +86,10 @@ class Statistic_Work_Form(FlaskForm):
     user=StringField(_l('User'))
     subcategory=SelectField(u'Subcategory', coerce=int, validators=[InputRequired()])
     
-    submit = SubmitField(_l('Submit'))  
+    submit = SubmitField(_l('Submit'))
+
+class DeleteForm(FlaskForm):
+    id=IntegerField(_l('ID'))
+    delete = SubmitField(_l('Delete'))
     
     

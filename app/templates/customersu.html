@@ -167,14 +167,14 @@
       </div>
     </div>
   </div>
-
-
-
+<form action="" method="post" >
+  {{ form.hidden_tag() }}
+<td>{{ form_del.id(value=list.id) }}{{ wtf.form_field(form_del.delete, button_map={'delete':'danger'}) }}</td> 
+</form>
  </tr>           
 
 
   
-
 
 
 

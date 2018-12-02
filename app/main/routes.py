@@ -5,7 +5,7 @@ from werkzeug.urls import url_parse
 from flask_babel import _, get_locale
 from app import db
 from app.main import bp
-from app.main.forms import EditProfileForm, PostForm, LocationForm, NetworkForm, CustomerForm, Post_r_Form, Statistic_Work_Form
+from app.main.forms import EditProfileForm, PostForm, LocationForm, NetworkForm, CustomerForm, Post_r_Form, Statistic_Work_Form, DeleteForm
 from app.models import User, Post, Location, Customer, Network, Post_r, Statistic, Category, Subcategory
 from guess_language import guess_language
 from werkzeug.utils import secure_filename
@@ -190,6 +190,14 @@ def customersu(customername):
 
     form=NetworkForm()
     form_work=Statistic_Work_Form()
+    form_del=DeleteForm()
+
+
+    if form_del.validate_on_submit():
+        print('form validate')
+        id=form_del.id.data
+        delete(Location,id)
+        return redirect(url_for('main.customersu',customername=customername))
 
     form_work.category.choices=category_list
     form_work.subcategory.choices=subcategory_list
@@ -267,10 +275,14 @@ def customersu(customername):
             
 
         return json.dumps({'id': a });   
+
+
+
+
         
 
 
-    return render_template('customersu.html', cust=cust, lists=lists, form=form, form_work=form_work)
+    return render_template('customersu.html', cust=cust, lists=lists, form=form, form_work=form_work, form_del=form_del)
     
 
 
@@ -422,6 +434,18 @@ def save():
 
 
     return json.dumps({'status':'OK'});
+
+
+
+
+
+def delete(table, id):
+    print('It works')
+
+    object = table.query.get(id)
+    db.session.delete(object)
+    db.session.commit()
+    flash('Object deleted')
 
 
 
