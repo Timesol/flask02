@@ -15,6 +15,7 @@ contract=document.getElementById('contract').value
                                 document.getElementById('project').value =json['project'];
                                 document.getElementById('technology').value =json['technology'];
                                 document.getElementById('hardware').value =json['hardware'];
+                                document.getElementById('customer').value =json['customer'];
                         },
                         error: function(error){
                                 console.log(error);
