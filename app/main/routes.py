@@ -194,10 +194,12 @@ def customersu(customername):
 
 
     if form_del.validate_on_submit():
-        print('form validate')
-        id=form_del.id.data
-        delete(Location,id)
-        return redirect(url_for('main.customersu',customername=customername))
+        
+        if form_del.delete.data:  
+            print('form validate')
+            id=form_del.id_del.data
+            delete(Location,id)
+            return redirect(url_for('main.customersu',customername=customername))
 
     form_work.category.choices=category_list
     form_work.subcategory.choices=subcategory_list
@@ -447,7 +449,28 @@ def delete(table, id):
     db.session.commit()
     flash('Object deleted')
 
+@bp.route('/query',methods=['GET', 'POST'])
+@login_required
 
+def query():
+    no=request.args.get('no')
+
+    location=Location.query.get(no)
+    locr=location.residence
+    locp=location.project
+    locpm=location.projectmanager  
+    loch=location.hardware
+    loct=location.technology
+    locc=location.contract
+    return json.dumps({'locr':locr,'locp':locp,'locpm':locpm,'loch':loch,'loct':loct,'locc':locc,
+
+
+
+
+
+
+
+        });
 
 
 

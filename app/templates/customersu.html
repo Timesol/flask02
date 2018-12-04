@@ -14,6 +14,7 @@
           <span class="glyphicon glyphicon glyphicon-left"></span> Back
         </a>
         
+      <div id="container_customersu_main" class="container_customersu_main" > 
 <table class="table table-striped table-responsive">
   <thead>
     <tr>
@@ -168,9 +169,12 @@
     </div>
   </div>
 <form action="" method="post" >
-  {{ form.hidden_tag() }}
-<td>{{ form_del.id(value=list.id) }}{{ wtf.form_field(form_del.delete, button_map={'delete':'danger'}) }}</td> 
+  {{ form_del.hidden_tag() }}
+<td>{{ form_del.id_del(value=list.id, type="hidden") }}
+{{ wtf.form_field(form_del.delete, class=" btn btn-danger btn-sm") }}</td> 
 </form>
+
+<td><button onclick="hide_content( {{list.id }} )">Test</button></td>
  </tr>           
 
 
@@ -201,6 +205,14 @@
 
 
 
+
+</div>  <!--End Div of container container_customersu-->
+
+
+<div class="container" id="container_customersu_sub" style="display:none"> 
+           {% include '_customersu.html' %}
+
+        </div>
 
 
 {% endblock %}

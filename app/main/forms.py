@@ -89,7 +89,7 @@ class Statistic_Work_Form(FlaskForm):
     submit = SubmitField(_l('Submit'))
 
 class DeleteForm(FlaskForm):
-    id=IntegerField(_l('ID'))
+    id_del=IntegerField(_l('ID_DEL'), validators=[DataRequired()])
     delete = SubmitField(_l('Delete'))
     
     

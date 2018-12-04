@@ -240,6 +240,40 @@ function router_todo(no){
 }
 
 
+function hide_content(no){
+document.getElementById('container_customersu_main').style["display"]="none";
+document.getElementById('container_customersu_sub').style["display"]="block";
+    $.ajax({
+      url: '/query',
+                        type: "get",
+      data: {  no : no},
+    
+      success: function(response){
+        console.log(response);
+        var json = JSON.parse(response);
+                                document.getElementById('residence_sub').innerHTML =json['locr'];
+                                document.getElementById('project_sub').innerHTML =json['locp'];
+                                document.getElementById('projectmanager_sub').innerHTML =json['locpm'];
+                                document.getElementById('technology_sub').innerHTML =json['loct'];
+                                document.getElementById('hardware_sub').innerHTML =json['loch'];
+                                document.getElementById('contract_sub').innerHTML =json['locc'];
+      },
+      error: function(error){
+        console.log(error);
+      }
+    });
+  
+
+
+
+
+
+
+
+}
+
+
+
 
 
 
