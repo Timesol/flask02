@@ -8,7 +8,7 @@ contract=document.getElementById('contract').value
                         type: "get",
                         data: {  contract : contract},
                 
-                        success: function(response){
+                        success: function(ip,response){
                                 console.log(response);
                                 var json = JSON.parse(response);
                                 document.getElementById('residence').value =json['match'];

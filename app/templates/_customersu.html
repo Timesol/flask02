@@ -66,6 +66,14 @@
 <div class="panel-heading">Network 1</div>
 <div class="panel-body">
 
+  {% for list in lists %}
+  
+   {{lists|selectattr("id","equalto", 6)|first}}
+  
+  
+  {% endfor %}
+
+
 
 </div>
 </div>

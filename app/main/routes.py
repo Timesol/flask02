@@ -458,14 +458,14 @@ def query():
     location=Location.query.get(no)
     d={}
     for i in location.networks:
-        netid='w'+ str(i.id)
+        netid='network'+ str(i.id)
+        netid=str(netid)
+        id= 'id'+ str(i.id)
         print(netid)
-        d={
-        i.id: i.name,
-        netid : i.network
-
-
-        }
+        a={
+        id : i.name,
+        netid : i.network}
+        d.update(a)
 
     
     print (d)
@@ -476,8 +476,11 @@ def query():
     loch=location.hardware
     loct=location.technology
     locc=location.contract
-    return json.dumps(d)
-    return json.dumps({'locr':locr,'locp':locp,'locpm':locpm,'loch':loch,'loct':loct,'locc':locc, });
+    d1={'locr':locr,'locp':locp,'locpm':locpm,'loch':loch,'loct':loct,'locc':locc, }
+    d2=d
+    d1.update(d2)
+    
+    return json.dumps(d1);
 
 
 
