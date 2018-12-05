@@ -1,11 +1,10 @@
-
-/*
-
-.navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
-    background-color: #b8cef9;
-    color: #FFC0CB;
+.flex-container {
+  display: flex;
+  background-color: DodgerBlue;
 }
 
+#delete_button  label{
+ visibility: hidden;
+ display:none;
 
-*\
-
+}

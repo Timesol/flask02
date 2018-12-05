@@ -43,8 +43,8 @@ function edit_row(no){
  document.getElementById("edit_button"+no);
  document.getElementById("save_button"+no);
 
- $("#edit_button"+no).addClass('disabled')
- $("#save_button"+no).removeClass('disabled')
+document.getElementById("edit_button"+no).style["display"]="none";
+ document.getElementById("save_button"+no).style["display"]="inline-block";
 	
  var residence=document.getElementById("residence_row"+no);
  var project=document.getElementById("project_row"+no);
@@ -92,8 +92,8 @@ function save_row(no)
  document.getElementById("save_button"+no)
 
 
-$("#edit_button"+no).removeClass('disabled')
-$("#save_button"+no).addClass('disabled')
+document.getElementById("edit_button"+no).style["display"]="inline-block";
+ document.getElementById("save_button"+no).style["display"]="none";
 
 
 
@@ -243,6 +243,8 @@ function router_todo(no){
 function hide_content(no){
 document.getElementById('container_customersu_main').style["display"]="none";
 document.getElementById('container_customersu_sub').style["display"]="block";
+document.getElementById('button_back').style["display"]="none";
+
     $.ajax({
       url: '/query',
                         type: "get",
@@ -273,7 +275,18 @@ document.getElementById('container_customersu_sub').style["display"]="block";
 }
 
 
+function content_back(){
 
+
+document.getElementById('container_customersu_main').style["display"]="block";
+document.getElementById('container_customersu_sub').style["display"]="none";
+document.getElementById('button_back').style["display"]="inline";
+
+
+
+
+
+}
 
 
 

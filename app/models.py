@@ -203,7 +203,7 @@ class Location(db.Model):
     project= db.Column(db.String(140))
     projectmanager=db.Column(db.String(140))
     hardware=db.Column(db.String(140))
-    networks= db.relationship('Network', backref='location')
+    networks= db.relationship('Network', backref='location' , lazy='dynamic')
     contract= db.Column(db.String(140))
     
      

@@ -456,21 +456,28 @@ def query():
     no=request.args.get('no')
 
     location=Location.query.get(no)
+    d={}
+    for i in location.networks:
+        netid='w'+ str(i.id)
+        print(netid)
+        d={
+        i.id: i.name,
+        netid : i.network
+
+
+        }
+
+    
+    print (d)
+
     locr=location.residence
     locp=location.project
     locpm=location.projectmanager  
     loch=location.hardware
     loct=location.technology
     locc=location.contract
-    return json.dumps({'locr':locr,'locp':locp,'locpm':locpm,'loch':loch,'loct':loct,'locc':locc,
-
-
-
-
-
-
-
-        });
+    return json.dumps(d)
+    return json.dumps({'locr':locr,'locp':locp,'locpm':locpm,'loch':loch,'loct':loct,'locc':locc, });
 
 
 
