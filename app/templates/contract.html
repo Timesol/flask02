@@ -1,0 +1,114 @@
+
+{% extends "base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block app_content %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}"> 
+<div id="flex-container-button" class="flex-container"> 
+<div class="flex-item">
+  </div>
+</div>  <!-- End Div Flex Container -->
+
+
+
+<div class="panel panel-info">
+
+<div class="panel-heading">Info</div>
+<div class="panel-body">
+<a class="btn btn-success" href="{{ url_for('main.customersu',customername=contract.customer.name) }}">Back</a>
+
+
+
+
+
+<table class="table  table-responsive">
+  <thead>
+    <tr>
+      
+      <th scope="col">Residence</th>
+      <th scope="col"> Project</th>
+      <th scope="col">Projectmanager</th>
+      <th scope="col">Hardware</th>
+      <th scope="col">Technology</th>
+      <th scope="col">Contract</th>
+      <th scope="col"></th>
+      <th scope="col"></th>
+      <th scope="col"></th>
+      <th scope="col"></th>
+      <th scope="col"></th>
+      <th scope="col"></th>
+
+    </tr>
+  </thead>
+
+  <tbody>
+  	<tr>
+  		
+      <td id="residence_contract">{{contract.residence}}</td>
+      <td id="project_contract">{{contract.project}}</td>
+      <td id="projectmanager_contract">{{contract.projectmanager}}</td>
+      <td id="hardware_contract">{{contract.hardware}}</td>
+      <td id="technology_contract">{{contract.technology}}</td>
+      <td id="contract_contract">{{contract.contract}}</td>
+
+
+
+
+
+
+
+
+
+
+  	</tr>
+
+</tbody>
+</table>
+
+</div> <!--End Div Panel Body-->
+</div> 
+<p></p>
+
+
+<div class="flex-container">
+  {% for i in contract.networks %}
+  <div class="flex-item">
+  
+
+<div   class="panel panel-warning">
+<div class="panel-heading">{{i.name}}</div>
+<div class="panel-body">
+  <table class="table  table-responsive">
+<tr><td>{{i.network}}</td></tr>
+<tr><td>{{i.gateway}}</td></tr>
+<tr><td>{{i.cdir}}</td></tr>
+<tr><td>{{i.subnet}}</td></tr>
+<tr><td>{{i.vip}}</td></tr>
+  
+</table>
+
+
+</div>
+</div>
+
+
+
+
+  </div> <!-- End Div Flex Item -->
+{% endfor %}
+
+    </div> <!-- End Div Flex Container -->
+
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+

@@ -449,7 +449,50 @@ def delete(table, id):
     db.session.commit()
     flash('Object deleted')
 
-@bp.route('/query',methods=['GET', 'POST'])
+
+@bp.route('/contract/<id>',methods=['GET', 'POST'])
+@login_required
+
+def contract(id):
+
+    contract=Location.query.get(id)
+
+    return render_template('contract.html', contract=contract)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+''' @bp.route('/query',methods=['GET', 'POST'])
 @login_required
 
 def query():
@@ -480,7 +523,7 @@ def query():
     d2=d
     d1.update(d2)
     
-    return json.dumps(d1);
+    return json.dumps(d1); '''
 
 
 

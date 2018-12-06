@@ -1,8 +1,15 @@
 .flex-container {
   display: flex;
   background-color: DodgerBlue;
+  align-content: space-around;
+  
 }
+.flex-item{
 
+align-content: space-around;
+margin: 1%;
+
+}
 #delete_button  label{
  visibility: hidden;
  display:none;
