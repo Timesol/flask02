@@ -187,7 +187,7 @@ class Network(db.Model):
     toip = db.Column(db.String(140))
     gateway= db.Column(db.String(140))
     subnet= db.Column(db.String(140))
-    cdir = db.Column(db.Integer)
+    cdir = db.Column(db.String(140))
     vip = db.Column(db.String(140))
     adinfo=db.Column(db.String(140))
     adinfo2=db.Column(db.String(140))

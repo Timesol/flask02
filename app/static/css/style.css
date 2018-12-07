@@ -2,6 +2,9 @@
   display: flex;
   background-color: DodgerBlue;
   align-content: space-around;
+  align-items: flex-start;
+  flex-direction: row
+
   
 }
 .flex-item{
@@ -10,8 +13,19 @@ align-content: space-around;
 margin: 1%;
 
 }
-#delete_button  label{
- visibility: hidden;
- display:none;
+
+
+#flex-container-button.flex-container{
+
+
+justify-content: flex-end;
+
+}
+
+.container .right{
+
+
+margin-left: auto;
+float: right;
 
 }

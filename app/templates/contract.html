@@ -3,10 +3,26 @@
 {% import 'bootstrap/wtf.html' as wtf %}
 
 {% block app_content %}
-<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}"> 
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+<script type="text/javascript" src="{{url_for('static', filename='contract.js')}}"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="{{url_for('static', filename='jquery.js')}}">\x3C/script>')</script>
+
+
 <div id="flex-container-button" class="flex-container"> 
-<div class="flex-item">
-  </div>
+<div id="flex-item-button" class="flex-item">
+
+
+<div><a href="javascript: edit_row({{contract.id}});" class="btn btn-info btn-sm" id="edit_button{{contract.id}}">
+          <span class="glyphicon glyphicon-edit"></span></a>
+          <a style="display:none; "href="javascript: save_row({{contract.id}});" class="btn btn-success btn-sm" aria-disabled="true" id ="save_button{{contract.id}}">
+          <span class="glyphicon glyphicon-floppy-disk"></span>
+        </a></div>
+
+
+  </div>  <!-- End Div Flex Item -->
 </div>  <!-- End Div Flex Container -->
 
 
@@ -32,11 +48,7 @@
       <th scope="col">Technology</th>
       <th scope="col">Contract</th>
       <th scope="col"></th>
-      <th scope="col"></th>
-      <th scope="col"></th>
-      <th scope="col"></th>
-      <th scope="col"></th>
-      <th scope="col"></th>
+      
 
     </tr>
   </thead>
@@ -70,20 +82,29 @@
 <p></p>
 
 
-<div class="flex-container">
+<div id="flex_one" class="flex-container">
   {% for i in contract.networks %}
   <div class="flex-item">
   
 
 <div   class="panel panel-warning">
-<div class="panel-heading">{{i.name}}</div>
+<div class="panel-heading">{{i.name}}&nbsp;&nbsp;&nbsp;  
+<a href="javascript: edit_row_network('{{i.id}}' , '{{contract.id}}');" class="btn btn-info btn-sm" id="edit_button{{i.id}}">
+          <span class="glyphicon glyphicon-edit"></span></a>
+          <a style="display:none; "href="javascript: save_row_network('{{i.id}}', '{{contract.id}}');" class="btn btn-success btn-sm" aria-disabled="true" id ="save_button{{i.id}}">
+          <span class="glyphicon glyphicon-floppy-disk"></span>
+        </a>
+
+
+
+</div>
 <div class="panel-body">
   <table class="table  table-responsive">
-<tr><td>{{i.network}}</td></tr>
-<tr><td>{{i.gateway}}</td></tr>
-<tr><td>{{i.cdir}}</td></tr>
-<tr><td>{{i.subnet}}</td></tr>
-<tr><td>{{i.vip}}</td></tr>
+<tr><td id="network_contract{{i.id}}">{{i.network}}</td></tr>
+<tr><td id="gateway_contract{{i.id}}">{{i.gateway}}</td></tr>
+<tr><td id="cdir_contract{{i.id}}">{{i.cdir}}</td></tr>
+<tr><td id="subnet_contract{{i.id}}">{{i.subnet}}</td></tr>
+<tr><td id="vip_contract{{i.id}}">{{i.vip}}</td></tr>
   
 </table>
 
@@ -94,10 +115,50 @@
 
 
 
+
+
+
   </div> <!-- End Div Flex Item -->
 {% endfor %}
 
+  <div  id="container_add" class="flex-item" style="display:none;">
+  <div   class="panel panel-warning">
+    <div class="panel-heading" ><a href="javascript: edit_row_network('99999' , '{{contract.id}}');" class="btn btn-info btn-sm" id="edit_button99999">
+       <span class="glyphicon glyphicon-edit"></span></a>
+          <a style="display:none; "href="javascript: save_row_network('99999', '{{contract.id}}');" class="btn btn-success btn-sm" aria-disabled="true" id ="save_button99999">
+          <span class="glyphicon glyphicon-floppy-disk"></span>
+        </a></div>
+    <div class="panel-body">
+      <table class="table  table-responsive">
+        <tr><td id="network_contract99999" ></td></tr>
+        <tr><td id="gateway_contract99999" ></td></tr>
+        <tr><td id="cdir_contract99999" ></td></tr>
+        <tr><td id="subnet_contract99999" ></td></tr>
+        <tr><td id="vip_contract99999" ></td></tr>
+        <tr><td ></td></tr>
+      </table>
+
+
+
+
+</div> <!-- Panel Body -->
+</div> <!-- End Panel -->
+</div> <!-- End flex item -->
+
+
+<div id="flex-item-add" class="flex-item right">
+  <div class="right">
+<a href="#"   onclick="panel()"class="btn btn-success btn-sm">
+          <span  class="glyphicon glyphicon-plus"></span>
+        </a>
+      </div>
+</div>
+
+
     </div> <!-- End Div Flex Container -->
+
+
+
 
 
 {% endblock %}

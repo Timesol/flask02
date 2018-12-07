@@ -423,6 +423,8 @@ def save():
     new_hardware = request.args.get('hardware_val', None)
     new_technology = request.args.get('technology_val', None)
     new_contract = request.args.get('contract_val', None)
+
+    
     
    
     arg=Location.query.get(no)
@@ -435,7 +437,42 @@ def save():
     db.session.commit()
 
 
+    
+
+
     return json.dumps({'status':'OK'});
+
+
+
+@bp.route('/save_net',methods=['GET', 'POST'])
+@login_required
+
+
+
+def save_net():
+    no=request.args.get('no')
+    no_loc=request.args.get('no_loc')
+    print(no)
+    print(no_loc)
+    new_network = request.args.get('network_val', None)
+    new_gateway = request.args.get('gateway_val', None)
+    new_subnet = request.args.get('subnet_val', None)
+    new_cdir = request.args.get('cdir_val', None)
+    new_vip = request.args.get('vip_val', None)
+
+    arg_net=Network.query.get(int(no))
+   
+    
+
+    arg_net.network=new_network
+    arg_net.gateway=new_gateway
+    arg_net.subnet=new_subnet
+    arg_net.cdir=new_cdir
+    arg_net.vip=new_vip
+    db.session.commit()
+
+    return json.dumps({'status':'OK'});
+
 
 
 
