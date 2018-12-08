@@ -189,8 +189,8 @@ class Network(db.Model):
     subnet= db.Column(db.String(140))
     cdir = db.Column(db.String(140))
     vip = db.Column(db.String(140))
-    adinfo=db.Column(db.String(140))
-    adinfo2=db.Column(db.String(140))
+
+    
     location_id = db.Column(db.Integer, db.ForeignKey('location.id'))
     
 
@@ -205,6 +205,8 @@ class Location(db.Model):
     hardware=db.Column(db.String(140))
     networks= db.relationship('Network', backref='location' , lazy='dynamic')
     contract= db.Column(db.String(140))
+    contact= db.Column(db.String(140))
+   
     
      
     
@@ -214,6 +216,9 @@ class Location(db.Model):
 
     def __repr__(self):
         return '<Location {}>'.format(self.residence)
+
+
+
 
 
 

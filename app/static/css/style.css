@@ -1,9 +1,11 @@
 .flex-container {
   display: flex;
-  background-color: DodgerBlue;
+  
   align-content: space-around;
   align-items: flex-start;
-  flex-direction: row
+  flex-direction: row;
+  flex-wrap: wrap;
+  
 
   
 }
@@ -11,6 +13,8 @@
 
 align-content: space-around;
 margin: 1%;
+
+
 
 }
 
@@ -27,5 +31,13 @@ justify-content: flex-end;
 
 margin-left: auto;
 float: right;
+
+}
+
+
+#flex-container-button-net.flex-container{
+
+
+justify-content: flex-end;
 
 }

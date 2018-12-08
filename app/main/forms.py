@@ -61,8 +61,6 @@ class NetworkForm(FlaskForm):
     subnet=StringField(_l('Subnet'))
     cdir=StringField(_l('Cdir'))
     vip =StringField(_l('Vip'))
-    adinfo1 =StringField(_l('Additional Info'))
-    adinfo2 =StringField(_l('Additional Info 2'))
     submit = SubmitField(_l('Submit'))
 
 

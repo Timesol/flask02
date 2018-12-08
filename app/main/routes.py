@@ -18,7 +18,7 @@ from requests import Request, Session
 import bs4 as bs
 import pandas as pd
 from app.file.routes import expy
-
+from app.edit.routes import delete
 
 
 
@@ -188,7 +188,7 @@ def customersu(customername):
    
     
 
-    form=NetworkForm()
+    
     form_work=Statistic_Work_Form()
     form_del=DeleteForm()
 
@@ -241,50 +241,13 @@ def customersu(customername):
         expy(cat,scat,hard,user,tech,cust,contr,time)
         return redirect(url_for('main.customersu',customername=customername))
     
-     
-    if form.validate_on_submit():
-        
-        
-        location=Location.query.get(form.locid.data)
-
-       
-        networklist= Network(network=form.network.data, name=form.name.data, fromip=form.fromip.data, toip=form.toip.data,
-
-        gateway=form.gateway.data,subnet=form.subnet.data,cdir=form.cdir.data,vip=form.vip.data)
-        
-        location.networks.append(networklist)
-        db.session.commit()
-        flash(_('Your changes have been saved.'))
-        return redirect(url_for('main.customersu',customername=customername))
-    
-        count=0
-    if request.args.get('list'): 
-        no=request.args.get('list')
-        location=Location.query.get(no)
-        k=0
-        a={}
-        t=0
-        for i in location.networks:
-            if i == None:
-                break
-            key=k
-            value= i.name
-            a[key]= value
-            k+=1
-        for i in range(0,k,1):
-            print(a[t])
-            t+=1   
-            
-
-        return json.dumps({'id': a });   
-
 
 
 
         
 
 
-    return render_template('customersu.html', cust=cust, lists=lists, form=form, form_work=form_work, form_del=form_del)
+    return render_template('customersu.html', cust=cust, lists=lists,form_work=form_work, form_del=form_del)
     
 
 
@@ -402,99 +365,44 @@ def statistics(username):
 
 
 
-
-
-
-
-
-
-
-
-@bp.route('/save',methods=['GET', 'POST'])
-@login_required
-
-
-
-def save():
-    no=request.args.get('no')
-    new_residence = request.args.get('residence_val', None)
-    new_project = request.args.get('project_val', None)
-    new_projectmanager = request.args.get('projectmanager_val', None)
-    new_hardware = request.args.get('hardware_val', None)
-    new_technology = request.args.get('technology_val', None)
-    new_contract = request.args.get('contract_val', None)
-
-    
-    
-   
-    arg=Location.query.get(no)
-    arg.residence=new_residence
-    arg.project=new_project
-    arg.projectmanager=new_projectmanager
-    arg.hardware=new_hardware
-    arg.technology=new_technology
-    arg.contract=new_contract
-    db.session.commit()
-
-
-    
-
-
-    return json.dumps({'status':'OK'});
-
-
-
-@bp.route('/save_net',methods=['GET', 'POST'])
-@login_required
-
-
-
-def save_net():
-    no=request.args.get('no')
-    no_loc=request.args.get('no_loc')
-    print(no)
-    print(no_loc)
-    new_network = request.args.get('network_val', None)
-    new_gateway = request.args.get('gateway_val', None)
-    new_subnet = request.args.get('subnet_val', None)
-    new_cdir = request.args.get('cdir_val', None)
-    new_vip = request.args.get('vip_val', None)
-
-    arg_net=Network.query.get(int(no))
-   
-    
-
-    arg_net.network=new_network
-    arg_net.gateway=new_gateway
-    arg_net.subnet=new_subnet
-    arg_net.cdir=new_cdir
-    arg_net.vip=new_vip
-    db.session.commit()
-
-    return json.dumps({'status':'OK'});
-
-
-
-
-
-
-def delete(table, id):
-    print('It works')
-
-    object = table.query.get(id)
-    db.session.delete(object)
-    db.session.commit()
-    flash('Object deleted')
-
-
 @bp.route('/contract/<id>',methods=['GET', 'POST'])
 @login_required
 
 def contract(id):
-
+    form=NetworkForm()
+    form_del=DeleteForm()
     contract=Location.query.get(id)
 
-    return render_template('contract.html', contract=contract)
+    if form_del.validate_on_submit():
+        
+        if form_del.delete.data:  
+            print('form validate')
+            id=form_del.id_del.data
+            delete(Network,id)
+            return redirect(url_for('main.contract',id=contract.id))
+
+    
+
+    if form.validate_on_submit():
+
+        networklist= Network(network=form.network.data, name=form.name.data, fromip=form.fromip.data, toip=form.toip.data,
+
+        gateway=form.gateway.data,subnet=form.subnet.data,cdir=form.cdir.data,vip=form.vip.data)
+
+        contract.networks.append(networklist)
+        db.session.commit()
+        flash(_('Your changes have been saved.'))
+
+        return redirect(url_for('main.contract',id=contract.id, contract=contract))
+
+
+
+
+
+
+    
+
+    return render_template('contract.html', contract=contract, form=form, form_del=form_del)
 
 
 
@@ -566,7 +474,9 @@ def query():
 
 
 
-
+@bp.route('/insert')
+def insert():
+    return render_template('insert.html')
 
 
 

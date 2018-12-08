@@ -1,3 +1,9 @@
+
+
+
+
+
+
 function edit_row(no){
 
 
@@ -95,6 +101,7 @@ function edit_row_network(no, no_loc){
 
  document.getElementById("edit_button"+no).style["display"]="none";
  document.getElementById("save_button"+no).style["display"]="inline-block";
+ document.getElementById("delete_button"+no).style["display"]="inline-block";
 	
  var network=document.getElementById("network_contract"+no);
  var gateway=document.getElementById("gateway_contract"+no);
@@ -145,6 +152,7 @@ function save_row_network(no, no_loc)
 
 document.getElementById("edit_button"+no).style["display"]="inline-block";
  document.getElementById("save_button"+no).style["display"]="none";
+  document.getElementById("delete_button"+no).style["display"]="none";
 
 
 
@@ -179,6 +187,116 @@ document.getElementById("container_add").style["display"]=null;
 
 
 }
+
+
+
+
+function send_id(id){
+
+
+
+
+  document.getElementById('locid').value = id;
+  document.getElementById('locid').readOnly = true;
+
+
+
+
+}
+
+function dec2bin(dec){
+    return (dec >>> 0).toString(2);
+}
+
+
+function createNetmaskAddr(bitCount) {
+  var mask=[];
+  for(i=0;i<4;i++) {
+    var n = Math.min(bitCount, 8);
+    mask.push(256 - Math.pow(2, 8-n));
+    bitCount -= n;
+  }
+  return mask.join('.');
+}
+
+function getIpRangeFromAddressAndNetmask(str) {
+  var part = str.split("/"); // part[0] = base address, part[1] = netmask
+  var ipaddress = part[0].split('.');
+  var netmaskblocks = ["0","0","0","0"];
+  if(!/\d+\.\d+\.\d+\.\d+/.test(part[1])) {
+    // part[1] has to be between 0 and 32
+    netmaskblocks = ("1".repeat(parseInt(part[1], 10)) + "0".repeat(32-parseInt(part[1], 10))).match(/.{1,8}/g);
+    netmaskblocks = netmaskblocks.map(function(el) { return parseInt(el, 2); });
+  } else {
+    // xxx.xxx.xxx.xxx
+    netmaskblocks = part[1].split('.').map(function(el) { return parseInt(el, 10) });
+  }
+  // invert for creating broadcast address (highest address)
+  var invertedNetmaskblocks = netmaskblocks.map(function(el) { return el ^ 255; });
+  var baseAddress = ipaddress.map(function(block, idx) { return block & netmaskblocks[idx]; });
+  var broadcastaddress = baseAddress.map(function(block, idx) { return block | invertedNetmaskblocks[idx]; });
+  return [baseAddress.join('.'), broadcastaddress.join('.')];
+}
+
+
+$(document).ready(function(){
+    var $regexname=/(?=[/.]).*[?=1234567890]$/;
+    $('#network').on('keypress keydown keyup',function(){
+             if (!$(this).val().match($regexname)) {
+              
+                 $('.emsg').removeClass('hidden');
+                 $('.emsg').show();
+                 
+
+             }
+           else{
+           	var network_calc=$(this).val();
+            var calc= network_calc.split("/");
+           	var calc_cdir= calc[1];
+                // else, do not display message
+                $('.emsg').addClass('hidden');
+                $('#cdir').val(calc_cdir)
+                calc_cdir= calc[0];
+                
+
+                network_calc=network_calc.split("/");
+                network_calc=network_calc[0]
+                
+                network_calc= network_calc.split(".");
+               
+                var oc1 = parseInt(network_calc[0]);
+                var oc2 = parseInt(network_calc[1]);
+                var oc3 = parseInt(network_calc[2]);
+                var oc4 = parseInt(network_calc[3]);
+                calc=parseInt(calc[1])
+                $('#subnet').val(createNetmaskAddr(calc))
+                hosts=32-calc
+                hosts=Math.pow(2, hosts)
+                console.log(hosts)
+                var ip=$(this).val();
+                ip= getIpRangeFromAddressAndNetmask(ip)
+                $('#fromip').val(ip[0])
+                $('#toip').val(ip[1])
+                oc4=oc4+1
+                var gateway=[oc1,oc2,oc3,oc4].join(".")
+                $('#gateway').val(gateway)
+ 
+
+
+
+
+
+
+               }
+         });
+});
+
+
+
+
+
+
+
 
 
 /* alert("Hallo");

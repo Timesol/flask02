@@ -126,18 +126,6 @@ projectmanager_val : projectmanager_val, hardware_val : hardware_val, technology
 
 
 
-function get_id(id){
-
-
-
-
-  document.getElementById('locid').value = id;
-  document.getElementById('locid').readOnly = true;
-
-
-
-
-}
 
 
 function get_data(technology, hardware,user,contract,customer){
