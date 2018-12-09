@@ -3,21 +3,24 @@
 
 
 {% block app_content %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
  <!doctype html>
-    <title>Upload new File</title>
-    <h1>Upload new File</h1>
+   
+   <table class="table table-responsive">
+    
     <form method=post enctype=multipart/form-data>
-      <p><input type=file name=file > <input type=submit value=Upload></p>
+      <td> <label class="btn btn-info btn-sm" id="file-button">Browse
+    <input type="file" id="File"  name=file  size="60" >
+    </label> </td> <td> <input  class="btn btn-info btn-sm"type=submit value=Upload></td>
     </form>
+    </table>
 <body>
-	<table class="table table-striped table-responsive">
-	  <thead>
-	    <tr>
-	      <th scope="col">Files</th>
-
-	       </tr>
-  </thead>
-
+  <div id="container_customersu_main" class="container_customersu_main" style="width: auto;"> 
+<div  id="panel_main" class="panel panel-info">
+<div class="panel-heading">Files</div>
+<div class="panel-body">
+	<table class="table table-responsive">
+	
   <tbody>
 
     {% for i in list %}
@@ -30,6 +33,10 @@
 </tbody>
 
 </table>
+
+</div>
+</div>
+
 </body>
 {% endblock %}
 

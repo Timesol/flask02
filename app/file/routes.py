@@ -9,6 +9,7 @@ from flask_login import login_required
 import requests
 from requests import Request, Session
 from flask import render_template, flash, redirect, url_for, request, g, current_app, json
+from flask_login import login_user, logout_user, current_user, login_required
 from flask_babel import _, get_locale
 from werkzeug.utils import secure_filename
 import openpyxl
@@ -134,4 +135,22 @@ def save(l, t,sheetname):
         return True
     sheetname[l+"%d"  % empty_row]= str(t)
 
+
+
+def createFolder(directory):
+    try:
+        if not os.path.exists(directory):
+            os.makedirs(directory)
+    except OSError:
+        print ('Error: Creating directory. ' +  directory)
+
+
+
+@bp.route('/return_files_user/<filename>')
+def return_files_user(filename):
+    try:
+        return send_file(UPLOAD_FOLDER+current_user+filename , attachment_filename=filename)
+    except Exception as e:
+        return str(e)
+    return render_template('user.html', title=_('user'), filelist=filelist)
 

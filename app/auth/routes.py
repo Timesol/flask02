@@ -10,6 +10,7 @@ from app.auth.forms import LoginForm, RegistrationForm, \
 from app.models import User
 from app.auth.email import send_password_reset_email
 from guess_language import guess_language
+from app.file.routes import createFolder
 
 
 
@@ -50,6 +51,7 @@ def register():
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
+        createFolder('./uploads/'+user.username)
         flash(_('Congratulations, you are now a registered user!'))
         return redirect(url_for('auth.login'))
     return render_template('auth/register.html', title=_('Register'), form=form)

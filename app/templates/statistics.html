@@ -4,18 +4,23 @@
 {% block app_content %}
 
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+<div id="container_customersu_main" class="container_customersu_main" style="width: auto;"> 
+<div  id="panel_main" class="panel panel-info">
+<div class="panel-heading">Statistic</div>
+<div class="panel-body">
 <table class="table" >
   <thead>
-    <tr class="info " style="color:#31708f;" style="font-weight:normal;">
+    <tr>
+      
+      <th scope="col" >Category</th>
+      <th scope="col" >Subcategory </th>
+      <th scope="col" >Technology</th>
+      <th scope="col" >Customer</th>
+      <th scope="col" >Contract</th>
+      <th scope="col" >Hardware</th>
+      <th scope="col" >Time</th>
+      <th scope="col" >User</th>
       <th scope="col"></th>
-      <th scope="col" style="font-weight:normal;">Category</th>
-      <th scope="col" style="font-weight:normal;">Subcategory </th>
-      <th scope="col" style="font-weight:normal;">Technology</th>
-      <th scope="col" style="font-weight:normal;">Customer</th>
-      <th scope="col" style="font-weight:normal;">Contract</th>
-      <th scope="col" style="font-weight:normal;">Hardware</th>
-      <th scope="col" style="font-weight:normal;">Time</th>
-      <th scope="col" style="font-weight:normal;">User</th>
       
        
     </tr>
@@ -37,6 +42,11 @@
       <td>{{stat.hardware}}</td>
       <td>{{stat.time}}</td>
       <td>{{stat.user}}</td>
+      <td><form action="" method="post" >
+  {{ form_del.hidden_tag() }}
+<td>{{ form_del.id_del(value=stat.id, type="hidden") }}
+{{ wtf.form_field(form_del.delete, class=" btn btn-danger btn-sm") }}</td> 
+</form></td>
 
       
 </tr>
@@ -47,6 +57,10 @@
 </tbody>
 
 
+</table>
 
+
+</div> <!-- End Div Panel-Body-->
+</div> <!-- End Div  Panel-Container-->
 
 {% endblock %}

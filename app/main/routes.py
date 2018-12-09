@@ -21,8 +21,18 @@ from app.file.routes import expy
 from app.edit.routes import delete
 
 
+UPLOAD_FOLDER = os.environ.get('UPLOAD_FOLDER_ENV')
+ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'xlsx','cfg'])
+ALLOWED_EXTENSIONS_PANDAS = set(['xlsx'])
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
- 
+
+def allowed_file_pandas(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS_PANDAS
+    return True  
 
 @bp.before_request
 def before_request():
@@ -78,9 +88,15 @@ def explore():
 
 
 
-@bp.route('/user/<username>')
+@bp.route('/user/<username>', methods=['GET', 'POST'])
 @login_required
 def user(username):
+    folder=UPLOAD_FOLDER+current_user.username
+    filelist=[]
+    for x in os.listdir(folder):
+        filelist.append(x)
+    print(list)
+
     user = User.query.filter_by(username=username).first_or_404()
     page = request.args.get('page', 1, type=int)
     posts = user.posts.order_by(Post.timestamp.desc()).paginate(
@@ -89,8 +105,36 @@ def user(username):
         if posts.has_next else None
     prev_url = url_for('main.user', username=user.username, page=posts.prev_num) \
         if posts.has_prev else None
+
+
+
+
+    if request.method == 'POST':
+        # check if the post request has the file part
+        if 'file' not in request.files:
+            flash('No file part')
+            return redirect(request.url)
+        file = request.files['file']
+        # if user does not select file, browser also
+        # submit a empty part without filename
+        if file.filename == '':
+            flash('No selected file')
+            return redirect(request.url)
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(UPLOAD_FOLDER+current_user.username, filename))
+            flash(_('File uploaded!'))
+            #if allowed_file_pandas(file.filename):
+                #sendpandas(filename)
+                
+          
+
+            
+        return redirect(url_for('main.user',username=user.username, user=user,
+                            filename=filename,filelist=filelist ))
+
     return render_template('user.html', user=user, posts=posts.items,
-                           next_url=next_url, prev_url=prev_url)
+                           next_url=next_url, prev_url=prev_url, filelist=filelist)
 
 
 @bp.route('/edit_profile', methods=['GET', 'POST'])
@@ -350,15 +394,26 @@ def router_todo():
 
 
 
-@bp.route('/statistics/<username>')
+@bp.route('/statistics/<username>' ,methods=['GET', 'POST'])
 @login_required
 def statistics(username):
+    form_del=DeleteForm()
+
+    if form_del.validate_on_submit():
+
+        
+        if form_del.delete.data:  
+            print('form validate')
+            id=form_del.id_del.data
+            delete(Statistic,id)
+            return redirect(url_for('main.statistics',username=current_user.username))
+
     user=User.query.filter_by(username=username).first_or_404()
     stats=user.statistics
 
 
 
-    return render_template('statistics.html', user=user, stats=stats)
+    return render_template('statistics.html', user=user, stats=stats, form_del=form_del)
 
 
 

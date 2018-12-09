@@ -1,0 +1,31 @@
+ <!doctype html>
+    <table class="table table-responsive">
+    
+    <form method=post enctype=multipart/form-data>
+      <td> <label class="btn btn-info btn-sm" id="file-button">Browse
+    <input type="file" id="File"  name=file  size="60" >
+    </label> </td> <td> <input  class="btn btn-info btn-sm"type=submit value=Upload></td>
+    </form>
+    </table>
+<body>
+	<table class="table table-responsive">
+	  <thead>
+	    <tr>
+	      <th scope="col">Files</th>
+
+	       </tr>
+  </thead>
+
+  <tbody>
+
+    {% for i in filelist %}
+     <tr>
+    <td><a href="{{ url_for('file.return_files_user', filename=i ) }}" target="blank">{{i}}</a></td>
+    </tr>
+{% endfor %}
+
+
+</tbody>
+
+</table>
+</body>
