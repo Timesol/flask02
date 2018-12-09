@@ -203,29 +203,6 @@ $.ajax({
 
 
 
-function router_todo(no){
-
-		$.ajax({
-			url: '/router_todo',
-                        type: "get",
-			data: {  no : no},
-		
-			success: function(response){
-				console.log(response);
-			},
-			error: function(error){
-				console.log(error);
-			}
-		});
-	
-
-
-
-
-
-
-
-}
 
 
 function hide_content(no){
