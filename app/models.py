@@ -8,8 +8,9 @@ from time import time
 import jwt
 from flask import current_app
 from app.search import add_to_index, remove_from_index, query_index
+from sqlalchemy.ext.declarative import declarative_base
 
-
+Base = declarative_base()
 
 
 class SearchableMixin(object):
@@ -189,8 +190,6 @@ class Network(db.Model):
     subnet= db.Column(db.String(140))
     cdir = db.Column(db.String(140))
     vip = db.Column(db.String(140))
-
-    
     location_id = db.Column(db.Integer, db.ForeignKey('location.id'))
     
 
@@ -205,20 +204,22 @@ class Location(db.Model):
     hardware=db.Column(db.String(140))
     networks= db.relationship('Network', backref='location' , lazy='dynamic')
     contract= db.Column(db.String(140))
-    contact= db.Column(db.String(140))
-   
-    
-     
-    
-
-
-    
+    contact=db.Column(db.String(140))
+    sid= db.Column(db.String(140))
+    matchcode= db.Column(db.String(140))
+    seller= db.Column(db.String(140))
+    dependencies=db.relationship('Contract', backref='location' , lazy='dynamic')
 
     def __repr__(self):
         return '<Location {}>'.format(self.residence)
 
+class Contract(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name= db.Column(db.String(140))
+    contract=db.Column(db.String(140))
+    location_idc = db.Column(db.Integer, db.ForeignKey('location.id'))
 
-
+    
 
 
 
@@ -233,6 +234,7 @@ class Post_r(db.Model): # ,SearchableMixin needs to be added
     
     def __repr__(self):
         return '<Post_r {}>'.format(self.body)
+
 
 
 
@@ -265,6 +267,12 @@ class Subcategory(db.Model):
     id=db.Column(db.Integer, primary_key=True)
     name= db.Column(db.String(140))
     statistics= db.relationship('Statistic', backref='subcategory')
+
+
+def dynamic_class(table_name, columns):
+    dyn_table=type(table_name, (Base,), columns)
+
+    return dyn_table
 
 
 
