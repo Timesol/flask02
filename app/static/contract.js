@@ -1,8 +1,10 @@
 
-
-
-
-
+$(document).ready(function() {
+    // show the alert
+    setTimeout(function() {
+        $(".alert").alert('close');
+    }, 2000);
+});
 
 function edit_row(no){
 
@@ -200,6 +202,28 @@ function send_id(id){
   document.getElementById('locid').readOnly = true;
 
 
+var value_template= document.getElementById('bmodal').value;
+
+
+if(value_template == 'Single-Static'){
+$('label[for="gateway"]').hide();
+$('label[for="fromip"]').hide();
+$('label[for="toip"]').hide();
+$('label[for="vip"]').hide();
+$('label[for="subnet"]').hide();
+$('label[for="cdir"]').hide();
+
+document.getElementById('name').value=value_template;
+document.getElementById('gateway').style["display"]="none";
+document.getElementById('fromip').style["display"]="none";
+document.getElementById('toip').style["display"]="none";
+document.getElementById('vip').style["display"]="none";
+document.getElementById('subnet').style["display"]="none";
+document.getElementById('cdir').style["display"]="none";
+
+
+
+}
 
 
 }
@@ -255,7 +279,8 @@ $(document).ready(function(){
            	var calc_cdir= calc[1];
                 // else, do not display message
                 $('.emsg').addClass('hidden');
-                $('#cdir').val(calc_cdir)
+                if(!$('#cdir').is(":hidden")){ 
+                $('#cdir').val(calc_cdir)}
                 calc_cdir= calc[0];
                 
 
@@ -269,17 +294,22 @@ $(document).ready(function(){
                 var oc3 = parseInt(network_calc[2]);
                 var oc4 = parseInt(network_calc[3]);
                 calc=parseInt(calc[1])
-                $('#subnet').val(createNetmaskAddr(calc))
+                if(!$('#subnet').is(":hidden")){ 
+                $('#subnet').val(createNetmaskAddr(calc))}
                 hosts=32-calc
                 hosts=Math.pow(2, hosts)
                 console.log(hosts)
                 var ip=$(this).val();
                 ip= getIpRangeFromAddressAndNetmask(ip)
-                $('#fromip').val(ip[0])
-                $('#toip').val(ip[1])
+                if(!$('#fromip').is(":hidden")){ 
+                $('#fromip').val(ip[0])}
+                if(!$('#toip').is(":hidden")){ 
+                $('#toip').val(ip[1])}
+
+                if(!$('#gateway').is(":hidden")){   
                 oc4=oc4+1
                 var gateway=[oc1,oc2,oc3,oc4].join(".")
-                $('#gateway').val(gateway)
+                $('#gateway').val(gateway)}
  
 
 
@@ -316,6 +346,26 @@ function router_todo(no){
 
 }
 
+
+
+function hide_net_forms(){
+
+var value_template= document.getElementById('bmodal').value;
+
+
+if(value_template == 'ppp-static'){
+
+$('label[for="gateway"]').hide();
+document.getElementById('gateway').type="hidden";
+
+}
+
+
+
+
+
+
+}
 
 
 

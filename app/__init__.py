@@ -13,6 +13,9 @@ from config import Config
 from werkzeug.utils import secure_filename
 from flask import request
 from elasticsearch import Elasticsearch
+
+
+
 #  Variable for setting path  
 
 

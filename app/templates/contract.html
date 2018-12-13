@@ -12,224 +12,34 @@
 
 <ul class="nav nav-tabs">
   <li class="nav-item active">
-    <a class="nav-link active" id="Overview-tab" data-toggle="tab" href="#Overview" role="tab" aria-controls="home" aria-selected="true">Overview</a>
+    <a class="nav-link active"  id="Overview-tab" data-toggle="tab" href="#Overview" role="tab" aria-controls="home" aria-selected="true">Overview</a>
 
   </li>
   <li class="nav-item">
-    <a class="nav-link" href="#">Customerdata</a>
+    <a class="nav-link active" id="Networks-tab" data-toggle="tab" href="#Networks" role="tab" aria-controls="home" aria-selected="true">Networks</a>
   </li>
   <li class="nav-item">
     <a class="nav-link" href="#">Journal</a>
   </li>
  
 </ul>
-<div class="tab-content" id="TabContentOverview" class="active" >
+<div class="tab-content" id="TabContent" class="active" >
 <div class="tab-pane active in " id="Overview" role="tabpanel" aria-labelledby="Overview-tab">
 
 
-
-<div id="flex-container-button" class="flex-container"> 
-<div id="flex-item-button" class="flex-item">
+{% include '_contract_overview.html' %}
 
 
-<div><a href="javascript: edit_row({{contract.id}});" class="btn btn-info btn-sm" id="edit_button{{contract.id}}">
-          <span class="glyphicon glyphicon-edit"></span></a>
-          <a style="display:none; "href="javascript: save_row({{contract.id}});" class="btn btn-success btn-sm" aria-disabled="true" id ="save_button{{contract.id}}">
-          <span class="glyphicon glyphicon-floppy-disk"></span>
-        </a></div>
-
-
-  </div>  <!-- End Div Flex Item -->
-<div id="flex-item-button2" class="flex-item">
-  <button id="router_todo" onclick="router_todo( {{contract.id}} )"  type="button" class="btn btn-info btn-sm " >
-<span class="glyphicon glyphicon-send"></span>
-
-
-</button>
-</div> <!-- End Div flex-item-button2 -->
-</div>  <!-- End Div Flex Container -->
-
-
-
-<div class="panel panel-info">
-
-<div class="panel-heading">Info</div>
-<div class="panel-body">
-<a class="btn btn-success" href="{{ url_for('main.customersu',customername=contract.customer.name) }}">Back</a>
-
-
-
-
-
-<table class="table  table-responsive">
-  <thead>
-    <tr>
-      
-      <th scope="col">Residence</th>
-      <th scope="col"> Project</th>
-      <th scope="col">Projectmanager</th>
-      <th scope="col">Hardware</th>
-      <th scope="col">Technology</th>
-      <th scope="col">Contract</th>
-      <th scope="col"></th>
-      
-
-    </tr>
-  </thead>
-
-  <tbody>
-  	<tr>
-  		
-      <td id="residence_contract">{{contract.residence}}</td>
-      <td id="project_contract">{{contract.project}}</td>
-      <td id="projectmanager_contract">{{contract.projectmanager}}</td>
-      <td id="hardware_contract">{{contract.hardware}}</td>
-      <td id="technology_contract">{{contract.technology}}</td>
-      <td id="contract_contract">{{contract.contract}}</td>
-
-
-
-
-
-
-
-
-
-
-  	</tr>
-
-</tbody>
-</table>
-
-</div> <!--End Div Panel Body-->
-</div> 
+</div> <!--End Div Tab Panel-->
 <p></p>
 
-<div id="flex-container-button-net" class="flex-container"> 
-<div id="flex-item-button-net" class="flex-item">
-<button id="bmodal" onclick="send_id( {{contract.id}} )"  type="button" class="btn btn-info btn-sm"  data-toggle="modal" data-target="#myModal">
-<span class="glyphicon glyphicon-signal"</span>
-</button>
 
-<!-- The Modal -->
-<div class="modal" id="myModal">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
+<div class="tab-pane fade out" id="Networks" role="tabpanel" aria-labelledby="Networks-tab" >
 
-      <!-- Modal Header -->
-      <div class="modal-header modal-lg">
-        <h4 class="modal-title">Add Network</h4>
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-      </div> <!-- End Div Modal Head -->
-
-      <!-- Modal body -->
-      
-
-      <div class="modal-body modal-lg">
+{% include '_contract_networks.html' %}
 
 
-
-
-      
-         {{ wtf.quick_form(form,  button_map={'submit':'success'} ,id="formcu") }}  
-         <p><span class="emsg hidden">Please use Format 192.168.0.1/24</span></p>
-
-        </div>
-
-
-      </div>
-    </div>
-  </div>
-
- 
-
-
-
-
-
-
-</div> <!-- End Div flex-item-button-net" -->
-  </div><!--End Div flex-container-button-net Body-->
-
-
-<p></p>
-<div id="flex_one" class="flex-container">
-  {% for i in contract.networks %}
-  <div class="flex-item">
-  
-
-<div   class="panel panel-info">
-<div class="panel-heading">{{i.name}}&nbsp;&nbsp;&nbsp;  
-<a href="javascript: edit_row_network('{{i.id}}' , '{{contract.id}}');" class="btn btn-info btn-sm" id="edit_button{{i.id}}">
-          <span class="glyphicon glyphicon-edit"></span></a>
-          <a style="display:none; "href="javascript: save_row_network('{{i.id}}', '{{contract.id}}');" class="btn btn-success btn-sm" aria-disabled="true" id ="save_button{{i.id}}">
-          <span class="glyphicon glyphicon-floppy-disk"></span>
-        </a>&nbsp;
-
-        <form id="delete_button{{i.id}}" style="display:none;" action="" method="post" >
-  {{ form_del.hidden_tag() }}
-{{ form_del.id_del(value=i.id ,type="hidden" ) }}
-{{ wtf.form_field(form_del.delete, label="", class=" btn btn-danger btn-sm") }}
-</form>
-
-
-
-</div>
-<div class="panel-body">
-  <table class="table  table-responsive">
-<tr><td>Network: </td><td id="network_contract{{i.id}}">{{i.network}}</td></tr>
-<tr><td>Gateway: </td><td id="gateway_contract{{i.id}}">{{i.gateway}}</td></tr>
-<tr><td>Cdir: </td><td id="cdir_contract{{i.id}}">{{i.cdir}}</td></tr>
-<tr><td>Subnet: </td><td id="subnet_contract{{i.id}}">{{i.subnet}}</td></tr>
-<tr><td>VIP: </td><td id="vip_contract{{i.id}}">{{i.vip}}</td></tr>
-  
-</table>
-
-
-</div>
-</div>
-
-
-
-
-
-
-
-  </div> <!-- End Div Flex Item -->
-{% endfor %}
-
-
-
-
-  <div  id="container_add" class="flex-item" style="display:none;">
-  <div   class="panel panel-warning">
-    <div class="panel-heading" ><a href="javascript: edit_row_network('99999' , '{{contract.id}}');" class="btn btn-info btn-sm" id="edit_button99999">
-       <span class="glyphicon glyphicon-edit"></span></a>
-          <a style="display:none; "href="javascript: save_row_network('99999', '{{contract.id}}');" class="btn btn-success btn-sm" aria-disabled="true" id ="save_button99999">
-          <span class="glyphicon glyphicon-floppy-disk"></span>
-        </a></div>
-    <div class="panel-body">
-      <table class="table  table-responsive">
-        <tr><td>Network: </td><td id="network_contract99999" ></td></tr>
-        <tr><td>Gateway: </td><td id="gateway_contract99999" ></td></tr>
-        <tr><td>Cdir: </td><td id="cdir_contract99999" ></td></tr>
-        <tr><td>Subnet: </td><td id="subnet_contract99999" ></td></tr>
-        <tr><td>VIP: </td><td id="vip_contract99999" ></td></tr>
-        <tr><td ></td></tr>
-      </table>
-
-
-
-
-</div> <!-- Panel Body -->
-</div> <!-- End Panel -->
-</div> <!-- End flex item -->
-
-
-    </div> <!-- End Div Flex Container -->
-
-
-</div> <!-- End Div Tab Overview-->
+</div> <!-- End Div Tab Networks-->
 </div> <!-- End Div Tab Content -->
 
 {% endblock %}

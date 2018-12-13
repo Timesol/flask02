@@ -1,0 +1,88 @@
+<div id="flex-container-button" class="flex-container"> 
+<div id="flex-item-button" class="flex-item">
+
+
+<div><a href="javascript: edit_row({{contract.id}});" class="btn btn-info btn-sm" id="edit_button{{contract.id}}">
+          <span class="glyphicon glyphicon-edit"></span></a>
+          <a style="display:none; "href="javascript: save_row({{contract.id}});" class="btn btn-success btn-sm" aria-disabled="true" id ="save_button{{contract.id}}">
+          <span class="glyphicon glyphicon-floppy-disk"></span>
+        </a></div> </div>  <!-- End Div Flex Item -->
+
+
+ 
+<div id="flex-item-button2" class="flex-item">
+  <button id="router_todo" onclick="router_todo( {{contract.id}} )"  type="button" class="btn btn-info btn-sm " >
+<span class="glyphicon glyphicon-send"></span></button></div> <!-- End Div flex-item-button2 -->
+
+</div>  <!-- End Div Flex Container-Button -->
+
+<!-- --------------------------------------------------------------------------------------------- -->
+
+
+<div class="panel panel-info">
+
+<div class="panel-heading">Info</div>
+<div class="panel-body">
+<a class="btn btn-success" href="{{ url_for('main.customersu',customername=contract.customer.name) }}">Back</a>
+
+
+
+
+
+<table class="table  table-responsive">
+  <thead>
+    <tr>
+      
+      <th scope="col">Residence</th>
+      <th scope="col"> Project</th>
+      <th scope="col">Projectmanager</th>
+      <th scope="col">Hardware</th>
+      <th scope="col">Technology</th>
+      <th scope="col">Contract</th>
+      <th scope="col"></th>
+      
+
+    </tr>
+  </thead>
+
+  <tbody>
+  	<tr>
+  		
+      <td id="residence_contract">{{contract.residence}}</td>
+      <td id="project_contract">{{contract.project}}</td>
+      <td id="projectmanager_contract">{{contract.projectmanager}}</td>
+      <td id="hardware_contract">{{contract.hardware}}</td>
+      <td id="technology_contract">{{contract.technology}}</td>
+      <td id="contract_contract">{{contract.contract}}</td>
+
+
+
+
+
+
+
+
+
+
+  	</tr>
+
+</tbody>
+</table>
+
+</div> <!--End Div Panel Body-->
+</div> <!--End Div Panel-->
+<p></p>
+<div id="flex-container-contract-info" class="flex-container"> 
+<div id="flex-item-contract-info" class="flex-item">
+
+
+
+
+
+
+
+
+
+
+</div> <!--flex-item-contract-info-->
+</div> <!--flex-container-contract-info-->

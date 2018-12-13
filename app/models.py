@@ -71,6 +71,13 @@ followers = db.Table('followers',
     db.Column('followed_id', db.Integer, db.ForeignKey('user.id'))
 )
 
+basket= db.Table('basket',
+    db.Column('info_id', db.Integer, db.ForeignKey('info.id')),
+    db.Column('network_id', db.Integer, db.ForeignKey('network.id'))
+
+   
+)
+
 
 
 class User(UserMixin,db.Model):
@@ -168,7 +175,14 @@ class Post(db.Model, SearchableMixin): # ,SearchableMixin needs to be added
     def __repr__(self):
         return '<Post {}>'.format(self.body)
 
-
+class Info(db.Model):
+    id=db.Column(db.Integer, primary_key=True)
+    text=db.Column(db.String(1400))
+    col1=db.Column(db.String(140))
+    col2=db.Column(db.String(140))
+    col3=db.Column(db.String(140))
+    col4=db.Column(db.String(140))
+    networks=db.relationship("Info", secondary="basket")
 
 
 
@@ -190,6 +204,7 @@ class Network(db.Model):
     subnet= db.Column(db.String(140))
     cdir = db.Column(db.String(140))
     vip = db.Column(db.String(140))
+    infos=db.relationship("Network", secondary="basket")
     location_id = db.Column(db.Integer, db.ForeignKey('location.id'))
     
 

@@ -1,0 +1,102 @@
+<div id="flex-container-button-net" class="flex-container"> 
+<div id="flex-item-button-net" class="flex-item">
+<select id="bmodal" onclick="send_id( {{contract.id}} )"   type="button" class="btn btn-secondary btn-sm"  data-toggle="modal" data-target="#myModal">
+
+<option  id="linknet" value="linknet">Linknet</option>
+<option id="Single-Static" value="Single-Static">Single Static</option>
+<option id="custnetstandard" value="custnetstandard">Customernet Standard</option>
+</select>
+
+
+<!-- The Modal -->
+<div class="modal" id="myModal">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header modal-lg">
+        <h4 class="modal-title">Add Network</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div> <!-- End Div Modal Head -->
+
+      <!-- Modal body -->
+      <div class="modal-body modal-lg">
+         {{ wtf.quick_form(form,  button_map={'submit':'success'} ,id="formcu") }}  
+         <p><span class="emsg hidden">Please use Format 192.168.0.1/24</span></p></div></div></div></div>
+
+</div> <!-- End Div flex-item-button-net" -->
+  </div><!--End Div flex-container-button-net Body-->
+
+
+<p></p>
+<div id="flex_one" class="flex-container">
+  {% for i in contract.networks %}
+  <div class="flex-item">
+  
+
+<div   class="panel panel-info">
+<div class="panel-heading">{{i.name}}&nbsp;&nbsp;&nbsp;  
+<a href="javascript: edit_row_network('{{i.id}}' , '{{contract.id}}');" class="btn btn-info btn-sm" id="edit_button{{i.id}}">
+          <span class="glyphicon glyphicon-edit"></span></a>
+          <a style="display:none; "href="javascript: save_row_network('{{i.id}}', '{{contract.id}}');" class="btn btn-success btn-sm" aria-disabled="true" id ="save_button{{i.id}}">
+          <span class="glyphicon glyphicon-floppy-disk"></span>
+        </a>&nbsp;
+
+        <form id="delete_button{{i.id}}" style="display:none;" action="" method="post" >
+  {{ form_del.hidden_tag() }}
+{{ form_del.id_del(value=i.id ,type="hidden" ) }}
+{{ wtf.form_field(form_del.delete, label="", class=" btn btn-danger btn-sm") }}
+</form>
+
+
+
+</div>
+<div class="panel-body">
+  <table class="table  table-responsive">
+{%if i.network %}
+<tr><td>Network: </td><td id="network_contract{{i.id}}">{{i.network}}</td></tr>
+{% else%}
+<div style="display:none;" id="network_contract{{i.id}}"></div>
+{% endif %}
+{%if i.gateway %}
+<tr><td>Gateway: </td><td id="gateway_contract{{i.id}}">{{i.gateway}}</td></tr>
+{% else%}
+<div style="display:none;" id="gateway_contract{{i.id}}"></div>
+{% endif %}
+{%if i.cdir %}
+<tr><td>Cdir: </td><td id="cdir_contract{{i.id}}">{{i.cdir}}</td></tr>
+{% else%}
+<div  style="display:none;" id="cdir_contract{{i.id}}"></div>
+{% endif %}
+{%if i.subnet %}
+<tr><td>Subnet: </td><td id="subnet_contract{{i.id}}">{{i.subnet}}</td></tr>
+{% else%}
+<div  style="display:none;" id="subnet_contract{{i.id}}"></div>
+{% endif %}
+{%if i.vip %}
+<tr><td>VIP: </td><td id="vip_contract{{i.id}}">{{i.vip}}</td></tr>
+{% else%}
+<div  style="display:none;" id="vip_contract{{i.id}}"></div>
+{% endif %}
+</table>
+
+
+</div>
+</div>
+
+
+
+
+
+
+
+  </div> <!-- End Div Flex Item -->
+{% endfor %}
+
+
+</div> <!-- Panel Body -->
+</div> <!-- End Panel -->
+
+
+
+    </div> <!-- End Div Flex Container -->

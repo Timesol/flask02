@@ -1,6 +1,6 @@
 .flex-container {
   display: flex;
-  
+  background: blue;
   align-content: space-around;
   align-items: flex-start;
   flex-direction: row;
