@@ -17,6 +17,7 @@ def save():
     new_hardware = request.args.get('hardware_val', None)
     new_technology = request.args.get('technology_val', None)
     new_contract = request.args.get('contract_val', None)
+    new_hardware=new_hardware.split(":")
 
     
     
@@ -25,7 +26,8 @@ def save():
     arg.residence=new_residence
     arg.project=new_project
     arg.projectmanager=new_projectmanager
-    arg.hardware=new_hardware
+    arg.hardware.first().name=new_hardware[0]
+    arg.hardware.first().sn=new_hardware[1]
     arg.technology=new_technology
     arg.contract=new_contract
     db.session.commit()

@@ -185,7 +185,7 @@ class Info(db.Model):
 class Customer(db.Model):
     
     id = db.Column(db.Integer, primary_key=True)
-    name= db.Column(db.String(140))
+    name= db.Column(db.String(140) ,index=True, unique=True)
     locations =db.relationship('Location', backref='customer')
 
 
@@ -212,7 +212,7 @@ class Location(db.Model, SearchableMixin):
     technology = db.Column(db.String(140))
     project= db.Column(db.String(140))
     projectmanager=db.Column(db.String(140))
-    hardware=db.Column(db.String(140))
+    hardware= db.relationship('Hardware', backref='location' , lazy='dynamic')
     networks= db.relationship('Network', backref='location' , lazy='dynamic')
     contract= db.Column(db.String(140))
     contact=db.Column(db.String(140))
@@ -228,6 +228,12 @@ class Location(db.Model, SearchableMixin):
 
     def remove_info(self,info):
         self.infos.remove(info)
+
+class Hardware(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name=db.Column(db.String(140))
+    sn = db.Column(db.String(140))
+    location_id = db.Column(db.Integer, db.ForeignKey('location.id'))
 
 
 class Contract(db.Model):

@@ -8,14 +8,16 @@ contract=document.getElementById('contract').value
                         type: "get",
                         data: {  contract : contract},
                 
-                        success: function(ip,response){
+                        success: function(response){
                                 console.log(response);
                                 var json = JSON.parse(response);
                                 document.getElementById('residence').value =json['match'];
                                 document.getElementById('project').value =json['project'];
                                 document.getElementById('technology').value =json['technology'];
                                 document.getElementById('hardware').value =json['hardware'];
-                                document.getElementById('customer').value =json['customer'];
+                                document.getElementById('customer').value =json['selcust'];
+                                document.getElementById('projectmanager').value =json['pm'];
+                               
                         },
                         error: function(error){
                                 console.log(error);

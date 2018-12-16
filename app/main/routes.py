@@ -6,7 +6,7 @@ from flask_babel import _, get_locale
 from app import db
 from app.main import bp
 from app.main.forms import EditProfileForm, PostForm, LocationForm, NetworkForm, CustomerForm, Post_r_Form, Statistic_Work_Form, DeleteForm, InfoForm,RemoveForm
-from app.models import User, Post, Location, Customer, Network, Post_r, Statistic, Category, Subcategory, Info
+from app.models import User, Post, Location, Customer, Network, Post_r, Statistic, Category, Subcategory, Info, Hardware
 from guess_language import guess_language
 from werkzeug.utils import secure_filename
 import os
@@ -200,7 +200,14 @@ def customers():
     if form.validate_on_submit():
         
         location = Location(residence=form.residence.data, technology=form.technology.data,
-        hardware=form.hardware.data,project=form.project.data, projectmanager=form.projectmanager.data, contract= form.contract.data)
+        project=form.project.data, projectmanager=form.projectmanager.data, contract= form.contract.data)
+        hardware=form.hardware.data
+        hardware=hardware.split(":")
+        hardware=Hardware(name=hardware[0], sn=hardware[1])
+        db.session.add(hardware)
+        db.session.commit()
+        location.hardware.append(hardware)
+
 
         db.session.add(location)
         
