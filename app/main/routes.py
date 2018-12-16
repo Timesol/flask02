@@ -5,8 +5,8 @@ from werkzeug.urls import url_parse
 from flask_babel import _, get_locale
 from app import db
 from app.main import bp
-from app.main.forms import EditProfileForm, PostForm, LocationForm, NetworkForm, CustomerForm, Post_r_Form, Statistic_Work_Form, DeleteForm
-from app.models import User, Post, Location, Customer, Network, Post_r, Statistic, Category, Subcategory
+from app.main.forms import EditProfileForm, PostForm, LocationForm, NetworkForm, CustomerForm, Post_r_Form, Statistic_Work_Form, DeleteForm, InfoForm,RemoveForm
+from app.models import User, Post, Location, Customer, Network, Post_r, Statistic, Category, Subcategory, Info
 from guess_language import guess_language
 from werkzeug.utils import secure_filename
 import os
@@ -235,6 +235,7 @@ def customersu(customername):
     
     form_work=Statistic_Work_Form()
     form_del=DeleteForm()
+    
 
 
     if form_del.validate_on_submit():
@@ -284,6 +285,8 @@ def customersu(customername):
         
         expy(cat,scat,hard,user,tech,cust,contr,time)
         return redirect(url_for('main.customersu',customername=customername))
+
+
     
 
 
@@ -304,11 +307,18 @@ def search():
     page = request.args.get('page', 1, type=int)
     posts, total = Post.search(g.search_form.q.data, page,
                                current_app.config['POSTS_PER_PAGE'])
+    location, total=Location.search(g.search_form.q.data,page,current_app.config['POSTS_PER_PAGE'])
+    loc=location.first()
+
+    if loc is not None:
+        return redirect(url_for('main.contract',id=loc.id))
+
+
     next_url = url_for('main.search', q=g.search_form.q.data, page=page + 1) \
         if total > page * current_app.config['POSTS_PER_PAGE'] else None
     prev_url = url_for('main.search', q=g.search_form.q.data, page=page - 1) \
         if page > 1 else None
-    return render_template('search.html', title=_('Search'), posts=posts,
+    return render_template('search.html', title=_('Search'), posts=posts,location=location,
                            next_url=next_url, prev_url=prev_url)
 
 
@@ -426,7 +436,17 @@ def statistics(username):
 def contract(id):
     form=NetworkForm()
     form_del=DeleteForm()
+    form_info=InfoForm()
+    form_remove=RemoveForm()
     contract=Location.query.get(id)
+
+    if form_remove.validate_on_submit():
+        if form_remove.remove.data:
+            info=Info.query.get(form_remove.id_rem.data)
+            contract.remove_info(info)
+            db.session.commit()
+            return redirect(url_for('main.contract',id=contract.id))
+
 
     if form_del.validate_on_submit():
         
@@ -439,17 +459,33 @@ def contract(id):
     
 
     if form.validate_on_submit():
+        if form.submit.data:
+            
 
-        networklist= Network(network=form.network.data, name=form.name.data, fromip=form.fromip.data, toip=form.toip.data,
+            networklist= Network(network=form.network.data, name=form.name.data, fromip=form.fromip.data, toip=form.toip.data,
 
-        gateway=form.gateway.data,subnet=form.subnet.data,cdir=form.cdir.data,vip=form.vip.data)
+            gateway=form.gateway.data,subnet=form.subnet.data,cdir=form.cdir.data,vip=form.vip.data)
 
-        contract.networks.append(networklist)
-        db.session.commit()
-        flash(_('Your changes have been saved.'))
+            contract.networks.append(networklist)
+            db.session.commit()
+            flash(_('Your changes have been saved.'))
 
-        return redirect(url_for('main.contract',id=contract.id, contract=contract))
+            return redirect(url_for('main.contract',id=contract.id, contract=contract))
+    location=Location.query.get(id)
+    infos_t=location.infos
 
+
+    if form_info.validate_on_submit():
+
+        if form_info.submit2.data:
+            print(form_info.infotext.data)
+            info_db=Info(infotext=form_info.infotext.data)
+            print(infos_t)
+            location.infos.append(info_db)
+            
+            db.session.commit()
+            flash(_('Your changes have been saved.'))
+            return redirect(url_for('main.contract',id=contract.id, contract=contract, infos_t=infos_t))
 
 
 
@@ -457,7 +493,7 @@ def contract(id):
 
     
 
-    return render_template('contract.html', contract=contract, form=form, form_del=form_del)
+    return render_template('contract.html', contract=contract, form=form, form_del=form_del, form_info=form_info, infos_t=infos_t, form_remove=form_remove)
 
 
 

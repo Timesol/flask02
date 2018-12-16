@@ -13,14 +13,14 @@
   
 
 <div id="container_customersu_main" class="container_customersu_main" style="width: auto;"> 
-<div  id="panel_main" class="panel panel-warning">
+<div  id="panel_main" class="panel panel-info">
 <div class="panel-heading">Locations</div>
 <div class="panel-body">
 
 
 <a id="button_back" href="{{ url_for('main.customers') }}" class="btn btn-success "> <span class="glyphicon glyphicon glyphicon-left"> </span> Back </a>
         
-<table class="table table-responsive table-sm">
+<table id="table" class="table table-responsive table-sm">
   <thead>
     <tr>
       
@@ -112,9 +112,9 @@
   </div>
   <td><a href="{{ url_for('main.contract',id=list.id) }}" class="btn btn-info btn-sm">
           <span class="glyphicon glyphicon-info-sign"></span> </a></td>
-<form action="" method="post" >
+<form action="" method="post" style="display:none;">
   {{ form_del.hidden_tag() }}
-<td>{{ form_del.id_del(value=list.id, type="hidden") }}
+<td  id="delete_button{{list.id}}" style="display:none;">{{ form_del.id_del(value=list.id, type="hidden") }}
 {{ wtf.form_field(form_del.delete, class=" btn btn-danger btn-sm") }}</td> 
 </form>
 

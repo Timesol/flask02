@@ -33,8 +33,6 @@ contract=document.getElementById('contract').value
 
 
 
-
-
 function edit_row(no){
 
 
@@ -45,6 +43,7 @@ function edit_row(no){
 
  document.getElementById("edit_button"+no).style["display"]="none";
  document.getElementById("save_button"+no).style["display"]="inline-block";
+ document.getElementById("delete_button"+no).style["display"]="inline-block";
 	
  var residence=document.getElementById("residence_row"+no);
  var project=document.getElementById("project_row"+no);
@@ -94,6 +93,7 @@ function save_row(no)
 
 document.getElementById("edit_button"+no).style["display"]="inline-block";
  document.getElementById("save_button"+no).style["display"]="none";
+ document.getElementById("delete_button"+no).style["display"]="none";
 
 
 

@@ -5,6 +5,22 @@
     {% for post in posts %}
         {% include '_post.html' %}
     {% endfor %}
+
+  
+    {% for i in location %}
+    {% if i.residence %}
+
+    test
+    {% endif %}
+    <a href="{{ url_for('main.contract',id=i.id) }}">{{i.residence}}</a>
+
+    {% endfor %}
+
+
+
+
+
+
     <nav aria-label="...">
         <ul class="pager">
             <li class="previous{% if not prev_url %} disabled{% endif %}">

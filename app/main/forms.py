@@ -92,7 +92,12 @@ class DeleteForm(FlaskForm):
 
 
 class InfoForm(FlaskForm):
-    text=StringField(_l('Info'))
-    submit = SubmitField(_l('Delete'))
+    infotext=StringField(_l('Info'))
+    submit2 = SubmitField(_l('Submit'))
+
+
+class RemoveForm(FlaskForm):
+    id_rem=IntegerField(_l('ID_REM'), validators=[DataRequired()])
+    remove = SubmitField(_l('Remove'))
     
     

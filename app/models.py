@@ -73,7 +73,7 @@ followers = db.Table('followers',
 
 basket= db.Table('basket',
     db.Column('info_id', db.Integer, db.ForeignKey('info.id')),
-    db.Column('network_id', db.Integer, db.ForeignKey('network.id'))
+    db.Column('location_id', db.Integer, db.ForeignKey('location.id'))
 
    
 )
@@ -177,12 +177,8 @@ class Post(db.Model, SearchableMixin): # ,SearchableMixin needs to be added
 
 class Info(db.Model):
     id=db.Column(db.Integer, primary_key=True)
-    text=db.Column(db.String(1400))
-    col1=db.Column(db.String(140))
-    col2=db.Column(db.String(140))
-    col3=db.Column(db.String(140))
-    col4=db.Column(db.String(140))
-    networks=db.relationship("Info", secondary="basket")
+    infotext=db.Column(db.String(140))
+    
 
 
 
@@ -204,11 +200,11 @@ class Network(db.Model):
     subnet= db.Column(db.String(140))
     cdir = db.Column(db.String(140))
     vip = db.Column(db.String(140))
-    infos=db.relationship("Network", secondary="basket")
     location_id = db.Column(db.Integer, db.ForeignKey('location.id'))
     
 
-class Location(db.Model):
+class Location(db.Model, SearchableMixin):
+    __searchable__ = ['contract']
 
     customer_id=db.Column(db.Integer, db.ForeignKey('customer.id'))
     id = db.Column(db.Integer, primary_key=True)
@@ -224,9 +220,15 @@ class Location(db.Model):
     matchcode= db.Column(db.String(140))
     seller= db.Column(db.String(140))
     dependencies=db.relationship('Contract', backref='location' , lazy='dynamic')
+    infos=db.relationship("Info", secondary="basket", backref='locations')
 
     def __repr__(self):
         return '<Location {}>'.format(self.residence)
+
+
+    def remove_info(self,info):
+        self.infos.remove(info)
+
 
 class Contract(db.Model):
     id = db.Column(db.Integer, primary_key=True)

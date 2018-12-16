@@ -367,7 +367,18 @@ document.getElementById('gateway').type="hidden";
 
 }
 
+function edit_button_info(no){
 
+
+document.getElementById("edit_button_info"+no).style["display"]="none";
+document.getElementById("remove_button"+no).style["display"]="inline-block";
+
+
+
+
+
+
+}
 
 
 
