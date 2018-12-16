@@ -1,3 +1,17 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 function scraper(){
 
 contract=document.getElementById('contract').value
@@ -208,8 +222,8 @@ $.ajax({
 
 
 function hide_content(no){
-document.getElementById('container_customersu_main').style["display"]="none";
-document.getElementById('container_customersu_sub').style["display"]="block";
+document.getElementById('container_locations_main').style["display"]="none";
+document.getElementById('container_locations_sub').style["display"]="block";
 document.getElementById('button_back').style["display"]="none";
 
     $.ajax({
@@ -245,8 +259,8 @@ document.getElementById('button_back').style["display"]="none";
 function content_back(){
 
 
-document.getElementById('container_customersu_main').style["display"]="block";
-document.getElementById('container_customersu_sub').style["display"]="none";
+document.getElementById('container_locations_main').style["display"]="block";
+document.getElementById('container_locations_sub').style["display"]="none";
 document.getElementById('button_back').style["display"]="inline";
 
 

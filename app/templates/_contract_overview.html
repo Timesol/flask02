@@ -14,23 +14,13 @@
   <button id="router_todo" onclick="router_todo( {{contract.id}} )"  type="button" class="btn btn-info btn-sm " >
 <span class="glyphicon glyphicon-send"></span></button></div> <!-- End Div flex-item-button2 -->
 <div id="flex-item-button3" class="flex-item">
-<button type="button" class="btn btn-info btn-sm"  data-toggle="modal" data-target="#myModal-info">
+<button type="button" class="btn btn-info btn-sm"  data-toggle="modal" data-target="#modal-info1">
 <span class="glyphicon glyphicon-plus"></span>
 </button>
-<div class="modal" id="myModal-info">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
 
-      <!-- Modal Header -->
-      <div class="modal-header modal-lg">
-        <h4 class="modal-title">Add Info</h4>
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-      </div> <!-- End Div Modal Head -->
+{{modal('Add Customer', '-info1', wtf.quick_form(form_info, button_map={'submit2':'success btn btn-sm'},id="testform" ), style="display:none;" )}}
 
-      <!-- Modal body -->
-      <div class="modal-body modal-lg">
-         {{ wtf.quick_form(form_info,  button_map={'submit2':'success'},id="testform") }}  
-         </div></div></div></div>
+
 </div>  <!-- End Div Flex Item-Button3 -->
 </div>  <!-- End Div Flex Container-Button -->
 
@@ -41,7 +31,7 @@
 
 <div class="panel-heading">Info</div>
 <div class="panel-body">
-<a class="btn btn-success" href="{{ url_for('main.customersu',customername=contract.customer.name) }}">Back</a>
+<a class="btn btn-success" href="{{ url_for('main.locations',customername=contract.customer.name) }}">Back</a>
 
 
 
@@ -69,7 +59,7 @@
       <td id="residence_contract">{{contract.residence}}</td>
       <td id="project_contract">{{contract.project}}</td>
       <td id="projectmanager_contract">{{contract.projectmanager}}</td>
-      <td id="hardware_contract">{{contract.hardware}}</td>
+      <td id="hardware_contract">{{contract.hardware.first().name}}:{{contract.hardware.first().sn}}</td>
       <td id="technology_contract">{{contract.technology}}</td>
       <td id="contract_contract">{{contract.contract}}</td>
 

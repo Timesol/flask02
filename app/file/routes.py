@@ -14,8 +14,15 @@ from flask_babel import _, get_locale
 from werkzeug.utils import secure_filename
 import openpyxl
 from openpyxl import load_workbook
+from app.pandaex import  sendpandas
+from app.file.forms import SearchForm
 
-
+@bp.before_app_request
+def before_request():
+    if current_user.is_authenticated:
+        
+        g.search_form = SearchForm()
+    g.locale = str(get_locale())
 
 
 UPLOAD_FOLDER = os.environ.get('UPLOAD_FOLDER_ENV')

@@ -190,6 +190,9 @@ def unfollow(username):
 @bp.route('/cutomers',methods=['GET', 'POST'])
 @login_required
 def customers():
+
+    custquerys=Customer.query.all()
+    locquerys=Location.query.all()
             
     available_customers=Customer.query.all()
     groups_list=[(i.id,i.name) for i in available_customers]
@@ -216,21 +219,22 @@ def customers():
         db.session.commit()
         flash(_('Your changes have been saved.'))
         return redirect(url_for('main.customers'))
-    custquerys=Customer.query.all()
-    locquerys=Location.query.all()
+    
 
     if form2.validate_on_submit():
         custname=Customer(name=form2.name.data)
         db.session.add(custname)
         db.session.commit()
         flash(_('Your changes have been saved.'))
-        
+        custquerys=Customer.query.all()
+        return redirect(url_for('main.customers'))
+
     return render_template('customers.html', title=_('Customers'), form=form, locquerys=locquerys, custquerys=custquerys, form2=form2)
 
-@bp.route('/customersu/<customername>', methods=['GET', 'POST'])
+@bp.route('/locations/<customername>', methods=['GET', 'POST'])
 @login_required
 
-def customersu(customername):
+def locations(customername):
     available_categorys=Category.query.all()
     category_list=[(i.id,i.name) for i in available_categorys]
 
@@ -251,7 +255,7 @@ def customersu(customername):
             print('form validate')
             id=form_del.id_del.data
             delete(Location,id)
-            return redirect(url_for('main.customersu',customername=customername))
+            return redirect(url_for('main.locations',customername=customername))
 
     form_work.category.choices=category_list
     form_work.subcategory.choices=subcategory_list
@@ -291,7 +295,7 @@ def customersu(customername):
 
         
         expy(cat,scat,hard,user,tech,cust,contr,time)
-        return redirect(url_for('main.customersu',customername=customername))
+        return redirect(url_for('main.locations',customername=customername))
 
 
     
@@ -301,7 +305,7 @@ def customersu(customername):
         
 
 
-    return render_template('customersu.html', cust=cust, lists=lists,form_work=form_work, form_del=form_del)
+    return render_template('locations.html', cust=cust, lists=lists,form_work=form_work, form_del=form_del)
     
 
 

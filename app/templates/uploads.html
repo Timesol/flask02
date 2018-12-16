@@ -4,8 +4,10 @@
 
 {% block app_content %}
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
- <!doctype html>
-   
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+<script>window.jQuery || document.write('<script src="{{url_for('static', filename='jquery.js')}}">\x3C/script>')</script>
+
    <table class="table table-responsive">
     
     <form method=post enctype=multipart/form-data>
@@ -15,7 +17,7 @@
     </form>
     </table>
 <body>
-  <div id="container_customersu_main" class="container_customersu_main" style="width: auto;"> 
+  <div id="container_locations_main" class="container_locations_main" style="width: auto;"> 
 <div  id="panel_main" class="panel panel-info">
 <div class="panel-heading">Files</div>
 <div class="panel-body">

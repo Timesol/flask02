@@ -1,18 +1,18 @@
 {% extends "base.html" %}
 {% import 'bootstrap/wtf.html' as wtf %}
-
+{% from "macros.html" import modal with context %}
 
 
 {% block app_content %}
 
 <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
-<script type="text/javascript" src="{{url_for('static', filename='edit.js')}}"></script>
+<script type="text/javascript" src="{{url_for('static', filename='locations.js')}}"></script>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script>window.jQuery || document.write('<script src="{{url_for('static', filename='jquery.js')}}">\x3C/script>')</script>
   
 
-<div id="container_customersu_main" class="container_customersu_main" style="width: auto;"> 
+<div id="container_locations_main" class="container_locations_main" style="width: auto;"> 
 <div  id="panel_main" class="panel panel-info">
 <div class="panel-heading">Locations</div>
 <div class="panel-body">
@@ -78,38 +78,15 @@
 
 
 
-<td><button id="bmodal2"  onclick="get_data( '{{list.technology}}','{{list.hardware}}','{{current_user.username}}','{{list.contract}}','{{list.customer.name}}')" type="button" class="btn btn-primary btn-sm"  data-toggle="modal" data-target="#myModal2">
+<td><button id="bmodal2"  onclick="get_data( '{{list.technology}}','{{list.hardware.first().name}}:{{list.hardware.first().sn}}','{{current_user.username}}','{{list.contract}}','{{list.customer.name}}')" type="button" class="btn btn-primary btn-sm"  data-toggle="modal" data-target="#modal-statistic1">
 <span class="glyphicon glyphicon-stats"></span>
 </button>
 
-<!-- The Modal -->
-<div class="modal" id="myModal2">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
 
-      <!-- Modal Header -->
-      <div class="modal-header modal-lg">
-        <h4 class="modal-title">Add Statistic</h4>
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-      </div>
-
-      <!-- Modal body -->
-
-
-      <div class="modal-body modal-lg">
+{{modal('Add Statistic', '-statistic1', wtf.quick_form(form_work,button_map={'submit' : 'success btn btn-sm'}), style="display:none;" )}}
 
 
 
-
-
-         {{ wtf.quick_form(form_work,  button_map={'submit':'success'}) }}
-
-        </div>
-
-
-      </div>
-    </div>
-  </div>
   <td><a href="{{ url_for('main.contract',id=list.id) }}" class="btn btn-info btn-sm">
           <span class="glyphicon glyphicon-info-sign"></span> </a></td>
 <form action="" method="post" style="display:none;">
@@ -120,23 +97,6 @@
 
 
  </tr>           
-
-
-  
-
-
-
-
- 
-
-
-
-
-
-
-
-
-
 
 {% endfor %}
 
@@ -155,10 +115,10 @@
 
 
 
-<div class="container" id="container_customersu_sub" style="display:none"> 
-           {% include '_customersu.html' %}
+<div class="container" id="container_locations_sub" style="display:none"> 
+           {% include '_locations.html' %}
 
-        </div> <!--End Div of container container_customersu-->
+        </div> <!--End Div of container container_locations-->
 
 
         

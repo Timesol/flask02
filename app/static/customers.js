@@ -1,4 +1,44 @@
 
+
+
+
+function scraper(){
+
+contract=document.getElementById('contract').value
+
+
+                $.ajax({
+                        url: '/scraper',
+                        type: "get",
+                        data: {  contract : contract},
+                
+                        success: function(response){
+                                console.log(response);
+                                var json = JSON.parse(response);
+                                document.getElementById('residence').value =json['match'];
+                                document.getElementById('project').value =json['project'];
+                                document.getElementById('technology').value =json['technology'];
+                                document.getElementById('hardware').value =json['hardware'];
+                                document.getElementById('customer').value =json['selcust'];
+                                document.getElementById('projectmanager').value =json['pm'];
+                               
+                        },
+                        error: function(error){
+                                console.log(error);
+                        }
+                });
+        
+
+
+
+
+
+
+
+}
+
+
+
 function edit_row(no){
 
 
@@ -7,8 +47,9 @@ function edit_row(no){
  document.getElementById("edit_button"+no);
  document.getElementById("save_button"+no);
 
- $("#edit_button"+no).addClass('disabled')
- $("#save_button"+no).removeClass('disabled')
+ document.getElementById("edit_button"+no).style["display"]="none";
+ document.getElementById("save_button"+no).style["display"]="inline-block";
+ document.getElementById("delete_button"+no).style["display"]="inline-block";
 	
  var residence=document.getElementById("residence_row"+no);
  var project=document.getElementById("project_row"+no);
@@ -56,8 +97,9 @@ function save_row(no)
  document.getElementById("save_button"+no)
 
 
-$("#edit_button"+no).removeClass('disabled')
-$("#save_button"+no).addClass('disabled')
+document.getElementById("edit_button"+no).style["display"]="inline-block";
+ document.getElementById("save_button"+no).style["display"]="none";
+ document.getElementById("delete_button"+no).style["display"]="none";
 
 
 
@@ -86,45 +128,30 @@ projectmanager_val : projectmanager_val, hardware_val : hardware_val, technology
 }
 
 
-function scraper(contract){
-
-                $.ajax({
-                        url: '/scraper',
-                        type: "get",
-                        data: {  contract : contract},
-                
-                        success: function(response){
-                                console.log(response);
-                        },
-                        error: function(error){
-                                console.log(error);
-                        }
-                });
-        
 
 
 
 
 
 
-
-}
-
-
-
-
-function get_id(id){
+function get_data(technology, hardware,user,contract,customer){
 
 
 
 
-  document.getElementById('locid').value = id;
-  document.getElementById('locid').readOnly = true;
+  
+  document.getElementById('technology').value = technology;
+  document.getElementById('hardware').value = hardware;
+  document.getElementById('customer').value = customer;
+  document.getElementById('user').value = user;
+  document.getElementById('contract').value = contract;
+  
+  
 
-
-
+   
 
 }
+
 
 
 
@@ -182,21 +209,33 @@ $.ajax({
 
 
 
-function router_todo(no){
 
-		$.ajax({
-			url: '/router_todo',
+
+function hide_content(no){
+document.getElementById('container_locations_main').style["display"]="none";
+document.getElementById('container_locations_sub').style["display"]="block";
+document.getElementById('button_back').style["display"]="none";
+
+    $.ajax({
+      url: '/query',
                         type: "get",
-			data: {  no : no},
-		
-			success: function(response){
-				console.log(response);
-			},
-			error: function(error){
-				console.log(error);
-			}
-		});
-	
+      data: {  no : no},
+    
+      success: function(response){
+        console.log(response);
+        var json = JSON.parse(response);
+                                document.getElementById('residence_sub').innerHTML =json['locr'];
+                                document.getElementById('project_sub').innerHTML =json['locp'];
+                                document.getElementById('projectmanager_sub').innerHTML =json['locpm'];
+                                document.getElementById('technology_sub').innerHTML =json['loct'];
+                                document.getElementById('hardware_sub').innerHTML =json['loch'];
+                                document.getElementById('contract_sub').innerHTML =json['locc'];
+      },
+      error: function(error){
+        console.log(error);
+      }
+    });
+  
 
 
 
@@ -207,37 +246,19 @@ function router_todo(no){
 }
 
 
+function content_back(){
+
+
+document.getElementById('container_locations_main').style["display"]="block";
+document.getElementById('container_locations_sub').style["display"]="none";
+document.getElementById('button_back').style["display"]="inline";
 
 
 
 
 
+}
 
 
 
 
-/*
-$(document).ready(function() {
-
-
-var modal = document.getElementById('rowi');
-var id = modal.dataset.lid
-
-
-/*
-     $('form').on('submit', function(event) {
-      
-       $.ajax({
-
-          data: {id: id},
-                
-
-             type : 'get',
-             //contentType: 'application/json;charset=UTF-8',
-             //dataType: "json",
-             url : window.location.pathname,
-            	success: function(response){
-				console.log(response);
-			},
-			error: function(error){
-				console.l

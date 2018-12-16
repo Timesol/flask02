@@ -1,0 +1,29 @@
+{% macro modal(title, key, form, buttonname, style="", onclick="") -%}
+
+<!-- The Modal -->
+<div class="modal" id="modal{{key}}">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header modal-lg">
+        <h4 class="modal-title">{{title}}</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+
+      <!-- Modal body -->
+      
+
+      <div class="modal-body modal-lg">
+      
+         {{form}} 
+          <button class="btn btn-primary btn-sm" style="{{style}}" onclick="{{onclick}}" >{{buttonname}}</button> 
+        </div>
+
+       
+      </div>
+    </div>
+  </div>
+
+
+{%- endmacro %}

@@ -1,10 +1,4 @@
 
-$(document).ready(function() {
-    // show the alert
-    setTimeout(function() {
-        $(".alert").alert('close');
-    }, 2000);
-});
 
 function edit_row(no){
 
@@ -382,11 +376,3 @@ document.getElementById("remove_button"+no).style["display"]="inline-block";
 
 
 
-/* alert("Hallo");
-	var node = document.createElement("DIV");
-	node.setAttribute("class", "flex-item");
-	node.setAttribute("id", "flex-item-id"); 
-	var textnode = document.createTextNode("Water"); 
-    node.appendChild(textnode); 
-    document.getElementById("flex_one").appendChild(node); 
-    var pan = document.createElement("DIV");   */

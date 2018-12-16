@@ -149,7 +149,7 @@ msgstr "Ha ocurrido un error inesperado"
 msgid "The administrator has been notified. Sorry for the inconvenience!"
 msgstr "El administrador ha sido notificado. ¡Lamentamos la inconveniencia!"
 
-#: app/templates/_post.html:9
+#: app/templates/main._post.html:9
 #, python-format
 msgid "%(username)s said %(when)s"
 msgstr "%(username)s dijo %(when)s"
