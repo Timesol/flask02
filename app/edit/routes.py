@@ -17,7 +17,12 @@ def save():
     new_hardware = request.args.get('hardware_val', None)
     new_technology = request.args.get('technology_val', None)
     new_contract = request.args.get('contract_val', None)
-    new_hardware=new_hardware.split(":")
+    new_sn=request.args.get('sn_val', None)
+    new_contact = request.args.get('contact_val', None)
+    new_seller = request.args.get('seller_val', None)
+    new_matchcode= request.args.get('matchcode_val', None)
+    new_vrf = request.args.get('vrf_val', None)
+    new_sid = request.args.get('sid_val', None)
 
     
     
@@ -26,10 +31,15 @@ def save():
     arg.residence=new_residence
     arg.project=new_project
     arg.projectmanager=new_projectmanager
-    arg.hardware.first().name=new_hardware[0]
-    arg.hardware.first().sn=new_hardware[1]
+    arg.hardware.first().name=new_hardware
+    arg.hardware.first().sn=new_sn
     arg.technology=new_technology
     arg.contract=new_contract
+    arg.contact=new_contact
+    arg.seller=new_seller
+    arg.matchcode=new_matchcode
+    arg.vrf=new_vrf
+    arg.sid=new_sid
     db.session.commit()
 
 

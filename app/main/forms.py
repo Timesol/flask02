@@ -65,8 +65,13 @@ class NetworkForm(FlaskForm):
 
 
 class CustomerForm(FlaskForm):
-    name= StringField(_l('Name'))
+    name= StringField(_l('Name'), validators=[DataRequired()])
     submit = SubmitField(_l('Submit'))
+
+    def validate_name(self, name):
+        customer = Customer.query.filter_by(name=name.data).first()
+        if customer is not None:
+            raise ValidationError(_('Please use a different Customer.'))
     
 
 
@@ -76,13 +81,13 @@ class Post_r_Form(FlaskForm):
 
 class Statistic_Work_Form(FlaskForm):
     category=SelectField(u'Category', coerce=int, validators=[InputRequired()])
-    technology=StringField(_l('Technology'))
-    time=IntegerField(_l('Time'))
-    customer=StringField(_l('Customer'))
-    contract=StringField(_l('Contract'))
-    hardware=StringField(_l('Hardware'))
-    user=StringField(_l('User'))
-    subcategory=SelectField(u'Subcategory', coerce=int, validators=[InputRequired()])
+    technology=StringField(_l('Technology') ,id='stat_technology')
+    time=IntegerField(_l('Time') ,id='stat_time')
+    customer=StringField(_l('Customer') ,id='stat_customer')
+    contract=StringField(_l('Contract'),id='stat_contract')
+    hardware=StringField(_l('Hardware') , id='stat_hardware')
+    user=StringField(_l('User'), id='stat_user')
+    subcategory=SelectField(u'Subcategory', coerce=int, validators=[InputRequired()], id='stat_subcategory')
     
     submit = SubmitField(_l('Submit'))
 

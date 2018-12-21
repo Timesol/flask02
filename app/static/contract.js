@@ -1,5 +1,8 @@
 
 
+
+
+
 function edit_row(no){
 
 
@@ -17,6 +20,12 @@ function edit_row(no){
  var hardware=document.getElementById("hardware_contract");
  var technology=document.getElementById("technology_contract");
  var contract=document.getElementById("contract_contract");
+ var seller=document.getElementById("seller_contract");
+ var matchcode=document.getElementById("matchcode_contract");
+ var vrf=document.getElementById("vrf_contract");
+ var sid=document.getElementById("sid_contract");
+ var sn=document.getElementById("sn_contract");
+ var contact=document.getElementById("contact_contract");
  
 	
  var residence_data=residence.innerHTML;
@@ -25,6 +34,16 @@ function edit_row(no){
  var hardware_data=hardware.innerHTML;
  var technology_data=technology.innerHTML;
  var contract_data=contract.innerHTML;
+ var seller_data=seller.innerHTML;
+ var matchcode_data=matchcode.innerHTML;
+ var vrf_data=vrf.innerHTML;
+ var sid_data=sid.innerHTML;
+ var sn_data=sn.innerHTML;
+ var contact_data=contact.innerHTML;
+ 
+
+
+
 
 	
  residence.innerHTML="<input type='text' id='residence_text"+"' value='"+residence_data+"'>";
@@ -33,6 +52,12 @@ function edit_row(no){
  hardware.innerHTML="<input type='text' id='hardware_text"+"' value='"+hardware_data+"'>";
  technology.innerHTML="<input type='text' id='technology_text"+"' value='"+technology_data+"'>";
  contract.innerHTML="<input type='text' id='contract_text"+"' value='"+contract_data+"'>";
+ seller.innerHTML="<input type='text' id='seller_text"+"' value='"+seller_data+"'>";
+ matchcode.innerHTML="<input type='text' id='matchcode_text"+"' value='"+matchcode_data+"'>";
+ vrf.innerHTML="<input type='text' id='vrf_text"+"' value='"+vrf_data+"'>";
+ sid.innerHTML="<input type='text' id='sid_text"+"' value='"+sid_data+"'>";
+ sn.innerHTML="<input type='text' id='sn_text"+"' value='"+sn_data+"'>";
+ contact.innerHTML="<input type='text' id='contact_text"+"' value='"+contact_data+"'>";
 }
 
 
@@ -44,6 +69,12 @@ function save_row(no)
  var hardware_val=document.getElementById("hardware_text").value;
  var technology_val=document.getElementById("technology_text").value;
  var contract_val=document.getElementById("contract_text").value;
+ var seller_val=document.getElementById("seller_text").value;
+ var matchcode_val=document.getElementById("matchcode_text").value;
+ var vrf_val=document.getElementById("vrf_text").value;
+ var sid_val=document.getElementById("sid_text").value;
+ var sn_val=document.getElementById("sn_text").value;
+ var contact_val=document.getElementById("contact_text").value;
 
  document.getElementById("residence_contract").innerHTML=residence_val;
  document.getElementById("project_contract").innerHTML=project_val;
@@ -51,6 +82,14 @@ function save_row(no)
  document.getElementById("hardware_contract").innerHTML=hardware_val;
  document.getElementById("technology_contract").innerHTML=technology_val;
  document.getElementById("contract_contract").innerHTML=contract_val;
+ document.getElementById("seller_contract").innerHTML=seller_val;
+ document.getElementById("matchcode_contract").innerHTML=matchcode_val;
+ document.getElementById("vrf_contract").innerHTML=vrf_val;
+ document.getElementById("sid_contract").innerHTML=sid_val;
+ document.getElementById("sn_contract").innerHTML=sn_val;
+ document.getElementById("contact_contract").innerHTML=contact_val;
+
+
 
  document.getElementById("edit_button"+no)
  document.getElementById("save_button"+no)
@@ -66,7 +105,8 @@ document.getElementById("edit_button"+no).style["display"]="inline-block";
 			url: '/save',
                         type: "get",
 			data: { residence_val : residence_val, no : no, project_val : project_val,
-projectmanager_val : projectmanager_val, hardware_val : hardware_val, technology_val : technology_val, contract_val: contract_val},
+projectmanager_val : projectmanager_val, hardware_val : hardware_val, technology_val : technology_val, contract_val: contract_val, 
+seller_val: seller_val, matchcode_val:matchcode_val, vrf_val:vrf_val,sid_val:sid_val,sn_val:sn_val,contact_val:contact_val},
 		
 			success: function(response){
 				console.log(response);
@@ -376,3 +416,61 @@ document.getElementById("remove_button"+no).style["display"]="inline-block";
 
 
 
+function append_info(info, customer){
+
+
+ $.ajax({
+      url: '/append_info',
+                        type: "get",
+      data: { info : info, customer: customer},
+    
+      success: function(response){
+        console.log(response);
+      },
+      error: function(error){
+        console.log(error);
+      }
+    });
+
+
+
+
+
+
+
+
+
+}
+
+
+
+
+
+
+function append_all(info, customer){
+
+
+ $.ajax({
+      url: '/append_all',
+                        type: "get",
+      data: { info : info, customer: customer},
+    
+      success: function(response){
+        console.log(response);
+      },
+      error: function(error){
+        console.log(error);
+        console.log('Testoutput');
+
+      }
+    });
+
+
+
+
+
+
+
+
+
+}

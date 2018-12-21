@@ -63,7 +63,6 @@ function edit_row(no){
 	
  var residence=document.getElementById("residence_row"+no);
  var project=document.getElementById("project_row"+no);
- var projectmanager=document.getElementById("projectmanager_row"+no);
  var hardware=document.getElementById("hardware_row"+no);
  var technology=document.getElementById("technology_row"+no);
  var contract=document.getElementById("contract_row"+no);
@@ -71,16 +70,12 @@ function edit_row(no){
 	
  var residence_data=residence.innerHTML;
  var project_data=project.innerHTML;
- var projectmanager_data=projectmanager.innerHTML;
- var hardware_data=hardware.innerHTML;
  var technology_data=technology.innerHTML;
  var contract_data=contract.innerHTML;
 
 	
  residence.innerHTML="<input type='text' id='residence_text"+no+"' value='"+residence_data+"'>";
  project.innerHTML="<input type='text' id='project_text"+no+"' value='"+project_data+"'>";
- projectmanager.innerHTML="<input type='text' id='projectmanager_text"+no+"' value='"+projectmanager_data+"'>";
- hardware.innerHTML="<input type='text' id='hardware_text"+no+"' value='"+hardware_data+"'>";
  technology.innerHTML="<input type='text' id='technology_text"+no+"' value='"+technology_data+"'>";
  contract.innerHTML="<input type='text' id='contract_text"+no+"' value='"+contract_data+"'>";
 }
@@ -91,15 +86,11 @@ function save_row(no)
 {
  var residence_val=document.getElementById("residence_text"+no).value;
  var project_val=document.getElementById("project_text"+no).value;
- var projectmanager_val=document.getElementById("projectmanager_text"+no).value;
- var hardware_val=document.getElementById("hardware_text"+no).value;
  var technology_val=document.getElementById("technology_text"+no).value;
  var contract_val=document.getElementById("contract_text"+no).value;
 
  document.getElementById("residence_row"+no).innerHTML=residence_val;
  document.getElementById("project_row"+no).innerHTML=project_val;
- document.getElementById("projectmanager_row"+no).innerHTML=projectmanager_val;
- document.getElementById("hardware_row"+no).innerHTML=hardware_val;
  document.getElementById("technology_row"+no).innerHTML=technology_val;
  document.getElementById("contract_row"+no).innerHTML=contract_val;
 
@@ -118,7 +109,7 @@ document.getElementById("edit_button"+no).style["display"]="inline-block";
 			url: '/save',
                         type: "get",
 			data: { residence_val : residence_val, no : no, project_val : project_val,
-projectmanager_val : projectmanager_val, hardware_val : hardware_val, technology_val : technology_val, contract_val: contract_val},
+  technology_val : technology_val, contract_val: contract_val},
 		
 			success: function(response){
 				console.log(response);
@@ -147,14 +138,14 @@ projectmanager_val : projectmanager_val, hardware_val : hardware_val, technology
 function get_data(technology, hardware,user,contract,customer){
 
 
-
+console.log(hardware)
 
   
-  document.getElementById('technology').value = technology;
-  document.getElementById('hardware').value = hardware;
-  document.getElementById('customer').value = customer;
-  document.getElementById('user').value = user;
-  document.getElementById('contract').value = contract;
+  document.getElementById('stat_technology').value = technology;
+  document.getElementById('stat_hardware').value = hardware;
+  document.getElementById('stat_customer').value = customer;
+  document.getElementById('stat_user').value = user;
+  document.getElementById('stat_contract').value = contract;
   
   
 

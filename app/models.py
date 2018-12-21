@@ -219,6 +219,7 @@ class Location(db.Model, SearchableMixin):
     sid= db.Column(db.String(140))
     matchcode= db.Column(db.String(140))
     seller= db.Column(db.String(140))
+    vrf= db.Column(db.String(140))
     dependencies=db.relationship('Contract', backref='location' , lazy='dynamic')
     infos=db.relationship("Info", secondary="basket", backref='locations')
 

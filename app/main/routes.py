@@ -21,6 +21,7 @@ from app.file.routes import expy
 from app.edit.routes import delete
 
 
+
 UPLOAD_FOLDER = os.environ.get('UPLOAD_FOLDER_ENV')
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'xlsx','cfg'])
 ALLOWED_EXTENSIONS_PANDAS = set(['xlsx'])
@@ -187,38 +188,12 @@ def unfollow(username):
 
 
 
-@bp.route('/cutomers',methods=['GET', 'POST'])
+@bp.route('/customers',methods=['GET', 'POST'])
 @login_required
 def customers():
 
-    custquerys=Customer.query.all()
-    locquerys=Location.query.all()
-            
-    available_customers=Customer.query.all()
-    groups_list=[(i.id,i.name) for i in available_customers]
-    form= LocationForm()
     form2= CustomerForm()
-
-    form.customer.choices = groups_list
-    if form.validate_on_submit():
-        
-        location = Location(residence=form.residence.data, technology=form.technology.data,
-        project=form.project.data, projectmanager=form.projectmanager.data, contract= form.contract.data)
-        hardware=form.hardware.data
-        hardware=hardware.split(":")
-        hardware=Hardware(name=hardware[0], sn=hardware[1])
-        db.session.add(hardware)
-        db.session.commit()
-        location.hardware.append(hardware)
-
-
-        db.session.add(location)
-        
-        customer=Customer.query.get(form.customer.data)
-        customer.locations.append(location)
-        db.session.commit()
-        flash(_('Your changes have been saved.'))
-        return redirect(url_for('main.customers'))
+    custquerys=Customer.query.all()
     
 
     if form2.validate_on_submit():
@@ -229,7 +204,7 @@ def customers():
         custquerys=Customer.query.all()
         return redirect(url_for('main.customers'))
 
-    return render_template('customers.html', title=_('Customers'), form=form, locquerys=locquerys, custquerys=custquerys, form2=form2)
+    return render_template('customers.html', title=_('Customers'), custquerys=custquerys, form2=form2)
 
 @bp.route('/locations/<customername>', methods=['GET', 'POST'])
 @login_required
@@ -298,6 +273,36 @@ def locations(customername):
         return redirect(url_for('main.locations',customername=customername))
 
 
+    custquerys=Customer.query.all()
+    locquerys=Location.query.all()
+            
+    available_customers=Customer.query.all()
+    groups_list=[(i.id,i.name) for i in available_customers]
+    form= LocationForm()
+   
+
+    form.customer.choices = groups_list
+    if form.validate_on_submit():
+        
+        location = Location(residence=form.residence.data, technology=form.technology.data,
+        project=form.project.data, projectmanager=form.projectmanager.data, contract= form.contract.data)
+        hardware=form.hardware.data
+        hardware=hardware.split(":")
+        hardware=Hardware(name=hardware[0], sn=hardware[1])
+        db.session.add(hardware)
+        db.session.commit()
+        location.hardware.append(hardware)
+
+
+        db.session.add(location)
+        
+        customer=Customer.query.get(form.customer.data)
+        customer.locations.append(location)
+        db.session.commit()
+        flash(_('Your changes have been saved.'))
+        return redirect(url_for('main.customers'))
+
+
     
 
 
@@ -305,7 +310,7 @@ def locations(customername):
         
 
 
-    return render_template('locations.html', cust=cust, lists=lists,form_work=form_work, form_del=form_del)
+    return render_template('locations.html', cust=cust, lists=lists,form_work=form_work, form_del=form_del, form=form, locquerys=locquerys)
     
 
 
@@ -507,10 +512,51 @@ def contract(id):
     return render_template('contract.html', contract=contract, form=form, form_del=form_del, form_info=form_info, infos_t=infos_t, form_remove=form_remove)
 
 
+@bp.route('/append_all',methods=['GET', 'POST'])
+@login_required
+
+
+def append_all():
+    i=request.args.get('info')
+    c=request.args.get('customer')
+    info=Info.query.get(i)
+
+    customer=Customer.query.get(c)
+    locations=Location.query.all()
+
+    for f in locations:
+
+       f.infos.append(info)
+       db.session.commit()
+      
+
+    return json.dumps({'status':'OK'});
 
 
 
 
+
+
+
+
+@bp.route('/append_info',methods=['GET', 'POST'])
+@login_required
+
+
+def append_info():
+    i=request.args.get('info')
+    c=request.args.get('customer')
+    info=Info.query.get(i)
+
+    customer=Customer.query.get(c)
+
+    for f in customer.locations:
+
+
+      f.infos.append(info)
+    db.session.commit()
+
+    return json.dumps({'status':'OK'});
 
 
 

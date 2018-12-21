@@ -10,6 +10,7 @@ import os
 import requests
 from app import db
 from app.models import Customer
+from app.data.charts import barchart
 
 
 @bp.route('/scraper',methods=['GET', 'POST'])
@@ -84,3 +85,16 @@ def scraper():
 
         
     return json.dumps({"match": out_match,  "technology": out_technology, "hardware": out_hardware ,"customer" : out_customer, "selcust": selcust, "project": out_project, "pm": pm});
+
+
+
+
+
+@bp.route('/test')
+
+def test():
+    barchart()
+
+
+    
+    return render_template('test.html', name = 'new_plot', url ='/home/ahoehne/flask02/app/static/images/new_plot.png')

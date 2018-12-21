@@ -1,4 +1,15 @@
+
+
+
+
+
+
+
+
+
+
 <div id="flex-container-button" class="flex-container"> 
+  
 <div id="flex-item-button" class="flex-item">
 
 
@@ -18,67 +29,60 @@
 <span class="glyphicon glyphicon-plus"></span>
 </button>
 
-{{modal('Add Customer', '-info1', wtf.quick_form(form_info, button_map={'submit2':'success btn btn-sm'},id="testform" ), style="display:none;" )}}
+{{modal('Add Note', '-info1', wtf.quick_form(form_info, button_map={'submit2':'success btn btn-sm'},id="testform" ), style="display:none;" )}}
 
 
 </div>  <!-- End Div Flex Item-Button3 -->
+<div id="flex-item-back" class="flex-item">
+  <a class="btn btn-success btn-sm" href="{{ url_for('main.locations',customername=contract.customer.name) }}">Back</a></div>
 </div>  <!-- End Div Flex Container-Button -->
 
+<p></p>
 <!-- --------------------------------------------------------------------------------------------- -->
 
-
+<div id="flex-container-contract" class="flex-container"> 
+<div id="flex-item-contract" class="flex-item">
 <div class="panel panel-info">
 
 <div class="panel-heading">Info</div>
 <div class="panel-body">
-<a class="btn btn-success" href="{{ url_for('main.locations',customername=contract.customer.name) }}">Back</a>
+
 
 
 
 
 
 <table class="table  table-responsive">
-  <thead>
-    <tr>
-      
-      <th scope="col">Residence</th>
-      <th scope="col"> Project</th>
-      <th scope="col">Projectmanager</th>
-      <th scope="col">Hardware</th>
-      <th scope="col">Technology</th>
-      <th scope="col">Contract</th>
-      <th scope="col"></th>
-      
 
-    </tr>
-  </thead>
 
   <tbody>
-  	<tr>
-  		
-      <td id="residence_contract">{{contract.residence}}</td>
-      <td id="project_contract">{{contract.project}}</td>
-      <td id="projectmanager_contract">{{contract.projectmanager}}</td>
-      <td id="hardware_contract">{{contract.hardware.first().name}}:{{contract.hardware.first().sn}}</td>
-      <td id="technology_contract">{{contract.technology}}</td>
-      <td id="contract_contract">{{contract.contract}}</td>
+  
+ <tr><td Style="color:#31708f;">Residence</td><td id="residence_contract" >{{contract.residence}}</td><td Style="color:#31708f;">Contact</td><td id="contact_contract" >{{contract.contact}}</td></tr>
+<tr><td Style="color:#31708f;">Project</td><td id="project_contract">{{contract.project}}</td><td Style="color:#31708f;">Projectmanager</td><td id="projectmanager_contract">{{contract.projectmanager}}</td>
+<tr><td Style="color:#31708f;">Seller</td><td id="seller_contract" >{{contract.seller}}</td><td Style="color:#31708f;">Matchcode</td><td id="matchcode_contract" >{{contract.matchcode}}</td></tr>
+<tr><td Style="color:#31708f;">Hardware</td><td id="hardware_contract">{{contract.hardware.first().name}}</td><td Style="color:#31708f;" >Serialnumber</td><td id="sn_contract">{{contract.hardware.first().sn}}</td></tr>
+<tr><td Style="color:#31708f;">Technology</td><td id="technology_contract">{{contract.technology}}</td><td Style="color:#31708f;">VRF</td><td id="vrf_contract">{{contract.vrf}}</td></tr>
+<tr><td Style="color:#31708f;">Contract</td><td id="contract_contract">{{contract.contract}}</td><td Style="color:#31708f;">Sid</td><td id="sid_contract" >{{contract.sid}}</td></tr>
 
 
 
 
+ 
 
 
 
 
-
-
-  	</tr>
+  	
 
 </tbody>
 </table>
 
 </div> <!--End Div Panel Body-->
 </div> <!--End Div Panel-->
+
+
+</div> <!--end container-contract item -->
+</div> <!--end container-contract -->
 <p></p>
 <div id="flex-container-contract-info" class="flex-container"> 
 
@@ -90,6 +94,15 @@
 <div class="panel-heading">Notes&nbsp;&nbsp;&nbsp; 
   <a href="javascript: edit_button_info({{i.id}});" class="btn btn-info btn-sm" id="edit_button_info{{i.id}}">
           <span class="glyphicon glyphicon-edit"></span></a>
+  <div class="dropdown" style="display:inline;">
+  <button class="btn btn-info btn-sm dropdown-toggle" type="button" data-toggle="dropdown"><span class="  glyphicon glyphicon-share"></span>
+  <span class="caret"></span></button>
+  <ul class="dropdown-menu" >
+    <li><a href="javascript: append_info( '{{i.id}}', '{{contract.customer.id}}' );">Append to Customer</a></li>
+    <li><a href="javascript: append_all( '{{i.id}}', '{{contract.customer.id}}');">Append to All</a></li>
+    
+  </ul>
+</div>
 
   <form style="display:none;" id="remove_button{{i.id}}" action="" method="post" >
   {{ wtf.form_field(form_remove.remove, label="", class=" btn btn-danger btn-sm") }}
