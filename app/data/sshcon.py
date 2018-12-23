@@ -20,5 +20,5 @@ except pxssh.ExceptionPxssh as e:
 
 
 
-eval "{ sleep 1; echo ahoehne; sleep 1; echo net7toor; sleep 1; echo 'ls'; sleep 5; }" | telnet 192.168.0.136
+eval "{ sleep 1; echo ahoehne; sleep 1; echo net7toor; sleep 1; echo 'ls'; sleep 15; }" | telnet 192.168.0.136
  

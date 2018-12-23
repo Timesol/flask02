@@ -13,6 +13,7 @@ from app.models import Customer
 from app.data.charts import barchart
 
 
+
 @bp.route('/scraper',methods=['GET', 'POST'])
 @login_required
 
