@@ -3,64 +3,46 @@
 
 {% block app_content %}
 
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
-<div id="container_statistics_main" class="container_statistics_main" style="width: auto;"> 
-<div  id="panel_main" class="panel panel-info">
-<div class="panel-heading">Statistic</div>
-<div class="panel-body">
-<table class="table" >
-  <thead>
-    <tr>
-      
-      <th scope="col" >Category</th>
-      <th scope="col" >Subcategory </th>
-      <th scope="col" >Technology</th>
-      <th scope="col" >Customer</th>
-      <th scope="col" >Contract</th>
-      <th scope="col" >Hardware</th>
-      <th scope="col" >Time</th>
-      <th scope="col" >User</th>
-      <th scope="col"></th>
-      
-       
-    </tr>
-  </thead>
-<tbody>
-
-
-{% for stat in stats %}
+<script type="text/javascript" src="{{url_for('static', filename='contract.js')}}"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="{{url_for('static', filename='jquery.js')}}">\x3C/script>')</script>
 
 
 
-<tr >
-      
-      <td>{{stat.category.name}}</td>
-      <td>{{stat.subcategory.name}}</td>
-      <td>{{stat.technology}}</td>
-      <td>{{stat.customer}}</td>
-      <td>{{stat.contract}}</td>
-      <td>{{stat.hardware}}</td>
-      <td>{{stat.time}}</td>
-      <td>{{stat.user}}</td>
-      <td><form action="" method="post" >
-  {{ form_del.hidden_tag() }}
-<td>{{ form_del.id_del(value=stat.id, type="hidden") }}
-{{ wtf.form_field(form_del.delete, class=" btn btn-danger btn-sm") }}</td> 
-</form></td>
+<ul class="nav nav-tabs">
+  <li class="nav-item active">
+    <a class="nav-link active"  id="Charts-tab" data-toggle="tab" href="#Tabs" role="tab" aria-controls="home" aria-selected="true">Tabs</a>
 
-      
-</tr>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link active" id="Tabs-tab" data-toggle="tab" href="#Charts" role="tab" aria-controls="home" aria-selected="true">Charts</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="#">Timeflow</a>
+  </li>
+ 
+</ul>
+<div class="tab-content" id="TabContent" class="active" >
+<div class="tab-pane active in " id="Tabs" role="tabpanel" aria-labelledby="Tabs-tab">
 
 
-{% endfor %}
-
-</tbody>
+{% include '_statistics_tabs.html' %}
 
 
-</table>
+</div> <!--End Div Tab Panel-->
+
+<p></p>
 
 
-</div> <!-- End Div Panel-Body-->
-</div> <!-- End Div  Panel-Container-->
+<div class="tab-pane fade out" id="Charts" role="tabpanel" aria-labelledby="Charts-tab" >
+
+{% include '_statistics_charts.html' %}
+
+
+</div> <!-- End Div Tab Charts-->
+</div> <!-- End Div Tab Content -->
 
 {% endblock %}

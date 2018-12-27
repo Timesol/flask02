@@ -274,6 +274,7 @@ class Statistic(db.Model):
     user_id_stat=db.Column(db.Integer, db.ForeignKey('user.id'))
     category_id=db.Column(db.Integer, db.ForeignKey('category.id'))
     subcategory_id=db.Column(db.Integer, db.ForeignKey('subcategory.id'))
+    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     
 
 

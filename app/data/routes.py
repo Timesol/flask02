@@ -1,16 +1,20 @@
 from bs4 import BeautifulSoup
 from flask import render_template, flash, redirect, url_for, request, g, current_app, json
+from app.models import User, Post, Location, Customer, Network, Post_r, Statistic, Category, Subcategory, Info, Hardware
+from app.main.forms import EditProfileForm, PostForm, LocationForm, NetworkForm, CustomerForm, Post_r_Form, Statistic_Work_Form, DeleteForm, InfoForm,RemoveForm
 from requests import Request, Session
 import bs4 as bs
 import pandas as pd
 from app.data import bp
-from flask_login import login_required
+from flask_login import login_required, current_user
 from flask_babel import _, get_locale
 import os
 import requests
 from app import db
 from app.models import Customer
-from app.data.charts import barchart
+from app.functions.sshcon import connector
+from app.functions.charts import barchart
+from app.edit.routes import delete
 
 
 
@@ -94,8 +98,56 @@ def scraper():
 @bp.route('/test')
 
 def test():
-    barchart()
+    
+    
 
 
     
     return render_template('test.html', name = 'new_plot', url ='/home/ahoehne/flask02/app/static/images/new_plot.png')
+
+
+@bp.route('/scripter',methods=['GET', 'POST'])
+@login_required
+
+
+def scripter():
+
+    return
+
+
+
+@bp.route('/statistics/<username>' ,methods=['GET', 'POST'])
+@login_required
+def statistics(username):
+    form_del=DeleteForm()
+
+    if form_del.validate_on_submit():
+
+        
+        if form_del.delete.data:  
+            print('form validate')
+            id=form_del.id_del.data
+            delete(Statistic,id)
+            return redirect(url_for('data.statistics',username=current_user.username))
+
+    user=User.query.filter_by(username=username).first_or_404()
+
+    
+    page = request.args.get('page', 1, type=int)
+
+    stats = user.statistics.order_by(Statistic.timestamp.desc()).paginate(
+        page, current_app.config['POSTS_PER_PAGE'], False)
+    next_url = url_for('data.statistics',username=current_user.username, page=stats.next_num) \
+        if stats.has_next else None
+    prev_url = url_for('data.statistics',username=current_user.username, page=stats.prev_num) \
+        if stats.has_prev else None
+    barchart()
+
+
+
+    return render_template('statistics.html', user=user, stats=stats.items, form_del=form_del,next_url=next_url,
+                           prev_url=prev_url)
+
+
+
+

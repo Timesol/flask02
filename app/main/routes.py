@@ -420,32 +420,6 @@ def router_todo():
 
 
 
-@bp.route('/statistics/<username>' ,methods=['GET', 'POST'])
-@login_required
-def statistics(username):
-    form_del=DeleteForm()
-
-    if form_del.validate_on_submit():
-
-        
-        if form_del.delete.data:  
-            print('form validate')
-            id=form_del.id_del.data
-            delete(Statistic,id)
-            return redirect(url_for('main.statistics',username=current_user.username))
-
-    user=User.query.filter_by(username=username).first_or_404()
-    stats=user.statistics
-
-
-
-    return render_template('statistics.html', user=user, stats=stats, form_del=form_del)
-
-
-
-
-
-
 @bp.route('/contract/<id>',methods=['GET', 'POST'])
 @login_required
 
@@ -584,47 +558,6 @@ def append_info():
 
 
 
-
-''' @bp.route('/query',methods=['GET', 'POST'])
-@login_required
-
-def query():
-    no=request.args.get('no')
-
-    location=Location.query.get(no)
-    d={}
-    for i in location.networks:
-        netid='network'+ str(i.id)
-        netid=str(netid)
-        id= 'id'+ str(i.id)
-        print(netid)
-        a={
-        id : i.name,
-        netid : i.network}
-        d.update(a)
-
-    
-    print (d)
-
-    locr=location.residence
-    locp=location.project
-    locpm=location.projectmanager  
-    loch=location.hardware
-    loct=location.technology
-    locc=location.contract
-    d1={'locr':locr,'locp':locp,'locpm':locpm,'loch':loch,'loct':loct,'locc':locc, }
-    d2=d
-    d1.update(d2)
-    
-    return json.dumps(d1); '''
-
-
-
-
-
-@bp.route('/insert')
-def insert():
-    return render_template('insert.html')
 
 
 

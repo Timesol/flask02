@@ -1,0 +1,81 @@
+
+
+<p></p>
+<div id="container_statistics_main" class="container_statistics_main" style="width: auto;"> 
+<div  id="panel_main" class="panel panel-info">
+<div class="panel-heading">Statistic</div>
+<div class="panel-body">
+<table class="table" >
+  <thead>
+    <tr>
+      
+      <th scope="col" >Category</th>
+      <th scope="col" >Subcategory </th>
+      <th scope="col" >Technology</th>
+      <th scope="col" >Customer</th>
+      <th scope="col" >Contract</th>
+      <th scope="col" >Hardware</th>
+      <th scope="col" >Time</th>
+      <th scope="col" >User</th>
+      <th scope="col">Date</th>
+      <th scope="col"></th>
+      
+       
+    </tr>
+  </thead>
+<tbody>
+
+
+{% for stat in stats %}
+
+
+
+<tr >
+      
+      <td>{{stat.category.name}}</td>
+      <td>{{stat.subcategory.name}}</td>
+      <td>{{stat.technology}}</td>
+      <td>{{stat.customer}}</td>
+      <td>{{stat.contract}}</td>
+      <td>{{stat.hardware}}</td>
+      <td>{{stat.time}}</td>
+      <td>{{stat.user}}</td>
+      <td>{{moment(stat.timestamp).calendar()}}</td>
+      <td><form action="" method="post" >
+  {{ form_del.hidden_tag() }}
+<td>{{ form_del.id_del(value=stat.id, type="hidden") }}
+{{ wtf.form_field(form_del.delete, class=" btn btn-danger btn-sm") }}</td> 
+</form></td>
+
+      
+</tr>
+
+
+{% endfor %}
+
+</tbody>
+
+
+</table>
+
+
+</div> <!-- End Div Panel-Body-->
+</div> <!-- End Div  Panel-->
+</div> <!-- End Container-->
+
+
+
+<nav aria-label="...">
+    <ul class="pager">
+        <li class="previous{% if not prev_url %} disabled{% endif %}">
+            <a href="{{ prev_url or '#' }}">
+                <span aria-hidden="true">&larr;</span> {{ _('Newer Entries') }}
+            </a>
+        </li>
+        <li class="next{% if not next_url %} disabled{% endif %}">
+            <a href="{{ next_url or '#' }}">
+                {{ _('Older Entries') }} <span aria-hidden="true">&rarr;</span>
+            </a>
+        </li>
+    </ul>
+</nav>
