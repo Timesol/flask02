@@ -23,6 +23,7 @@ def save():
     new_matchcode= request.args.get('matchcode_val', None)
     new_vrf = request.args.get('vrf_val', None)
     new_sid = request.args.get('sid_val', None)
+    new_connector = request.args.get('connector_val', None)
 
     
     
@@ -40,6 +41,7 @@ def save():
     arg.matchcode=new_matchcode
     arg.vrf=new_vrf
     arg.sid=new_sid
+    arg.connector=new_connector
     db.session.commit()
 
 

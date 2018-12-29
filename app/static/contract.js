@@ -26,6 +26,7 @@ function edit_row(no){
  var sid=document.getElementById("sid_contract");
  var sn=document.getElementById("sn_contract");
  var contact=document.getElementById("contact_contract");
+ var connector=document.getElementById("connector_contract");
  
 	
  var residence_data=residence.innerHTML;
@@ -40,6 +41,7 @@ function edit_row(no){
  var sid_data=sid.innerHTML;
  var sn_data=sn.innerHTML;
  var contact_data=contact.innerHTML;
+ var connector_data=connector.innerHTML;
  
 
 
@@ -58,6 +60,7 @@ function edit_row(no){
  sid.innerHTML="<input type='text' id='sid_text"+"' value='"+sid_data+"'>";
  sn.innerHTML="<input type='text' id='sn_text"+"' value='"+sn_data+"'>";
  contact.innerHTML="<input type='text' id='contact_text"+"' value='"+contact_data+"'>";
+ connector.innerHTML="<input type='text' id='connector_text"+"' value='"+connector_data+"'>";
 }
 
 
@@ -75,6 +78,7 @@ function save_row(no)
  var sid_val=document.getElementById("sid_text").value;
  var sn_val=document.getElementById("sn_text").value;
  var contact_val=document.getElementById("contact_text").value;
+ var connector_val=document.getElementById("connector_text").value;
 
  document.getElementById("residence_contract").innerHTML=residence_val;
  document.getElementById("project_contract").innerHTML=project_val;
@@ -88,6 +92,7 @@ function save_row(no)
  document.getElementById("sid_contract").innerHTML=sid_val;
  document.getElementById("sn_contract").innerHTML=sn_val;
  document.getElementById("contact_contract").innerHTML=contact_val;
+ document.getElementById("connector_contract").innerHTML=connector_val;
 
 
 
@@ -106,7 +111,7 @@ document.getElementById("edit_button"+no).style["display"]="inline-block";
                         type: "get",
 			data: { residence_val : residence_val, no : no, project_val : project_val,
 projectmanager_val : projectmanager_val, hardware_val : hardware_val, technology_val : technology_val, contract_val: contract_val, 
-seller_val: seller_val, matchcode_val:matchcode_val, vrf_val:vrf_val,sid_val:sid_val,sn_val:sn_val,contact_val:contact_val},
+seller_val: seller_val, matchcode_val:matchcode_val, vrf_val:vrf_val,sid_val:sid_val,sn_val:sn_val,contact_val:contact_val, connector_val:connector_val},
 		
 			success: function(response){
 				console.log(response);

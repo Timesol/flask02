@@ -29,8 +29,8 @@
 
 
 <!--Button to Open the Modal -->
-<button type="button" class="btn btn-info btn-sm"  data-toggle="modal" data-target="#modal-customer1">
-<span class="glyphicon glyphicon-plus"></span>
+<button type="button" class="btn btn-success btn-sm"  data-toggle="modal" data-target="#modal-customer1">
+<span>Add Customer</span>
 </button>
 
 {{modal('Add Customer', '-customer1', wtf.quick_form(form2,button_map={'submit' : 'success btn btn-sm'}), style="display:none;" )}}

@@ -222,6 +222,7 @@ class Location(db.Model, SearchableMixin):
     vrf= db.Column(db.String(140))
     dependencies=db.relationship('Contract', backref='location' , lazy='dynamic')
     infos=db.relationship("Info", secondary="basket", backref='locations')
+    connector=db.Column(db.String(280))
 
     def __repr__(self):
         return '<Location {}>'.format(self.residence)
@@ -250,7 +251,7 @@ class Contract(db.Model):
 class Post_r(db.Model): # ,SearchableMixin needs to be added
     
     id = db.Column(db.Integer, primary_key=True)
-    body = db.Column(db.String(140))
+    body = db.Column(db.String(400))
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     user_id2 = db.Column(db.Integer, db.ForeignKey('user.id'))
     language = db.Column(db.String(5))
@@ -299,7 +300,8 @@ def dynamic_class(table_name, columns):
 
     return dyn_table
 
-
+class test(db.Model):
+    id=db.Column(db.Integer, primary_key=True)
 
 
 
