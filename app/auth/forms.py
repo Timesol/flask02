@@ -47,3 +47,12 @@ class ResetPasswordForm(FlaskForm):
     submit = SubmitField(_l('Request Password Reset'))
 
 
+class ChangePasswordForm(FlaskForm):
+    username= StringField(_l('Username'), validators=[DataRequired()])
+    old_password = PasswordField(_l('Old Password'), validators=[DataRequired()])
+    new_password = PasswordField(_l('New Password'), validators=[DataRequired()])
+    new_password2 = PasswordField(
+        _l('Repeat Password'), validators=[DataRequired(),
+                                           EqualTo('new_password')])
+    submit = SubmitField(_l('Change Password'))
+

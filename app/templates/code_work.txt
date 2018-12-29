@@ -1,0 +1,21 @@
+ImJmZjg4OTE0OTBkMDhkNGJlYzc3Y2IzZTBjOTI1NGU2MzRhMzYzYTQi.DtiHqw.3t5-CF7dClka1wcj6RbOg909H2g
+csrf_token
+
+
+import requests
+from bs4 import BeautifulSoup
+
+user='USERNAME'
+pw='PASSWORD'
+url='https://www.okcupid.com/login'
+
+session=requests.session()
+
+values = {'username': user, 'password': pw, 'okc_api': '1'}
+session.post(url, data=values)
+page = session.get('http://www.okcupid.com/')
+
+soup = BeautifulSoup(page.content)
+print(soup.title.string)
+
+session.close()

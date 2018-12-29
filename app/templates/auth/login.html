@@ -14,4 +14,11 @@
         {{ _('Forgot Your Password?') }}
         <a href="{{ url_for('auth.reset_password_request') }}">{{ _('Click to Reset It') }}</a>
     </p>
+    <p>
+        {{ _('Change Password?') }}
+        <a href="{{ url_for('auth.change_password') }}">{{ _('Click to Change It') }}</a>
+
+
+
+    </p>
 {% endblock %}

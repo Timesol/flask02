@@ -1,0 +1,28 @@
+ <table class="table table-hover">
+        <tr>
+            <td width="70px">
+                <a href="{{ url_for('main.user', username=post_r.author_r.username) }}">
+                    <img src="{{ post_router.author.avatar(70) }}" />
+                </a>
+            </td>
+            <td>
+                {% set user_link %}
+                    <span class="user_popup">
+                        <a href="{{ url_for('main.user', username=post_r.author_r.username) }}">
+                            {{ post.author.username }}
+                        </a>
+                    </span>
+                {% endset %}
+                {{ _('%(username)s said %(when)s',
+                    username=user_link, when=moment(post_r.timestamp).fromNow()) }}
+                <br>
+                <span id="post{{ post_r.id }}">{{ post_r.body }}</span>
+                {% if post_r.language and post_r.language != g.locale %}
+                <br><br>
+                <a href="#">{{ _('Translate') }}</a>
+                {% endif %}
+                
+                
+            </td>
+        </tr>
+</table>

@@ -20,6 +20,8 @@ import pandas as pd
 from app.file.routes import expy
 from app.edit.routes import delete
 from app.functions.sshcon import connector
+from flask import session
+
 
 
 
@@ -490,12 +492,27 @@ def contract(id):
             return redirect(url_for('main.contract',id=contract.id, contract=contract, infos_t=infos_t))
 
     if form_script.validate_on_submit():
+
         if form_script.send.data:
-            con=form_script.connector.data.split(";")
-            jumpcon=con[0]
-            endcon=con[1]
-            sshUsername=current_user.username
-            aduser=form_script.aduser.data
+            if '%' not in form_script.connector.data:
+                
+    
+                sshUsername=session['username']
+                aduser=session['username']
+                sshPassword=session['password']
+                con=form_script.connector.data.split(";")
+                jumpcon=con[0]
+                endcon=con[1]
+            else:
+                con=form_script.connector.data.split("%")
+                jumpcon=con[0]
+                userjump=con[1]
+                passjump=con[2]
+                endcon=con[3]
+                userend=con[4]
+                passend=con[5]
+
+            
             script_id=form_script.script.data
             script_name=Script.query.get(script_id).name
             script_name='Script_'+script_name+'.txt'

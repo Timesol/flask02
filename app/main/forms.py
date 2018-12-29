@@ -115,7 +115,6 @@ class ScriptForm(FlaskForm):
     description=StringField(_l('Description'))
     script=SelectField(u'Script', coerce=int, validators=[InputRequired()], id='sel_script')
     connector=StringField(_l('Connector'))
-    aduser=StringField(_l('Additional User'))
     send = SubmitField(_l('Send'))
 
     
