@@ -47,6 +47,11 @@ class LocationForm(FlaskForm):
     hardware= StringField(_l('Hardware'))
     project= StringField(_l('Project'))
     projectmanager= StringField(_l('Projectmanager'))
+    contact=StringField(_l('Contact'))
+    sid=StringField(_l('SID'))
+    matchcode=StringField(_l('Matchcode'))
+    seller=StringField(_l('Seller'))
+    vrf=StringField(_l('VRF'))
     contract=StringField(_l('Contract ID'))
     submit = SubmitField(_l('Submit'))
 
@@ -104,5 +109,14 @@ class InfoForm(FlaskForm):
 class RemoveForm(FlaskForm):
     id_rem=IntegerField(_l('ID_REM'), validators=[DataRequired()])
     remove = SubmitField(_l('Remove'))
+
+
+class ScriptForm(FlaskForm):
+    description=StringField(_l('Description'))
+    script=SelectField(u'Script', coerce=int, validators=[InputRequired()], id='sel_script')
+    connector=StringField(_l('Connector'))
+    aduser=StringField(_l('Additional User'))
+    send = SubmitField(_l('Send'))
+
     
     

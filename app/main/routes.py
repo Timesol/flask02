@@ -5,8 +5,8 @@ from werkzeug.urls import url_parse
 from flask_babel import _, get_locale
 from app import db
 from app.main import bp
-from app.main.forms import EditProfileForm, PostForm, LocationForm, NetworkForm, CustomerForm, Post_r_Form, Statistic_Work_Form, DeleteForm, InfoForm,RemoveForm
-from app.models import User, Post, Location, Customer, Network, Post_r, Statistic, Category, Subcategory, Info, Hardware
+from app.main.forms import EditProfileForm, PostForm, LocationForm, NetworkForm, CustomerForm, Post_r_Form, Statistic_Work_Form, DeleteForm, InfoForm,RemoveForm,ScriptForm
+from app.models import User, Post, Location, Customer, Network, Post_r, Statistic, Category, Subcategory, Info, Hardware,Script
 from guess_language import guess_language
 from werkzeug.utils import secure_filename
 import os
@@ -19,6 +19,7 @@ import bs4 as bs
 import pandas as pd
 from app.file.routes import expy
 from app.edit.routes import delete
+from app.functions.sshcon import connector
 
 
 
@@ -202,7 +203,7 @@ def customers():
         db.session.commit()
         flash(_('Your changes have been saved.'))
         custquerys=Customer.query.all()
-        return redirect(url_for('main.customers'))
+        return redirect(url_for('main.locations',customername=custname.name))
 
     return render_template('customers.html', title=_('Customers'), custquerys=custquerys, form2=form2)
 
@@ -285,13 +286,16 @@ def locations(customername):
     if form.validate_on_submit():
         
         location = Location(residence=form.residence.data, technology=form.technology.data,
-        project=form.project.data, projectmanager=form.projectmanager.data, contract= form.contract.data)
-        hardware=form.hardware.data
-        hardware=hardware.split(":")
-        hardware=Hardware(name=hardware[0], sn=hardware[1])
-        db.session.add(hardware)
+        project=form.project.data, projectmanager=form.projectmanager.data, contract= form.contract.data,contact=form.contact.data,
+        vrf=form.vrf.data,seller=form.seller.data,sid=form.sid.data,matchcode=form.matchcode.data)
+        if form.hardware.data:
+            hardware=form.hardware.data
+            hardware=hardware.split(":")
+            hardware=Hardware(name=hardware[0], sn=hardware[1])
+            db.session.add(hardware)
+            location.hardware.append(hardware)
         db.session.commit()
-        location.hardware.append(hardware)
+        
 
 
         db.session.add(location)
@@ -300,7 +304,7 @@ def locations(customername):
         customer.locations.append(location)
         db.session.commit()
         flash(_('Your changes have been saved.'))
-        return redirect(url_for('main.customers'))
+        return redirect(url_for('main.contract',id=location.id))
 
 
     
@@ -425,11 +429,18 @@ def router_todo():
 @login_required
 
 def contract(id):
+    available_scripts=Script.query.all()
+
+    scripts_list=[(i.id,i.name) for i in available_scripts]
+
     form=NetworkForm()
     form_del=DeleteForm()
     form_info=InfoForm()
     form_remove=RemoveForm()
+    form_script=ScriptForm()
     contract=Location.query.get(id)
+
+    form_script.script.choices=scripts_list
 
     if form_remove.validate_on_submit():
         if form_remove.remove.data:
@@ -478,13 +489,35 @@ def contract(id):
             flash(_('Your changes have been saved.'))
             return redirect(url_for('main.contract',id=contract.id, contract=contract, infos_t=infos_t))
 
+    if form_script.validate_on_submit():
+        if form_script.send.data:
+            con=form_script.connector.data.split(";")
+            jumpcon=con[0]
+            endcon=con[1]
+            sshUsername=current_user.username
+            aduser=form_script.aduser.data
+            script_id=form_script.script.data
+            script_name=Script.query.get(script_id).name
+            script_name='Script_'+script_name+'.txt'
+            print(script_name)
+            script=render_template(script_name)
+            print(script)
+
+            test=connector(sshUsername,'Katze7436!',endcon ,jumpcon, aduser,script)
+            print (test)
+            flash(_('Script successfull finished!'))
+
+            return redirect(url_for('main.contract',id=contract.id, contract=contract, infos_t=infos_t))
+
+
+
 
 
 
 
     
 
-    return render_template('contract.html', contract=contract, form=form, form_del=form_del, form_info=form_info, infos_t=infos_t, form_remove=form_remove)
+    return render_template('contract.html',form_script=form_script, contract=contract, form=form, form_del=form_del, form_info=form_info, infos_t=infos_t, form_remove=form_remove)
 
 
 @bp.route('/append_all',methods=['GET', 'POST'])

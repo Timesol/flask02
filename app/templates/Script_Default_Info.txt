@@ -1,0 +1,5 @@
+sleep 1; echo terminal length 0;
+sleep 1; echo show running-config; sleep 5;
+echo sh ip int brief; sleep 1;
+echo show version; sleep 2;
+echo wr mem; sleep 2;

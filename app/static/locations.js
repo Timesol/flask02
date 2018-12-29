@@ -25,12 +25,17 @@ contract=document.getElementById('contract').value
                         success: function(response){
                                 console.log(response);
                                 var json = JSON.parse(response);
-                                document.getElementById('residence').value =json['match'];
+                                document.getElementById('matchcode').value =json['match'];
                                 document.getElementById('project').value =json['project'];
                                 document.getElementById('technology').value =json['technology'];
                                 document.getElementById('hardware').value =json['hardware'];
                                 document.getElementById('customer').value =json['selcust'];
                                 document.getElementById('projectmanager').value =json['pm'];
+                                document.getElementById('seller').value =json['seller'];
+                                document.getElementById('sid').value =json['sid'];
+                                document.getElementById('contact').value =json['contact'];
+                                document.getElementById('residence').value =json['residence'];
+                                document.getElementById('vrf').value =json['vrf'];
                                
                         },
                         error: function(error){

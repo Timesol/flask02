@@ -29,6 +29,7 @@ def scraper():
     
     username= os.environ.get('username_env')
     password = os.environ.get('password_env')
+    pm=""
 
     req = requests.get(login_url, auth=(username, password))
     final_page = bs.BeautifulSoup(req.content, 'lxml')
@@ -40,6 +41,8 @@ def scraper():
     out_project= final_page.select_one("a[href*=project_show]")
     out_customer=final_page.find_all('a', class_='DetailInternalLink')
     out_customer=out_customer[0]
+    out_seller= final_page.find('td', class_='DetailName', text='Verkäufer').findNext('td', class_="DetailText")
+    out_sid= final_page.find('td', class_='DetailName', text='YAPS-UID').findNext('td', class_="DetailText")
 
     if out_hardware is not None:
        
@@ -63,22 +66,53 @@ def scraper():
         pm_page = bs.BeautifulSoup(req.content, 'lxml')
         
         pm=pm_page.find('td', class_="PageViewHeader", text="Notiz").findNext('td').findNext('td')
-        pm=pm.contents[2]
-        pm=pm[6:]
-        
+        pm=pm.contents[0]
+       
+
+
+    login_url="https://intern.inode.at/backoffice/contract/contract_config_edit.php4?Contract_ID="+contract
+    req = requests.get(login_url, auth=(username, password))
+    edit_page = bs.BeautifulSoup(req.content, 'lxml')
+    out_contact=edit_page.find('td', class_="PageViewHeader", text="Kontaktperson").findNext('input').attrs
+    out_contact_tel=edit_page.find('td', class_="PageViewHeader", text="Kontaktperson (Tel)").findNext('input').attrs
+    out_residence_street=edit_page.find('td', class_="PageViewHeader", text="Strasse").findNext('input').attrs
+    out_residence_number=edit_page.find('td', class_="PageViewHeader", text="Hausnummer").findNext('input').attrs
+    out_residence_plz=edit_page.find('td', class_="PageViewHeader", text="PLZ").findNext('input').attrs
+    out_residence_city=edit_page.find('td', class_="PageViewHeader", text="Ort").findNext('input').attrs
+    out_vrf=edit_page.find('td', class_="PageViewHeader", text="VRF Name").findNext('input').attrs
+    
+    print(out_contact)   
 
 
 
     out_match=out_match.contents[0]
+    out_seller=out_seller.contents[0]
     out_technology=out_technology.contents[0]
     out_technology=out_technology.strip()
     out_technology= " ".join(out_technology.split())
     print(out_customer.contents[0])
     out_customer=out_customer.contents[0]
+    out_contact=out_contact['value']
+    out_contact_tel=out_contact_tel['value']
+    out_contact=out_contact+" Tel: " + out_contact_tel
+    out_residence_street=out_residence_street['value']
+    out_residence_number=out_residence_number['value']
+    out_residence_plz=out_residence_plz['value']
+    out_residence_city=out_residence_city['value']
+    out_residence=out_residence_street+ " " + out_residence_number+ " ,"+ out_residence_plz+ " " + out_residence_city
+
+    if out_vrf is not None:
+        out_vrf=out_vrf['value']
+
+    
 
     selcust=Customer.query.filter_by(name=out_customer).first()
     if selcust is not None:
         selcust=selcust.id
+
+    if out_sid is not None:
+        out_sid=out_sid.contents[0]
+
     
         
     
@@ -89,7 +123,11 @@ def scraper():
     
 
         
-    return json.dumps({"match": out_match,  "technology": out_technology, "hardware": out_hardware ,"customer" : out_customer, "selcust": selcust, "project": out_project, "pm": pm});
+    return json.dumps({"match": out_match,  "technology": out_technology, "hardware": out_hardware ,
+        "customer" : out_customer, "selcust": selcust, "project": out_project, "pm": pm, "seller": out_seller,
+        "sid": out_sid, "contact": out_contact,"residence": out_residence, "vrf": out_vrf
+
+        });
 
 
 

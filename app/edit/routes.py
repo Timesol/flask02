@@ -32,8 +32,9 @@ def save():
     arg.residence=new_residence
     arg.project=new_project
     arg.projectmanager=new_projectmanager
-    arg.hardware.first().name=new_hardware
-    arg.hardware.first().sn=new_sn
+    if new_hardware is not None:
+        arg.hardware.first().name=new_hardware
+        arg.hardware.first().sn=new_sn
     arg.technology=new_technology
     arg.contract=new_contract
     arg.contact=new_contact

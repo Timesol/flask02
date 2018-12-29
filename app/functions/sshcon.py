@@ -1,5 +1,6 @@
 from paramiko import client
 
+
 class ssh:
     client = None
  
@@ -21,31 +22,39 @@ class ssh:
                         prevdata = stdout.channel.recv(1024)
                         alldata += prevdata
  
-                    print(str(alldata, "utf8"))
+                    return str(alldata, "utf8")
         else:
             print("Connection not opened.")
 
 
 sshUsername = 'ahoehne'
-sshPassword = "net7toor"
-sshServer = "192.168.0.192"
-jumpcon='telnet 192.168.0.136'
-endcon='telnet 62.99.227.25'
-aduser='admin'
+sshPassword = "Katze7436!"
+sshServer = "10.146.140.166"
+jumpcon='telnet at-vie-xion-pe01'
+endcon='telnet vrf 04325363:B2B_ADLER 10.17.1.254'
+aduser='ahoehne'
 
-def connector(sshUsername,sshPassword,endcon ,jumpcon, aduser):
+def connector(sshUsername,sshPassword,endcon ,jumpcon, aduser,script):
+    #{0}= Username Jumphost 
+    #{1}= Password Jumphost 
+    #{2}= End Connection ...telnet ...
+    #{3}= Jump Connection
+    #{4}= Username En Connection
+    #{5}= Scriptbody
 
     connection = ssh(sshServer, sshUsername, sshPassword)
-    connection.sendCommand("""eval "{{ sleep 1; echo {0}; sleep 1; echo {1}; sleep 1; echo ls; sleep 2; echo {2}; sleep 1; echo {4}; sleep 1; echo {1};
-    sleep 1; echo sh run; sleep 5; 
-    echo sh ip int br; sleep 1;
-    echo show version; sleep 2;
-    echo show cellular 0 radio; sleep 2;
-    echo wr mem; sleep 2;
+    test=connection.sendCommand("""eval "{{ sleep 1; echo {0}; sleep 1; echo {1}; sleep 2; echo {2}; sleep 1; echo {4}; sleep 1; echo {1};
+    
+    {5}
 
 
+    }}" | {3} """.format(sshUsername,sshPassword,endcon ,jumpcon, aduser,script))
 
-    }}" | {3} """.format(sshUsername,sshPassword,endcon ,jumpcon, aduser))
+    
+
+    return test
+
+
 
 
 

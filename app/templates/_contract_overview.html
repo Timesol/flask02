@@ -14,22 +14,26 @@
 
 
 <div><a href="javascript: edit_row({{contract.id}});" class="btn btn-info btn-sm" id="edit_button{{contract.id}}">
-          <span class="glyphicon glyphicon-edit"></span></a>
+          <span> Edit</span></a>
           <a style="display:none; "href="javascript: save_row({{contract.id}});" class="btn btn-success btn-sm" aria-disabled="true" id ="save_button{{contract.id}}">
-          <span class="glyphicon glyphicon-floppy-disk"></span>
+          <span> Save</span>
         </a></div> </div>  <!-- End Div Flex Item -->
 
 
  
 <div id="flex-item-button2" class="flex-item">
   <button id="router_todo" onclick="router_todo( {{contract.id}} )"  type="button" class="btn btn-info btn-sm " >
-<span class="glyphicon glyphicon-send"></span></button></div> <!-- End Div flex-item-button2 -->
+<span></span> Send Routerinfo</button></div> <!-- End Div flex-item-button2 -->
 <div id="flex-item-button3" class="flex-item">
 <button type="button" class="btn btn-info btn-sm"  data-toggle="modal" data-target="#modal-info1">
-<span class="glyphicon glyphicon-plus"></span>
+<span> Add Note</span>
+</button>
+<button type="button" class="btn btn-info btn-sm"  data-toggle="modal" data-target="#modal-script1">
+<span>Script</span>
 </button>
 
 {{modal('Add Note', '-info1', wtf.quick_form(form_info, button_map={'submit2':'success btn btn-sm'},id="testform" ), style="display:none;" )}}
+{{modal('Activate Script', '-script1', wtf.quick_form(form_script, button_map={'send':'success btn btn-sm'},id="scriptform" ), style="display:none;" )}}
 
 
 </div>  <!-- End Div Flex Item-Button3 -->
@@ -94,9 +98,9 @@
 <div   class="panel panel-success">
 <div class="panel-heading">Notes&nbsp;&nbsp;&nbsp; 
   <a href="javascript: edit_button_info({{i.id}});" class="btn btn-info btn-sm" id="edit_button_info{{i.id}}">
-          <span class="glyphicon glyphicon-edit"></span></a>
+          <span>Edit</span></a>
   <div class="dropdown" style="display:inline;">
-  <button class="btn btn-info btn-sm dropdown-toggle" type="button" data-toggle="dropdown"><span class="  glyphicon glyphicon-share"></span>
+  <button class="btn btn-info btn-sm dropdown-toggle" type="button" data-toggle="dropdown"><span>Append to ...</span>
   <span class="caret"></span></button>
   <ul class="dropdown-menu" >
     <li><a href="javascript: append_info( '{{i.id}}', '{{contract.customer.id}}' );">Append to Customer</a></li>
