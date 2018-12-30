@@ -27,28 +27,26 @@ class ssh:
             print("Connection not opened.")
 
 
-sshUsername = 'ahoehne'
-sshPassword = "Katze7436!"
-sshServer = "10.146.140.166"
-jumpcon='telnet at-vie-xion-pe01'
-endcon='telnet vrf 04325363:B2B_ADLER 10.17.1.254'
-aduser='ahoehne'
 
-def connector(sshUsername,sshPassword,endcon ,jumpcon, aduser,script):
+
+
+
+
+def connector(endcon ,jumpcon, userjump,passjump,userend,passend,script,sshServer, sshUsername, sshPassword):
     #{0}= Username Jumphost 
     #{1}= Password Jumphost 
     #{2}= End Connection ...telnet ...
     #{3}= Jump Connection
-    #{4}= Username En Connection
+    #{4}= Username End Connection
     #{5}= Scriptbody
 
     connection = ssh(sshServer, sshUsername, sshPassword)
-    test=connection.sendCommand("""eval "{{ sleep 1; echo {0}; sleep 1; echo {1}; sleep 2; echo {2}; sleep 1; echo {4}; sleep 1; echo {1};
+    test=connection.sendCommand("""eval "{{ sleep 1; echo {2}; sleep 1; echo {3}; sleep 2; echo {0}; sleep 1; echo {4}; sleep 1; echo {5};
     
-    {5}
+    {6}
 
 
-    }}" | {3} """.format(sshUsername,sshPassword,endcon ,jumpcon, aduser,script))
+    }}" | {1} """.format(endcon ,jumpcon, userjump,passjump,userend,passend,script))
 
     
 

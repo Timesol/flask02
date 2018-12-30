@@ -1,3 +1,8 @@
+function loading(){
+console.log("Test");
+
+
+}
 
 
 
@@ -479,3 +484,9 @@ function append_all(info, customer){
 
 
 }
+
+
+
+
+
+

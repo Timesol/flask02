@@ -33,7 +33,7 @@
 </button>
 
 {{modal('Add Note', '-info1', wtf.quick_form(form_info, button_map={'submit2':'success btn btn-sm'},id="testform" ), style="display:none;" )}}
-{{modal('Activate Script', '-script1', wtf.quick_form(form_script, button_map={'send':'success btn btn-sm'},id="scriptform" ), style="display:none;" )}}
+{{modal('Activate Script', '-script1', wtf.quick_form(form_script, button_map={'send':'success btn btn-sm'},id="scriptform" ),style="display:none;",onclick="loading()" )}}
 
 
 </div>  <!-- End Div Flex Item-Button3 -->

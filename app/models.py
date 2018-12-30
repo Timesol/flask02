@@ -89,6 +89,7 @@ class User(UserMixin,db.Model):
     posts = db.relationship('Post', backref='author', lazy='dynamic')
     posts_r = db.relationship('Post_r', backref='author_r', lazy='dynamic')
     statistics = db.relationship('Statistic', backref='user_s', lazy='dynamic')
+    journals = db.relationship('Journal', backref='user_j', lazy='dynamic')
     about_me = db.Column(db.String(140))
     last_seen = db.Column(db.DateTime, default=datetime.utcnow)
     @login.user_loader
@@ -307,6 +308,14 @@ class test(db.Model):
 class Script(db.Model):
     id=db.Column(db.Integer, primary_key=True)
     name= db.Column(db.String(140) ,index=True, unique=True)
+
+class Journal(db.Model):
+    id=db.Column(db.Integer, primary_key=True)
+    description=db.Column(db.String(140) ,index=True)
+    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    user_id_journal=db.Column(db.Integer, db.ForeignKey('user.id'))
+    link=db.Column(db.String(140) ,index=True)
+
     
 
 

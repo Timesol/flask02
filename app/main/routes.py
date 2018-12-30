@@ -494,17 +494,32 @@ def contract(id):
     if form_script.validate_on_submit():
 
         if form_script.send.data:
+            sshUsername=session['username']
+            sshPassword=session['password']
+            sshServer = "10.146.140.166"
             if '%' not in form_script.connector.data:
                 
     
-                sshUsername=session['username']
-                aduser=session['username']
-                sshPassword=session['password']
+                
                 con=form_script.connector.data.split(";")
                 jumpcon=con[0]
                 endcon=con[1]
+                userjump=session['username']
+                passjump=session['password']
+                userend=session['username']
+                passend=session['password']
             else:
+                
+                sshUsername=session['username']
+                sshPassword=session['password']
                 con=form_script.connector.data.split("%")
+                for i in range(0,len(con),1):
+                    print(str(i) + con[i])
+                    
+                    if 'uim' in con[i]:
+                        print (i)
+                        con[i]=session['username']
+                        con.insert(i+1, session['password'])
                 jumpcon=con[0]
                 userjump=con[1]
                 passjump=con[2]
@@ -512,16 +527,20 @@ def contract(id):
                 userend=con[4]
                 passend=con[5]
 
+               
+
             
             script_id=form_script.script.data
             script_name=Script.query.get(script_id).name
             script_name='Script_'+script_name+'.txt'
-            print(script_name)
-            script=render_template(script_name)
-            print(script)
+            script=render_template('scripts/'+script_name)
+            
 
-            test=connector(sshUsername,'Katze7436!',endcon ,jumpcon, aduser,script)
-            print (test)
+            test=connector(endcon,jumpcon,userjump,passjump,userend,passend,script,sshServer, sshUsername, sshPassword)
+            
+            findresult=test.find('terminal length 0')
+            test=test[findresult::]
+            print ('Ergebnis '+ test)
             flash(_('Script successfull finished!'))
 
             return redirect(url_for('main.contract',id=contract.id, contract=contract, infos_t=infos_t))
