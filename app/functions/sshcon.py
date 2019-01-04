@@ -33,13 +33,14 @@ class ssh:
 
 
 def connector(endcon ,jumpcon, userjump,passjump,userend,passend,script,sshServer, sshUsername, sshPassword):
-    #{0}= Username Jumphost 
-    #{1}= Password Jumphost 
-    #{2}= End Connection ...telnet ...
-    #{3}= Jump Connection
+    #{2}= Username Jumphost 
+    #{3}= Password Jumphost 
+    #{0}= End Connection ...telnet ...
+    #{1}= Jump Connection
     #{4}= Username End Connection
-    #{5}= Scriptbody
-
+    #{5}= Password End Connection
+    #{6}= Scriptbody
+    
     connection = ssh(sshServer, sshUsername, sshPassword)
     test=connection.sendCommand("""eval "{{ sleep 1; echo {2}; sleep 1; echo {3}; sleep 2; echo {0}; sleep 1; echo {4}; sleep 1; echo {5};
     

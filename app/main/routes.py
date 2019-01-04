@@ -514,21 +514,8 @@ def contract(id):
             sshUsername=session['username']
             sshPassword=session['password']
             sshServer = "10.146.140.166"
-            if '%' not in form_script.connector.data:
+            if '%'in form_script.connector.data:
                 
-    
-                
-                con=form_script.connector.data.split(";")
-                jumpcon=con[0]
-                endcon=con[1]
-                userjump=session['username']
-                passjump=session['password']
-                userend=session['username']
-                passend=session['password']
-            else:
-                
-                sshUsername=session['username']
-                sshPassword=session['password']
                 con=form_script.connector.data.split("%")
                 for i in range(0,len(con),1):
                     print(str(i) + con[i])
@@ -543,6 +530,30 @@ def contract(id):
                 endcon=con[3]
                 userend=con[4]
                 passend=con[5]
+                
+
+                
+    
+            elif  ';' in form_script.connector.data:      
+                con=form_script.connector.data.split(";")
+                jumpcon=con[0]
+                endcon=con[1]
+                userjump=session['username']
+                passjump=session['password']
+                userend=session['username']
+                passend=session['password']
+
+            else:
+                print('Here')
+                jumpcon=form_script.connector.data
+                userjump=session['username']
+                passjump=session['password']
+                endcon=""
+                userend=""
+                passend=""
+            
+                
+                
 
                
 
@@ -560,7 +571,7 @@ def contract(id):
             print ('Ergebnis '+ test)
             flash(_('Script successfull finished!'))
 
-            return redirect(url_for('main.contract',id=contract.id, contract=contract, infos_t=infos_t))
+        return redirect(url_for('main.contract',id=contract.id, contract=contract, infos_t=infos_t))
 
 
 
