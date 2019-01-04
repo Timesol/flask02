@@ -30,6 +30,7 @@ def scraper():
     username= os.environ.get('username_env')
     password = os.environ.get('password_env')
     pm=""
+    out_vrf=""
 
     req = requests.get(login_url, auth=(username, password))
     final_page = bs.BeautifulSoup(req.content, 'lxml')
@@ -74,12 +75,18 @@ def scraper():
     req = requests.get(login_url, auth=(username, password))
     edit_page = bs.BeautifulSoup(req.content, 'lxml')
     out_contact=edit_page.find('td', class_="PageViewHeader", text="Kontaktperson").findNext('input').attrs
-    out_contact_tel=edit_page.find('td', class_="PageViewHeader", text="Kontaktperson (Tel)").findNext('input').attrs
+    if edit_page.find('td', class_="PageViewHeader", text="Kontaktperson (Tel)") is not None:
+        out_contact_tel=edit_page.find('td', class_="PageViewHeader", text="Kontaktperson (Tel)").findNext('input').attrs
+    if edit_page.find('td', class_="PageViewHeader", text="Kontaktperson (Tel)") is None:
+        out_contact_tel=edit_page.find('td', class_="PageViewHeader", text="Telefonnummer (privat)").findNext('input').attrs
+
     out_residence_street=edit_page.find('td', class_="PageViewHeader", text="Strasse").findNext('input').attrs
     out_residence_number=edit_page.find('td', class_="PageViewHeader", text="Hausnummer").findNext('input').attrs
     out_residence_plz=edit_page.find('td', class_="PageViewHeader", text="PLZ").findNext('input').attrs
     out_residence_city=edit_page.find('td', class_="PageViewHeader", text="Ort").findNext('input').attrs
-    out_vrf=edit_page.find('td', class_="PageViewHeader", text="VRF Name").findNext('input').attrs
+    if edit_page.find('td', class_="PageViewHeader", text="VRF Name") is not None:
+        out_vrf=edit_page.find('td', class_="PageViewHeader", text="VRF Name").findNext('input').attrs
+        out_vrf=out_vrf['value']
     
     print(out_contact)   
 
@@ -101,8 +108,8 @@ def scraper():
     out_residence_city=out_residence_city['value']
     out_residence=out_residence_street+ " " + out_residence_number+ " ,"+ out_residence_plz+ " " + out_residence_city
 
-    if out_vrf is not None:
-        out_vrf=out_vrf['value']
+
+        
 
     
 

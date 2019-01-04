@@ -1,12 +1,22 @@
+</div>
 <div id="flex-container-button-net" class="flex-container"> 
 <div id="flex-item-button-net" class="flex-item">
-<select id="bmodal" onclick="send_id( {{contract.id}} )"   type="button" class="btn btn-secondary btn-sm"  data-toggle="modal" data-target="#myModal">
 
-<option  id="linknet" value="linknet">Linknet</option>
-<option id="Single-Static" value="Single-Static">Single Static</option>
-<option id="custnetstandard" value="custnetstandard">Customernet Standard</option>
-</select>
 
+
+<div class="dropdown show">
+  <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    Dropdown link
+  </a>
+
+  <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+    <a class="dropdown-item" data-toggle="modal" data-target="#myModal">Action</a>
+    <a class="dropdown-item" data-toggle="modal" data-target="#myModal">Another action</a>
+    <a class="dropdown-item" data-toggle="modal" data-target="#myModal">Something else here</a>
+  </div>
+</div>
+</div>
+</div>
 
 <!-- The Modal -->
 <div class="modal" id="myModal">

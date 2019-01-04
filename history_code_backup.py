@@ -174,3 +174,133 @@ def insert():
 '''
 
 
+
+s=requests.Session()
+username='ahoehne'
+password='Katze7436!'
+s.auth=(username,password)
+c=s.get('https://intern.inode.at/backoffice/contract/contract_config_edit.php4?Contract_ID=1463383')
+s.cookies=c.cookies
+print(c.status_code)
+print('global session cookie')
+print(c.cookies)
+method_requests_mapping = {
+    'GET': s.get,
+    'HEAD': s.head,
+    'POST': s.post,
+    'PUT': s.put,
+    'DELETE': s.delete,
+    'PATCH': s.patch,
+    'OPTIONS': s.options,
+}
+
+@bp.route('/<path:url>', methods=['GET', 'POST'])
+def root(url):
+    #LOG.info("Root route, path: %s", url)
+    # If referred from a proxy request, then redirect to a URL with the proxy prefix.
+    # This allows server-relative and protocol-relative URLs to work.
+    proxy_ref = proxy_ref_info(request)
+    if proxy_ref:
+        redirect_url = "/p/%s/%s%s" % (proxy_ref[0], url, ("?" + str(request.query_string) if request.query_string else ""))
+        #LOG.info("Redirecting referred URL to: %s", redirect_url)
+
+        return redirect(redirect_url)
+    # Otherwise, default behavior
+    return render_template('index.html', name=url,request=request)
+
+
+
+@bp.route('/<path:url>', methods=method_requests_mapping.keys())
+def proxy(url):
+    print('function session cookie')
+    print(c.cookies)
+    
+
+    url='https://intern.inode.at/'+url
+   # requests.utils.add_dict_to_cookiejar(s.cookies,c.cookies)
+    cookies=dict(test='Feuer')
+    requests_function = method_requests_mapping[flask.request.method]
+    request = requests_function(url, stream=True, params=flask.request.args,allow_redirects=False, cookies=cookies)
+    
+    response = flask.Response(flask.stream_with_context(request.iter_content()),
+                              content_type=request.headers['content-type'],
+                              
+                              status=request.status_code, )
+    print('request session cookie')
+    print(request.cookies)
+    
+    
+    
+    return response
+
+
+
+
+
+    
+
+
+   
+
+proxy.counter= 0
+    
+
+
+
+s=requests.Session()
+username='ahoehne'
+password='Katze7436!'
+s.auth=(username,password)
+c=s.get('https://intern.inode.at/backoffice/contract/contract_config_edit.php4?Contract_ID=1463383')
+s.cookies=c.cookies
+print(c.status_code)
+print('global session cookie')
+print(c.cookies)
+method_requests_mapping = {
+    'GET': s.get,
+    'HEAD': s.head,
+    'POST': s.post,
+    'PUT': s.put,
+    'DELETE': s.delete,
+    'PATCH': s.patch,
+    'OPTIONS': s.options,
+}
+
+
+
+@bp.route('/<path:url>', methods=method_requests_mapping.keys())
+def proxy(url):
+    print('function session cookie')
+    print(c.cookies)
+    
+
+    url='https://intern.inode.at/'+url
+   # requests.utils.add_dict_to_cookiejar(s.cookies,c.cookies)
+    cookies=dict(test='Feuer')
+    requests_function = method_requests_mapping[flask.request.method]
+    request = requests_function(url, stream=True, params=flask.request.args,allow_redirects=True, cookies=cookies)
+    
+    response = flask.Response(flask.stream_with_context(request.iter_content()),
+                              content_type=request.headers['content-type'],
+                              
+                              status=request.status_code, )
+    print('request session cookie')
+    print(request.cookies)
+    
+    
+    
+    return response
+
+
+
+
+
+    
+
+
+   
+
+proxy.counter= 0
+   
+
+

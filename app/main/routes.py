@@ -21,7 +21,22 @@ from app.file.routes import expy
 from app.edit.routes import delete
 from app.functions.sshcon import connector
 from flask import session
+from requests import get
+from flask import Response
+from flask import stream_with_context
+import urllib.parse
+import flask
+import logging
 
+
+@bp.route('/proxy', methods=['GET', 'POST'])
+def proxy():
+
+    return render_template('proxy.html')
+
+
+
+    
 
 
 
@@ -265,14 +280,16 @@ def locations(customername):
         scat=Subcategory.query.get(form_work.subcategory.data).name
         cat=Category.query.get(form_work.category.data).name
         hard=form_work.hardware.data
-        user=form_work.user.data
+        user_data=form_work.user.data
+        
+        
         tech=form_work.technology.data
         cust=form_work.customer.data
         contr=form_work.contract.data
         time=form_work.time.data
 
         
-        expy(cat,scat,hard,user,tech,cust,contr,time)
+        expy(cat,scat,hard,user_data,tech,cust,contr,time)
         return redirect(url_for('main.locations',customername=customername))
 
 

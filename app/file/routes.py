@@ -103,11 +103,12 @@ def return_files(filename):
 
 
 def expy(cat,scat,hard,user,tech,cust,contr,time):
-
+    
+    folder=os.environ.get('EXCEL_FOLDER_ENV')+current_user.username+'/'+'statistic_'+current_user.username+'.xlsx'
     
     sheet=cat
     print(cat)
-    srcfile = openpyxl.load_workbook(os.environ.get('EXCEL_FOLDER_ENV'),read_only=False)
+    srcfile = openpyxl.load_workbook(folder,read_only=False)
     sheetname = srcfile.get_sheet_by_name(sheet)
     save("A",tech, sheetname)
     save("B",cust, sheetname)
@@ -118,7 +119,7 @@ def expy(cat,scat,hard,user,tech,cust,contr,time):
     save("G",scat, sheetname)
 
 
-    srcfile.save(os.environ.get('EXCEL_FOLDER_ENV'))
+    srcfile.save(folder)
 
     
 
@@ -156,7 +157,7 @@ def createFolder(directory):
 @bp.route('/return_files_user/<filename>')
 def return_files_user(filename):
     try:
-        return send_file(UPLOAD_FOLDER+current_user+filename , attachment_filename=filename)
+        return send_file(UPLOAD_FOLDER+current_user.username+'/'+filename , attachment_filename=filename)
     except Exception as e:
         return str(e)
     return render_template('user.html', title=_('user'), filelist=filelist)

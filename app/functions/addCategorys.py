@@ -4,7 +4,9 @@ from app.models import User, Post, Location, Customer, Network, Post_r, Statisti
 
 
 def addC():
-    list=["aDSL Asymmetrisch","xDSL Asymmetrisch","Cable Asymmetrisch","vDSL","vULL","IP Add on","Fernwärme",
+    list_categorys=['Installation', 'Commissioning','Dismantling','CIA','Hardware','Unlock','Disruption']
+
+    list_subcategorys=["aDSL Asymmetrisch","xDSL Asymmetrisch","Cable Asymmetrisch","vDSL","vULL","IP Add on","Fernwärme",
     "DSL Symmetrisch","xDSL Symmetrisch","Cable Symmetrisch","CIA","EPL","Ethernet Link",
     "Platin","Ecard","Ecard-Internet","Quick Install","UMTS Backup",
      "Managed Security/Lizenzen", "Zwangsfertiggstellt","off. Fertigstel. Kunde	off.","Fertigstel. UPC","MPLS Projekt","MPLS Standard",
