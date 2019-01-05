@@ -13,7 +13,7 @@ from config import Config
 from werkzeug.utils import secure_filename
 from flask import request
 from elasticsearch import Elasticsearch
-from flask_basicauth import BasicAuth
+
 
 
 
@@ -30,25 +30,21 @@ login.login_view = 'auth.login'
 login.login_message = _l('Please log in to access this page.')
 mail = Mail()
 bootstrap = Bootstrap()
-moment = Moment()
+momentflask = Moment()
 babel = Babel()
-basic_auth=BasicAuth()
+
 
 def create_app(config_class=Config):
     app = Flask(__name__)
     app.config.from_object(config_class)
     app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
-    app.config['BASIC_AUTH_USERNAME']='Einhorn'
-    app.config['BASIC_AUTH_PASSWORD']='Feuerzangenbohle554!!?'
-    app.config['BASIC_AUTH_FORCE']= True
     db.init_app(app)
     migrate.init_app(app, db)
     login.init_app(app)
     mail.init_app(app)
     bootstrap.init_app(app)
-    moment.init_app(app)
+    momentflask.init_app(app)
     babel.init_app(app)
-    basic_auth.init_app(app)
     UPLOAD_FOLDER_app=(app)
 
     app.elasticsearch = Elasticsearch([app.config['ELASTICSEARCH_URL']]) \

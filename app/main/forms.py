@@ -7,7 +7,7 @@ from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, \
 from flask_babel import _, lazy_gettext as _l
 from app.models import User,Post,Location, Customer
 from flask import request
-
+from wtforms.fields.html5 import DateField
 class SearchForm(FlaskForm):
     q = StringField(_l('Search'), validators=[DataRequired()])
 
@@ -116,6 +116,12 @@ class ScriptForm(FlaskForm):
     script=SelectField(u'Script', coerce=int, validators=[InputRequired()], id='sel_script')
     connector=StringField(_l('Connector'))
     send = SubmitField(_l('Send'))
+
+
+class StatbyTimeForm(FlaskForm):
+
+    daterange = StringField(_l('Daterange'))
+    submit = SubmitField(_l('Submit'))
 
     
     

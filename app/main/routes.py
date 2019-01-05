@@ -433,6 +433,7 @@ def router_todo():
 
     location=Location.query.get(no)
     post=render_template('router_todo.txt', location=location)
+    post=str(post)
     print(post)
     add_post=Post_r(body=post, author_r=current_user)
     db.session.add(add_post)

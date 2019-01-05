@@ -1,14 +1,41 @@
 {% extends "base.html" %}
 {% import 'bootstrap/wtf.html' as wtf %}
+{% from "macros.html" import modal with context %}
 
 {% block app_content %}
 
-<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+
+
+{% block scripts %}
+
+{{ super() }}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/daterangepicker.css') }}">
 <script type="text/javascript" src="{{url_for('static', filename='contract.js')}}"></script>
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-<script>window.jQuery || document.write('<script src="{{url_for('static', filename='jquery.js')}}">\x3C/script>')</script>
+<script type="text/javascript" src="{{url_for('static', filename='moment.min.js')}}"></script>
+<script type="text/javascript" src="{{url_for('static', filename='daterangepicker.js')}}"></script>
+<script>
+$(function() {
+  $('input[name="daterange"]').daterangepicker({
+    opens: 'left'
+  }, function(start, end, label) {
+    console.log("A new date selection was made: " + start.format('DD/MM/YYYY') + ' to ' + end.format('DD/MM/YYYY'));
+  });
+});
+</script>
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

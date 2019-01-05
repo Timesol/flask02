@@ -8,6 +8,8 @@ console.log("Test");
 
 
 
+
+
 function edit_row(no){
 
 
@@ -484,9 +486,12 @@ function append_all(info, customer){
 
 
 }
+function test(){
+
+alert('Hello you');
 
 
 
 
 
-
+}
