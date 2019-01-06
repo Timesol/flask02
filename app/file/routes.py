@@ -102,9 +102,9 @@ def return_files(filename):
 
 
 
-def expy(cat,scat,hard,user,tech,cust,contr,time):
+def expy(cat,scat,hard,user,tech,cust,contr,time,date):
     
-    folder=os.environ.get('EXCEL_FOLDER_ENV')+current_user.username+'/'+'statistic_'+current_user.username+'.xlsx'
+    folder=os.environ.get('EXCEL_FOLDER_ENV')+current_user.username+'/'+'statistic_'+date+"_"+current_user.username+'.xlsx'
     
     sheet=cat
     print(cat)
@@ -121,12 +121,60 @@ def expy(cat,scat,hard,user,tech,cust,contr,time):
 
     srcfile.save(folder)
 
+
+def expynew(date):
+    
+    folder=os.environ.get('EXCEL_FOLDER_ENV')+current_user.username+'/'+'statistic_'+date+"_"+current_user.username+'.xlsx'
+    
+   
+    empty_row=0
+    
+    wb = openpyxl.Workbook()
+    
+    wb.save(folder)
+    sheetname_original = wb.get_sheet_by_name('Sheet')
+
+    sheetname_original.title='Review'
+    review=wb.get_sheet_by_name('Review')
+    
+    wb.save(folder)
+    wb.create_sheet('Installation')
+    wb.create_sheet('Commissioning')
+    wb.create_sheet('Dismantling')
+    wb.create_sheet('CIA')
+    wb.create_sheet('MPLS')
+    wb.create_sheet('Disruption')
+    wb.save(folder)
+    
+    data=[('Technology', 'Customer','Contract','Hardware','Time','Employee','Subcategory','Additional Info')]
+    for isheet in wb.sheetnames:
+
+        if isheet == 'Review':
+            continue
+        
+        isheet = wb.get_sheet_by_name(isheet)
+        for row in data:
+           isheet.append(row)
+        
+
+    wb.save(folder)
+
+    
+    
+    
+
+
+    
+
+
+    
+
     
 
 
 
 def save(l, t,sheetname):
-    
+    empty_row=1
     
     for cell in sheetname[l]:
         

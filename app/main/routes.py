@@ -17,7 +17,7 @@ import requests
 from requests import Request, Session
 import bs4 as bs
 import pandas as pd
-from app.file.routes import expy
+from app.file.routes import expynew
 from app.edit.routes import delete
 from app.functions.sshcon import connector
 from flask import session
@@ -27,6 +27,7 @@ from flask import stream_with_context
 import urllib.parse
 import flask
 import logging
+
 
 
 @bp.route('/proxy', methods=['GET', 'POST'])
@@ -288,8 +289,8 @@ def locations(customername):
         contr=form_work.contract.data
         time=form_work.time.data
 
-        
-        expy(cat,scat,hard,user_data,tech,cust,contr,time)
+        now = datetime.today().strftime('%d-%m-%Y')
+        expynew(cat,scat,hard,user,tech,cust,contr,time,now)
         return redirect(url_for('main.locations',customername=customername))
 
 

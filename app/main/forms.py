@@ -122,6 +122,7 @@ class StatbyTimeForm(FlaskForm):
 
     daterange = StringField(_l('Daterange'))
     submit = SubmitField(_l('Submit'))
+    create = SubmitField(_l('Create'))
 
     
     

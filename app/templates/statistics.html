@@ -13,13 +13,31 @@
 <script type="text/javascript" src="{{url_for('static', filename='contract.js')}}"></script>
 <script type="text/javascript" src="{{url_for('static', filename='moment.min.js')}}"></script>
 <script type="text/javascript" src="{{url_for('static', filename='daterangepicker.js')}}"></script>
-<script>
+<script type="text/javascript">
 $(function() {
-  $('input[name="daterange"]').daterangepicker({
-    opens: 'left'
-  }, function(start, end, label) {
-    console.log("A new date selection was made: " + start.format('DD/MM/YYYY') + ' to ' + end.format('DD/MM/YYYY'));
-  });
+
+    var start = momentdt().subtract(29, 'days');
+    var end = momentdt();
+
+    function cb(start, end) {
+        $('#daterange input').html(start.format('MM/DD/YYYY') + ' - ' + end.format('MM/DD/YYYY'));
+    }
+
+    $('#daterange').daterangepicker({
+        startDate: start,
+        endDate: end,
+        ranges: {
+           'Today': [momentdt(), momentdt().add(1,'days')],
+           'Yesterday': [momentdt().subtract(1, 'days'), momentdt().subtract(1, 'days')],
+           'Last 7 Days': [momentdt().subtract(6, 'days'), momentdt().add(1,'days')],
+           'Last 30 Days': [momentdt().subtract(29, 'days'), momentdt()],
+           'This Month': [momentdt().startOf('month'), momentdt().endOf('month')],
+           'Last Month': [momentdt().subtract(1, 'month').startOf('month'), momentdt().subtract(1, 'month').endOf('month')]
+        }
+    }, cb);
+
+    cb(start, end);
+
 });
 </script>
 

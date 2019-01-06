@@ -486,12 +486,3 @@ function append_all(info, customer){
 
 
 }
-function test(){
-
-alert('Hello you');
-
-
-
-
-
-}

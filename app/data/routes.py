@@ -13,10 +13,11 @@ import requests
 from app import db
 from app.models import Customer
 from app.functions.sshcon import connector
-from app.functions.charts import barchart
+from app.functions.charts import barchart, barchart_byTime
 from app.edit.routes import delete
 from datetime import date
 from datetime import datetime
+from app.file.routes import expynew, expy
 
 
 
@@ -187,6 +188,9 @@ def scripter():
 def statistics(username):
     form_del=DeleteForm()
     form_byTime=StatbyTimeForm()
+    
+
+    stats2=None
 
     if form_del.validate_on_submit():
 
@@ -221,34 +225,106 @@ def statistics(username):
             start=time[0].split("/")
             endig=time[1].split("/")
 
-            print(start[0],start[1],start[2])
+           
             sm=start[0]
             sd=start[1]
             sy=start[2]
-            print(endig[0],endig[1],endig[2])
+            
             em=endig[0]
             ed=endig[1]
             ey=endig[2]
 
 
-            
 
             
 
-            print(ed,sd)
+            
+
+            
 
             page = request.args.get('page', 1, type=int)
             stats=statistic_byTime(sm,sd,sy,em,ed,ey)
+
+
+            
+    
+               
             stats=stats.filter(Statistic.user_id_stat==current_user.id).paginate(
                 page, current_app.config['POSTS_PER_PAGE'], False)
             next_url = url_for('data.statistics',username=current_user.username, page=stats.next_num) \
                 if stats.has_next else None
             prev_url = url_for('data.statistics',username=current_user.username, page=stats.prev_num) \
                 if stats.has_prev else None
+            barchart_byTime(sm,sd,sy,em,ed,ey)
+
+
+
+        if form_byTime.create.data:
+                print('create_button)')
+
+                time=form_byTime.daterange.data
+            
+                time = time.split(" - ")
+                start=time[0].split("/")
+                endig=time[1].split("/")
+
+           
+                sm=start[0]
+                sd=start[1]
+                sy=start[2]
+                em=endig[0]
+                ed=endig[1]
+                ey=endig[2]
+
+                page = request.args.get('page', 1, type=int)
+                stats=statistic_byTime(sm,sd,sy,em,ed,ey)
+                date=datetime.today().strftime('%d-%m-%Y')
+
+                expynew(date)
+                for i in stats:
+                    expy(i.category.name,i.subcategory.name,i.hardware,i.user,i.technology,i.customer,i.contract,i.time,date)
+
+                        
+    
+               
+                stats=stats.filter(Statistic.user_id_stat==current_user.id).paginate(
+                    page, current_app.config['POSTS_PER_PAGE'], False)
+                next_url = url_for('data.statistics',username=current_user.username, page=stats.next_num) \
+                    if stats.has_next else None
+                prev_url = url_for('data.statistics',username=current_user.username, page=stats.prev_num) \
+                    if stats.has_prev else None
+                barchart_byTime(sm,sd,sy,em,ed,ey)
+
+
 
              
-            return render_template('statistics.html', user=user, stats=stats.items, form_del=form_del,next_url=next_url,
+        return render_template('statistics.html', user=user, stats=stats.items, form_del=form_del,next_url=next_url,
                            prev_url=prev_url,form_byTime=form_byTime)
+
+
+
+          
+        
+                
+
+
+
+
+
+
+             
+                    
+
+    
+
+
+            
+
+            
+
+           
+          
+                    
 
 
     return render_template('statistics.html', user=user, stats=stats.items, form_del=form_del,next_url=next_url,
@@ -257,14 +333,14 @@ def statistics(username):
 
 
 def statistic_byTime(sm,sd,sy,em,ed,ey):
-    print(type(sm))
+    print(sm,sd,sy,em,ed,ey)
 
     start=sm+"/"+sd+"/"+sy
     end=em+"/"+ed+"/"+ey
     
     objDatestart = datetime.strptime(start, '%m/%d/%Y')
     objDateend = datetime.strptime(end, '%m/%d/%Y')
-    print(objDatestart)
+    
     
     stats=Statistic.query.filter(Statistic.timestamp <= objDateend).filter(Statistic.timestamp >= objDatestart)
 
