@@ -20,7 +20,7 @@
     <a class="nav-link active" id="Networks-tab" data-toggle="tab" href="#Networks" role="tab" aria-controls="home" aria-selected="true">Networks</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" href="#">Journal</a>
+      <a class="nav-link active" id="Journals-tab" data-toggle="tab" href="#Journals" role="tab" aria-controls="home" aria-selected="true">Journals</a>
   </li>
  
 </ul>
@@ -40,7 +40,14 @@
 {% include '_contract_networks.html' %}
 
 
-</div> <!-- End Div Tab Networks-->
+
+
+<p></p>
+
+<div class="tab-pane fade out" id="Journals" role="tabpanel" aria-labelledby="Journals-tab" >
+{% include '_contract_journals.html' %}
+</div>
+
 </div> <!-- End Div Tab Content -->
 
 {% endblock %}

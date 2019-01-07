@@ -1,9 +1,7 @@
-function loading(){
-console.log("Test");
-
-
-}
-
+$("#modal-journal").on("show.bs.modal", function(e) {
+    var link = $(e.relatedTarget);
+    $(this).find(".modal-body").load(link.attr("href"));
+});
 
 
 

@@ -215,6 +215,7 @@ class Location(db.Model, SearchableMixin):
     projectmanager=db.Column(db.String(140))
     hardware= db.relationship('Hardware', backref='location' , lazy='dynamic')
     networks= db.relationship('Network', backref='location' , lazy='dynamic')
+    journals= db.relationship('Journal', backref='location' , lazy='dynamic')
     contract= db.Column(db.String(140))
     contact=db.Column(db.String(140))
     sid= db.Column(db.String(140))
@@ -314,6 +315,7 @@ class Journal(db.Model):
     description=db.Column(db.String(140) ,index=True)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     user_id_journal=db.Column(db.Integer, db.ForeignKey('user.id'))
+    location_id_journal=db.Column(db.Integer, db.ForeignKey('location.id'))
     link=db.Column(db.String(140) ,index=True)
 
 class Template(db.Model):

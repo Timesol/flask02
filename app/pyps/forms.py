@@ -13,3 +13,8 @@ class PypScriptsForm(FlaskForm):
     name=StringField(_l('Scriptname'))
     body=TextAreaField(_l('Script'))
     submit = SubmitField(_l('Submit'))
+
+
+class CreateTemplateForm(FlaskForm):
+    name=StringField(_l('Templatename'))
+    create = SubmitField(_l('Create'))

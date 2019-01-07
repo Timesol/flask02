@@ -10,7 +10,7 @@ from app.main import bp
 from app.main.forms import EditProfileForm, PostForm, LocationForm, NetworkForm, \
 CustomerForm, Post_r_Form, Statistic_Work_Form, DeleteForm, InfoForm,RemoveForm,ScriptForm,TemplateForm
 from app.models import User, Post, Location, Customer, Network, Post_r, \
-Statistic, Category, Subcategory, Info, Hardware,Script,Template
+Statistic, Category, Subcategory, Info, Hardware,Script,Template,Journal
 from guess_language import guess_language
 from werkzeug.utils import secure_filename
 import os
@@ -593,6 +593,16 @@ def contract(id):
 
         return redirect(url_for('main.contract',id=contract.id, contract=contract, infos_t=infos_t))
 
+  
+    page = request.args.get('page', 1, type=int)
+
+    journs = contract.journals.order_by(Journal.timestamp.desc()).paginate(
+        page, current_app.config['POSTS_PER_PAGE'], False)
+    next_url = url_for('main.contract',id=contract.id, page=journs.next_num) \
+        if journs.has_next else None
+    prev_url = url_for('main.contract',id=contract.id, page=journs.prev_num ) \
+        if journs.has_prev else None
+
 
 
 
@@ -602,7 +612,7 @@ def contract(id):
     
 
     return render_template('contract.html',form_script=form_script, contract=contract, 
-        form=form, form_del=form_del, form_info=form_info, infos_t=infos_t, form_remove=form_remove,form_template=form_template)
+        form=form, form_del=form_del, form_info=form_info, infos_t=infos_t, form_remove=form_remove,form_template=form_template,journs=journs)
 
 
 @bp.route('/append_all',methods=['GET', 'POST'])
@@ -650,6 +660,28 @@ def append_info():
     db.session.commit()
 
     return json.dumps({'status':'OK'});
+
+
+
+
+
+
+
+
+
+
+
+
+
+@bp.route('/journal_show/<id>',methods=['GET', 'POST'])
+@login_required
+
+
+def journal_show(id):
+
+    return json.dumps({'status':'OK'});
+
+
 
 
 
