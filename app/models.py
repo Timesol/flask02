@@ -316,6 +316,12 @@ class Journal(db.Model):
     user_id_journal=db.Column(db.Integer, db.ForeignKey('user.id'))
     link=db.Column(db.String(140) ,index=True)
 
+class Template(db.Model):
+    id=db.Column(db.Integer, primary_key=True)
+    name=db.Column(db.String(380) ,index=True)
+
+
+
     
 
 

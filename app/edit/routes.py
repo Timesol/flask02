@@ -2,7 +2,7 @@ from flask import render_template, flash, redirect, url_for, request, g, current
 from app.edit import bp
 from flask_login import login_required
 from app import db
-from app.models import Customer,Location,Network,User,Statistic
+from app.models import Customer,Location,Network,User,Statistic,Hardware
 
 @bp.route('/save',methods=['GET', 'POST'])
 @login_required
@@ -15,9 +15,11 @@ def save():
     new_project = request.args.get('project_val', None)
     new_projectmanager = request.args.get('projectmanager_val', None)
     new_hardware = request.args.get('hardware_val', None)
+    
     new_technology = request.args.get('technology_val', None)
     new_contract = request.args.get('contract_val', None)
     new_sn=request.args.get('sn_val', None)
+    
     new_contact = request.args.get('contact_val', None)
     new_seller = request.args.get('seller_val', None)
     new_matchcode= request.args.get('matchcode_val', None)
@@ -29,12 +31,19 @@ def save():
     
    
     arg=Location.query.get(no)
+    print(arg.residence)
     arg.residence=new_residence
     arg.project=new_project
     arg.projectmanager=new_projectmanager
     if new_hardware is not None:
-        arg.hardware.first().name=new_hardware
-        arg.hardware.first().sn=new_sn
+        if arg.hardware.first() is not None:
+            arg.hardware.first().name=new_hardware
+            arg.hardware.first().sn=new_sn
+        else:
+            u=Hardware(name=new_hardware, sn=new_sn)
+            db.session.add(u)
+            arg.hardware.append(u)
+            db.session.commit()
     arg.technology=new_technology
     arg.contract=new_contract
     arg.contact=new_contact

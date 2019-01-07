@@ -28,15 +28,24 @@
 <button type="button" class="btn btn-info btn-sm"  data-toggle="modal" data-target="#modal-info1">
 <span> Add Note</span>
 </button>
+</div>
+<div id="flex-item-button4" class="flex-item">
 <button type="button" class="btn btn-info btn-sm"  data-toggle="modal" data-target="#modal-script1">
 <span>Script</span>
 </button>
+</div>
+<div id="flex-item-button5" class="flex-item">
+<button type="button" class="btn btn-info btn-sm"  data-toggle="modal" data-target="#modal-template1">
+<span>Config</span>
+</button>
+</div>
 
 {{modal('Add Note', '-info1', wtf.quick_form(form_info, button_map={'submit2':'success btn btn-sm'},id="testform" ), style="display:none;" )}}
 {{modal('Activate Script', '-script1', wtf.quick_form(form_script, button_map={'send':'success btn btn-sm'},id="scriptform" ),style="display:none;",onclick="loading()" )}}
+{{modal('Create Config', '-template1', wtf.quick_form(form_template, button_map={'submit':'success btn btn-sm'},id="templateform" ), style="display:none;" )}}
 
 
-</div>  <!-- End Div Flex Item-Button3 -->
+
 <div id="flex-item-back" class="flex-item">
   <a class="btn btn-success btn-sm" href="{{ url_for('main.locations',customername=contract.customer.name) }}">Back</a></div>
 </div>  <!-- End Div Flex Container-Button -->

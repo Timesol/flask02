@@ -1,3 +1,5 @@
+
+
 from datetime import datetime
 from flask import render_template, flash, redirect, url_for, request, g, current_app, json
 from flask_login import login_user, logout_user, current_user, login_required
@@ -5,8 +7,10 @@ from werkzeug.urls import url_parse
 from flask_babel import _, get_locale
 from app import db
 from app.main import bp
-from app.main.forms import EditProfileForm, PostForm, LocationForm, NetworkForm, CustomerForm, Post_r_Form, Statistic_Work_Form, DeleteForm, InfoForm,RemoveForm,ScriptForm
-from app.models import User, Post, Location, Customer, Network, Post_r, Statistic, Category, Subcategory, Info, Hardware,Script
+from app.main.forms import EditProfileForm, PostForm, LocationForm, NetworkForm, \
+CustomerForm, Post_r_Form, Statistic_Work_Form, DeleteForm, InfoForm,RemoveForm,ScriptForm,TemplateForm
+from app.models import User, Post, Location, Customer, Network, Post_r, \
+Statistic, Category, Subcategory, Info, Hardware,Script,Template
 from guess_language import guess_language
 from werkzeug.utils import secure_filename
 import os
@@ -290,7 +294,7 @@ def locations(customername):
         time=form_work.time.data
 
         now = datetime.today().strftime('%d-%m-%Y')
-        expynew(cat,scat,hard,user,tech,cust,contr,time,now)
+        
         return redirect(url_for('main.locations',customername=customername))
 
 
@@ -454,14 +458,28 @@ def contract(id):
 
     scripts_list=[(i.id,i.name) for i in available_scripts]
 
+
+    available_templates=Template.query.all()
+    templates_list=[(i.id,i.name) for i in available_templates]
+
     form=NetworkForm()
     form_del=DeleteForm()
     form_info=InfoForm()
     form_remove=RemoveForm()
     form_script=ScriptForm()
+    form_template=TemplateForm()
     contract=Location.query.get(id)
 
     form_script.script.choices=scripts_list
+    form_template.name.choices=templates_list
+
+    if form_template.validate_on_submit():
+        if form_template.submit.data:
+
+            create_config(contract,form_template.name.data)
+            return redirect(url_for('main.contract',id=contract.id))
+
+
 
     if form_remove.validate_on_submit():
         if form_remove.remove.data:
@@ -583,7 +601,8 @@ def contract(id):
 
     
 
-    return render_template('contract.html',form_script=form_script, contract=contract, form=form, form_del=form_del, form_info=form_info, infos_t=infos_t, form_remove=form_remove)
+    return render_template('contract.html',form_script=form_script, contract=contract, 
+        form=form, form_del=form_del, form_info=form_info, infos_t=infos_t, form_remove=form_remove,form_template=form_template)
 
 
 @bp.route('/append_all',methods=['GET', 'POST'])

@@ -124,5 +124,11 @@ class StatbyTimeForm(FlaskForm):
     submit = SubmitField(_l('Submit'))
     create = SubmitField(_l('Create'))
 
+
+class TemplateForm(FlaskForm):
+    name=SelectField(u'Template', coerce=int, validators=[InputRequired()], id='sel_template')
+    submit = SubmitField(_l('Submit'))
+
+
     
     
