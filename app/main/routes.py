@@ -7,7 +7,7 @@ from werkzeug.urls import url_parse
 from flask_babel import _, get_locale
 from app import db
 from app.main import bp
-from app.main.forms import EditProfileForm, PostForm, LocationForm, NetworkForm, \
+from app.main.forms import EditProfileForm, PostForm, LocationForm, NetworkForm,JournalForm, \
 CustomerForm, Post_r_Form, Statistic_Work_Form, DeleteForm, InfoForm,RemoveForm,ScriptForm,TemplateForm
 from app.models import User, Post, Location, Customer, Network, Post_r, \
 Statistic, Category, Subcategory, Info, Hardware,Script,Template,Journal
@@ -439,7 +439,7 @@ def router_todo():
     location=Location.query.get(no)
     post=render_template('router_todo.txt', location=location)
     post=str(post)
-    print(post)
+    
     add_post=Post_r(body=post, author_r=current_user)
     db.session.add(add_post)
     db.session.commit()
@@ -469,6 +469,7 @@ def contract(id):
     form_script=ScriptForm()
     form_template=TemplateForm()
     contract=Location.query.get(id)
+    form_journal=JournalForm()
 
     form_script.script.choices=scripts_list
     form_template.name.choices=templates_list
@@ -603,6 +604,23 @@ def contract(id):
     prev_url = url_for('main.contract',id=contract.id, page=journs.prev_num ) \
         if journs.has_prev else None
 
+    if form_journal.validate_on_submit():
+        if form_journal.submit_journal.data:
+            u=Journal(description=form_journal.description.data,user_j=current_user)
+            db.session.add(u)
+            db.session.commit()
+            link=os.environ.get('JOURNAL_FOLDER')+'journal_show_'+str(u.id)+'.txt'
+            u.link=link
+            contract.journals.append(u)
+            db.session.commit()
+            file= open(link,'w')
+            file.write(form_journal.body.data)
+
+            return redirect(url_for('main.contract',id=contract.id, contract=contract))
+
+
+    
+
 
 
 
@@ -612,7 +630,7 @@ def contract(id):
     
 
     return render_template('contract.html',form_script=form_script, contract=contract, 
-        form=form, form_del=form_del, form_info=form_info, infos_t=infos_t, form_remove=form_remove,form_template=form_template,journs=journs)
+        form=form, form_del=form_del, form_info=form_info, infos_t=infos_t, form_remove=form_remove,form_template=form_template,journs=journs.items, form_journal=form_journal)
 
 
 @bp.route('/append_all',methods=['GET', 'POST'])
@@ -679,7 +697,9 @@ def append_info():
 
 def journal_show(id):
 
-    return json.dumps({'status':'OK'});
+    journ=Journal.query.get(id)
+    journ_id=str(journ.id)
+    return render_template('journal.html',journ=journ,journ_id=journ_id)
 
 
 

@@ -1,14 +1,79 @@
 
+<div id="flex-container-journal" class="flex-container"> 
+  
+<div id="flex-item-button" class="flex-item">
+
+<button type="button" class="btn btn-info btn-sm"  data-toggle="modal" data-target="#modal-journal1">
+<span>Journal</span>
+</button>
 
 
-<h1>{{ _('Hi, %(username)s!', username=current_user.username) }}</h1>
-{% if form %}
+</div>
+</div>
 
-<br>
-{% endif %}
-{% for journ in journals%}
-    {% include '_journals.html' %}
+{{modal('Create Journal', '-journal1', wtf.quick_form(form_journal, button_map={'submit_journal':'success btn btn-sm'},id="journalform" ), style="display:none;" )}}
+
+
+
+
+<table class="table">
+  <thead>
+    <tr>
+      
+      <th scope="col">Description</th>
+      <th scope="col">User</th>
+       <th scope="col">Date</th>
+       
+    </tr>
+  </thead>
+<tbody>
+{%for journ in journs%}
+<tr>
+      
+      <td><a href="{{ url_for('main.journal_show',id=journ.id ) }}" data-toggle="modal" data-target="#modal-journal-show{{journ.id}}" onclick="load_modal({{journ.id}})">{{journ.description}} </a></td>
+      <td>{{journ.user_j.username}}</td>
+      <td>{{moment(journ.timestamp).calendar()}}</td>
+      
+</tr>
+
+<!-- The Modal -->
+<div class="modal" id="modal-journal-show{{journ.id}}" data-id={{journ.id}}>
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header modal-lg">
+        <h4 class="modal-title">Journal</h4>
+        <buttontype="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+
+      <!-- Modal body -->
+      
+
+      <div class="modal-body modal-lg" id="modal-body{{journ.id}}">
+      
+         
+
+
+
+
+        </div>
+
+       
+      </div>
+    </div>
+  </div>
+
 {% endfor %}
+
+</tbody>
+</table>
+
+
+
+
+
+
 <nav aria-label="...">
     <ul class="pager">
         <li class="previous{% if not prev_url %} disabled{% endif %}">

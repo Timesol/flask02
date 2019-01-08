@@ -1,9 +1,13 @@
-$("#modal-journal").on("show.bs.modal", function(e) {
+
+function load_modal(id){
+$("#modal-journal-show"+id).on("shown.bs.modal", function(e) {
     var link = $(e.relatedTarget);
-    $(this).find(".modal-body").load(link.attr("href"));
+    var id =
+    $(this).find(".modal-body").load('test.html');
+
 });
 
-
+}
 
 
 

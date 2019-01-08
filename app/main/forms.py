@@ -129,6 +129,12 @@ class TemplateForm(FlaskForm):
     name=SelectField(u'Template', coerce=int, validators=[InputRequired()], id='sel_template')
     submit = SubmitField(_l('Submit'))
 
+class JournalForm(FlaskForm):
+    description=StringField(_l('Description'))
+    body=TextAreaField(_l('Body'))
+    submit_journal = SubmitField(_l('Submit'))
+
+
 
     
     
