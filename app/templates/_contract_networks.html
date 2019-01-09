@@ -13,8 +13,8 @@
     <a class="dropdown-item" data-toggle="modal" data-target="#myModal">Action</a>
     <a class="dropdown-item" data-toggle="modal" data-target="#myModal">Another action</a>
     <a class="dropdown-item" data-toggle="modal" data-target="#myModal">Something else here</a>
-  </div>
-</div>
+  </div> <!-- End Dropdown Action -->
+</div> <!-- End Dropdown -->
 
 
 <!-- The Modal -->
@@ -31,16 +31,16 @@
       <!-- Modal body -->
       <div class="modal-body modal-lg">
          {{ wtf.quick_form(form,  button_map={'submit':'success'} ,id="formcu") }}  
-         <p><span class="emsg hidden">Please use Format 192.168.0.1/24</span></p></div></div></div></div>
+         <p><span class="emsg hidden">Please use Format 192.168.0.1/24</span></p></div></div></div></div> <!-- End Modal -->
 
 </div> <!-- End Div flex-item-button-net" -->
   </div><!--End Div flex-container-button-net Body-->
 
 
 <p></p>
-<div id="flex_one" class="flex-container">
+<div id="flex_networks" class="flex-container">
   {% for i in contract.networks %}
-  <div class="flex-item">
+  <div class="flex-item"> 
   
 
 <div   class="panel panel-info">
@@ -98,10 +98,18 @@
 
 
 
-  </div> <!-- End Div Flex Item -->
+  </div> <!-- End Panel Body -->
+ </div> <!-- End Panel -->
+</div> <!-- End Flex Item -->
+
 {% endfor %}
 
-</div>
+</div> <!--End Flex Container flex_networks-->
+
+
+
+
+
 
 
 

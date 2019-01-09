@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+{% from "macros.html" import modal with context %}
+
+
+
+{% block scripts %}
+
+{{ super() }}
+
+
+<script type="text/javascript" src="{{url_for('static', filename='tinymce/js/tinymce/tinymce.min.js')}}"></script>
+
+
+ 
+  <script type="text/javascript">
+  tinymce.init({
+    selector: '#config-textarea',
+    plugins: 'code, searchreplace',
+    toolbar: 'code, searchreplace',
+    
+    
+
+  });
+  </script>
+
+
+
+{% endblock %}
+
+
+
+
+
+{% block app_content %}
+
+
+<form method="post">
+    <textarea id="config-textarea">
+    	
+{% include '/journals/journal_show_'+journ_id+'.txt' %}
+
+
+
+    </textarea>
+  </form>
+
+
+
+
+
+
+
+
+{% endblock %}

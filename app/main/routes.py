@@ -31,6 +31,7 @@ from flask import stream_with_context
 import urllib.parse
 import flask
 import logging
+from app.functions.router_config import create_config
 
 
 
@@ -454,6 +455,7 @@ def router_todo():
 @login_required
 
 def contract(id):
+    contract=Location.query.get(id)
     available_scripts=Script.query.all()
 
     scripts_list=[(i.id,i.name) for i in available_scripts]
@@ -468,7 +470,7 @@ def contract(id):
     form_remove=RemoveForm()
     form_script=ScriptForm()
     form_template=TemplateForm()
-    contract=Location.query.get(id)
+    
     form_journal=JournalForm()
 
     form_script.script.choices=scripts_list
@@ -476,9 +478,20 @@ def contract(id):
 
     if form_template.validate_on_submit():
         if form_template.submit.data:
+            template=Template.query.get(form_template.name.data)
+            u=Journal(description=template.name,user_j=current_user)
+            db.session.add(u)
+            db.session.commit()
+            link=os.environ.get('JOURNAL_FOLDER')+'journal_show_'+str(u.id)+'.txt'
+            u.link=link
+            contract.journals.append(u)
+            db.session.commit()
+            file= open(link,'w')
+            config = create_config(contract,form_template.name.data)
+            file.write(config)
 
-            create_config(contract,form_template.name.data)
-            return redirect(url_for('main.contract',id=contract.id))
+            
+            return redirect(url_for('main.router_config',journal_id=u.id))
 
 
 
@@ -700,6 +713,19 @@ def journal_show(id):
     journ=Journal.query.get(id)
     journ_id=str(journ.id)
     return render_template('journal.html',journ=journ,journ_id=journ_id)
+
+
+
+@bp.route('/router_config/<journal_id>',methods=['GET', 'POST'])
+@login_required
+
+
+def router_config(journal_id):
+    journ=Journal.query.get(journal_id)
+    journ_id=str(journ.id)
+
+
+    return render_template('router_config.html',journ=journ, journ_id=journ_id)
 
 
 

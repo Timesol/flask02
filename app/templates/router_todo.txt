@@ -2,3 +2,6 @@
 {{location.residence}}
 https://intern.inode.at/backoffice/contract/contract_show.php4?Contract_ID={{location.contract}}
 {{location.hardware.first().name}}
+
+
+

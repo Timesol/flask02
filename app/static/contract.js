@@ -1,15 +1,4 @@
 
-function load_modal(id){
-$("#modal-journal-show"+id).on("shown.bs.modal", function(e) {
-    var link = $(e.relatedTarget);
-    var id =
-    $(this).find(".modal-body").load('test.html');
-
-});
-
-}
-
-
 
 
 function edit_row(no){
@@ -488,3 +477,27 @@ function append_all(info, customer){
 
 
 }
+
+
+$(document).ready(function(){
+var $modal = $('#modal-journal-show');
+
+// Show loader & then get content when modal is shown
+$modal.on('show.bs.modal', function(e) {
+  var href = $(e.relatedTarget).data('href');
+   
+  $(this)
+    .addClass('modal-scrollfix')
+    .find('.modal-body')
+    .html('loading...')
+    .load(href, function() {
+      // Use Bootstrap's built-in function to fix scrolling (to no avail)
+      $modal
+        .removeClass('modal-scrollfix')
+        .modal('handleUpdate');
+    });
+});
+
+});
+
+

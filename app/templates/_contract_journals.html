@@ -1,4 +1,4 @@
-
+<script type="text/javascript" src="{{url_for('static', filename='contract.js')}}"></script>
 <div id="flex-container-journal" class="flex-container"> 
   
 <div id="flex-item-button" class="flex-item">
@@ -30,46 +30,41 @@
 {%for journ in journs%}
 <tr>
       
-      <td><a href="{{ url_for('main.journal_show',id=journ.id ) }}" data-toggle="modal" data-target="#modal-journal-show{{journ.id}}" onclick="load_modal({{journ.id}})">{{journ.description}} </a></td>
+  <td><a data-href="{{ url_for('main.journal_show',id=journ.id ) }}"  data-toggle="modal" data-target="#modal-journal-show">{{journ.description}} </a></td>
       <td>{{journ.user_j.username}}</td>
       <td>{{moment(journ.timestamp).calendar()}}</td>
       
 </tr>
 
-<!-- The Modal -->
-<div class="modal" id="modal-journal-show{{journ.id}}" data-id={{journ.id}}>
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
 
-      <!-- Modal Header -->
-      <div class="modal-header modal-lg">
-        <h4 class="modal-title">Journal</h4>
-        <buttontype="button" class="close" data-dismiss="modal">&times;</button>
-      </div>
-
-      <!-- Modal body -->
-      
-
-      <div class="modal-body modal-lg" id="modal-body{{journ.id}}">
-      
-         
-
-
-
-
-        </div>
-
-       
-      </div>
-    </div>
-  </div>
 
 {% endfor %}
 
 </tbody>
 </table>
 
+<!-- The Modal -->
+<div class="modal" id="modal-journal-show">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
 
+      <!-- Modal Header -->
+
+       <div class="modal-header modal-lg">
+        <h4 class="modal-title">Journal</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+
+      <!-- Modal body -->
+     
+
+      <div class="modal-body modal-lg" id="modal-body">
+     
+
+       </div>
+      </div>
+    </div>
+  </div>
 
 
 

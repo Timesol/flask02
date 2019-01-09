@@ -1,0 +1,1 @@
+Testtemplate inklusive {{contract.id}} und {{contract.residence}}
