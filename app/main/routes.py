@@ -456,6 +456,8 @@ def router_todo():
 @login_required
 
 def contract(id):
+
+    dict_data={'Testkey1':'Value1', 'Testkey2':'Value2'}
     contract=Location.query.get(id)
     available_scripts=Script.query.all()
 
@@ -654,7 +656,7 @@ def contract(id):
     return render_template('contract.html',form_script=form_script, contract=contract, 
         form=form, form_del=form_del, form_info=form_info, infos_t=infos_t, form_remove=form_remove,
         form_template=form_template,journs=journs.items, form_journal=form_journal,next_url=next_url,
-                           prev_url=prev_url,form_get_nets=form_get_nets)
+                           prev_url=prev_url,form_get_nets=form_get_nets,dict_data=dict_data)
 
 
 @bp.route('/append_all',methods=['GET', 'POST'])

@@ -66,6 +66,9 @@ entries=('Basisvar-xdsl-prev_phone_areacode-1'
 'Basisvar-line_mpls-contact_person-1',
 'Basisvar-mpls-mpls_gateway-1',
 'Basisvar-xdsl-install_termin-1',
+'Basisvar-line_mpls-line_housenr-1e',
+'Basisvar-line_mpls-contact_phone-1e',
+'PaymentSave',
 'Basisvar-vull-vull_vlan-1' )
 
 def bo_data(link,id):
@@ -84,9 +87,9 @@ def bo_data(link,id):
     print(c.status_code)
     final_page = bs.BeautifulSoup(c.content, 'lxml')
     output=final_page.find_all('input' )
-    dict_data={}
+
     for i in output:
-        dict_data[i.attrs.get('name', 'NA')]= i.attrs.get('value', 'NA')
+        dict_data[i.parent.name]= i.attrs.get('value', 'NA')
     dict_data.pop('NA')
     
 
