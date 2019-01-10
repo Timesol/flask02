@@ -105,6 +105,10 @@ class InfoForm(FlaskForm):
     infotext=StringField(_l('Info'))
     submit2 = SubmitField(_l('Submit'))
 
+class GetNetworksForm(FlaskForm):
+    get = SubmitField(_l('Get'))
+
+
 
 class RemoveForm(FlaskForm):
     id_rem=IntegerField(_l('ID_REM'), validators=[DataRequired()])

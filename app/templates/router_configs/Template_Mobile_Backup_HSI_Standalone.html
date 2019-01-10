@@ -1,0 +1,150 @@
+cellular 0 lte profile create 1 t-data.connect chap #UMTS-Radiususer# #UMTS-Passwort#
+
+
+!
+!
+service timestamps debug datetime msec localtime show-timezone
+service timestamps log datetime msec localtime show-timezone
+service password-encryption
+!
+hostname B2B-LTE-{{contract.contract}}
+!
+!
+logging buffered 32000
+!
+no aaa new-model
+!
+clock timezone MEZ 1 0
+clock summer-time MESZ recurring last Sun Mar 2:00 last Sun Oct 3:00
+!
+!
+no ip bootp server
+no ip domain lookup
+ip cef
+!
+!
+vtp mode transparent
+!
+username admin privilege 15 secret 0 #ADMIN-PW#
+username eem privilege 15 secret 0 KSishwdL!
+!
+!
+chat-script lte "" "AT!CALL" TIMEOUT 20 "OK"
+!
+ interface Cellular0
+ description H4G Backup Interface :BMON
+ ip address negotiated
+ ip mtu 1460
+ ip virtual-reassembly in
+ encapsulation slip
+ load-interval 30
+ dialer in-band
+ dialer idle-timeout 0
+ dialer string lte
+ dialer watch-group 1
+ async mode interactive
+!
+!
+interface Vlan1
+ description LAN
+ ip address #CUSTOMER-LAN-IP# #CUSTOMER-LAN-NM#
+ ip virtual-reassembly in
+ ip tcp adjust-mss 1420
+ standby 1 ip #HSRP-VIRTUAL-IP#
+ standby 1 priority 90
+ standby 1 preempt
+ no shut
+!
+!
+!
+no ip http server
+no ip http secure-server
+!
+ip route 0.0.0.0 0.0.0.0 Cellular0
+!
+dialer watch-list 1 ip 5.6.7.8 0.0.0.0
+dialer watch-list 1 delay route-check initial 60
+dialer watch-list 1 delay connect 1
+dialer-list 1 protocol ip permit
+!
+!
+dialer-list 1 protocol ip permit
+!
+!
+snmp-server community uPc-MpLs-Ro RO 1
+snmp-server ifindex persist
+!
+access-list 1 permit 91.118.89.0 0.0.0.63
+access-list 199 permit tcp host 195.58.161.5 any range 22 telnet log-input
+access-list 199 permit tcp host 213.229.41.150 any range 22 telnet log-input
+access-list 199 permit tcp 91.118.89.0 0.0.0.255 any range 22 telnet log-input
+access-list 199 permit tcp #CUSTOMER-LAN-ACL# any range 22 telnet log-input
+access-list 199 deny   ip any any
+!
+!
+banner exec ^CC
+======================================================================
+Matchcode: {{contract.matchcode}}
+UID: {{contract.sid}}
+CID: {{contract.contract}}
+Notiz: LTE 4G
+======================================================================
+^C
+banner motd ^CC
+************************************************************************
+*                                                                      *
+*       THIS SYSTEM IS FOR THE USE OF AUTHORISED USERS ONLY!           *
+*                                                                      *
+*  For unauthorized users all access is prohibited and protected by    *
+*  international law.                                                  *
+*                                                                      *
+*  Individuals using this system are subject to having all of their    *
+*  activities on this system monitored, logged and checked by systems  *
+*  and personnel.                                                      *
+*                                                                      *
+*  When you login to this host you automatically agree with the above  *
+*  mentioned terms!                                                    *
+*                                                                      *
+************************************************************************
+^C
+!
+line con 0
+ privilege level 15
+ logging synchronous
+ login local
+ no modem enable
+ transport output telnet
+line aux 0
+ transport output telnet
+line 3
+ script dialer lte
+ modem InOut
+ no exec
+line vty 0 15
+ session-timeout 60 
+ access-class 199 in
+ exec-timeout 60 0
+ privilege level 15
+ login local
+ logging synchronous
+ transport input telnet
+!
+!
+scheduler max-task-time 5000
+scheduler allocate 20000 1000
+
+access-list 98 remark **NTP Server**
+access-list 98 permit 195.34.133.11
+access-list 98 permit 212.83.64.141
+access-list 98 deny   any
+access-list 99 remark **NTP Control** 
+access-list 99 deny   any
+
+ntp access-group peer 98
+ntp access-group serve 99
+ntp access-group serve-only 99
+ntp access-group query-only 99
+ntp server 195.34.133.11
+ntp server 212.83.64.141
+!
+end

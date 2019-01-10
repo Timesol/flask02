@@ -40,7 +40,7 @@ def index():
             u=Template(name=form_template.name.data)
             db.session.add(u)
             db.session.commit()
-            template_name='Template_'+u.name+'.txt'
+            template_name='Template_'+u.name+'.html'
             folder=os.environ.get('TEMPLATE_FOLDER')
             file= open(folder+template_name,'w')
             file.write('')

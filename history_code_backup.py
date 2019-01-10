@@ -1,3 +1,136 @@
+JOURNAL_FOLDER='/home/ahoehne/flask01/app/templates/journals/'
+TEMPLATE_FOLDER='/home/ahoehne/flask01/app/templates/router_configs/'
+BO_CONFIG_LINK='https://intern.inode.at/backoffice/contract/contract_config_edit.php4?Contract_ID='
+
+
+
+
+
+
+Basisvar-router_mpls-dns_server1-1 : 192.168.10.8
+Basisvar-net_mpls-network-1-net_ip_to-1 : 192.168.167.255
+Basisvar-mpls-mpls_pe-1 : at-grz-lazg-pe02
+Basisvar-router_mpls-router_sn-1 : 
+Basisvar-xdsl-prev_phone_areacode-1 : 
+Basisvar-router_mpls-snmp_access-1 : false
+Basisvar-xdsl-koloCampaign-1 : false
+Basisvar-vull-vull_dslam-1 : 
+Basisvar-line_mpls-line_floor-1 : 
+Basisvar-qos-advanced_service_percent-1 : 0
+Basisvar-vdsl-vdsl_dhcp_ip_cnr-1 : 
+Basisvar-net_mpls-network-1-net_submask-1 : 255.255.255.0
+Basisvar-mpls-topology-1 : hub
+Basisvar-line_mpls-line_housenr-1 : 25
+Basisvar-vull-vull_dslam_loc_id-1 : 
+Basisvar-router_mpls-dns_server2-1 : 192.168.10.4
+Basisvar-router_mpls-physical_ip-1 : 
+Basisvar-mpls_inside_net-static_ip-1 : 
+Basisvar-product_bandwidth-product_bandwidth_down-1 : 12320
+Basisvar-mpls-headquarters-1 : false
+Basisvar-router_mpls-read_only_community-1 : caritas_mpls
+Basisvar-qos-premium_service_percent-1 : 0
+Basisvar-router_mpls-hsrp-1 : false
+Basisvar-router_mpls-domain_name-1 : 
+Basisvar-net_mpls-network-1-net_name-1 : Kundennetz 1
+Basisvar-router_mpls-hsrp_gateway-1 : 
+Basisvar-xdsl-traffic_limit-1 : 
+Basisvar-xdsl-check-1 : Array
+Basisvar-net_mpls-network-1-net_nexthop-1 : 
+Basisvar-mpls-line_backup-1 : false
+Basisvar-router_mpls-trusted_host_ip-1 : 192.168.10.0
+Basisvar-router_mpls-dhcp_start_ip-1 : 192.168.167.150
+Basisvar-xdsl-installservice-1 : false
+Basisvar-xdsl-xdsl_wan_ip-1 : 
+Basisvar-net_mpls-net_common_name-1 : MPLS-Kundennetz
+Basisvar-hardware-username-1 : 
+Basisvar-xdsl-prev_phone_number-1 : 
+Basisvar-hardware-enable_password-1 : emuevuln
+Basisvar-vdsl-nima_hostname-1 : 
+Basisvar-qos-standard_service_percent-1 : 100
+Basisvar-vull-vull_phone-1 : 
+Basisvar-line_mpls-line_city-1 : Gleisdorf
+Basisvar-vdsl-hsi_line_backup-1 : false
+Basisvar-line_mpls-line_install_date_ta-1 : 
+Basisvar-vdsl-vdsl_guid-1 : 
+unlock : true
+Basisvar-router_mpls-dhcp_pool_size-1 : 103
+Basisvar-line_mpls-line_door-1 : 1
+Basisvar-net_mpls-network-1-net_ip_from-1 : 192.168.167.0
+Basisvar-mpls_inside_net-gateway_virtual_ip-1 : 172.17.98.1
+Basisvar-xdsl-xdsl_concentrator_gateway-1 : 
+Basisvar-line_mpls-contact_phone-1 : 03168015240
+Basisvar-mpls_inside_net-subnetmask-1 : 255.255.255.252
+Basisvar-xdsl-suppress_uzf_mail-1 : false
+Basisvar-xdsl-ta_clientnr-1 : 
+Basisvar-mpls-vrf_id-1 : 25131
+Basisvar-line_mpls-line_street-1 : Bürgergasse
+Basisvar-xdsl-radius_max_logins-1 : 
+Basisvar-mpls-mpls_interface-1 : Gi203/0/0/36.1301
+Basisvar-xdsl-username-1 : 
+service_class_premium[] : video
+Basisvar-net_mpls-network-1-net_ip-1 : 256
+Action : Config.Save
+Basisvar-router_mpls-router_sn_master-1 : 
+Basisvar-hardware-password-1 : 0zilrmna
+Basisvar-line_mpls-line_zipcode-1 : 8200
+Submit : NA
+Basisvar-mpls-automatic_completion-1 : false
+Basisvar-net_mpls-network-1-net_config_public-1 : false
+Basisvar-mpls-mpls_vlan-1 : 1301
+Basisvar-vull-vull_line_type-1 : 
+Basisvar-net_mpls-network-1-net_vip-1 : 
+Basisvar-router_mpls-dhcp_relay_server-1 : 
+Basisvar-xdsl-xdsl_concentrator_submask-1 : 
+Basisvar-router_mpls-dhcp_active-1 : relay
+Basisvar-mpls_inside_net-wan_router_ip-1 : 172.17.98.2
+searchStr : 
+Basisvar-line_mpls-line_stairway-1 : 
+Basisvar-mpls-vrf_name_spoke-1 : 
+Basisvar-router_mpls-router_management_ip-1 : 172.23.5.4
+Basisvar-product_bandwidth-product_bandwidth_up-1 : 1024
+Basisvar-net_mpls-network-1-net_gateway-1 : 192.168.167.1
+PaymentSave : alle Konfigurationen speichern
+Basisvar-router_mpls-trusted_host_subnet-1 : 255.255.255.0
+Basisvar-mpls-mpls_vlan_name-1 : CARITAS-1463695
+Basisvar-xdsl-xdsl_kuda-1 : 
+Basisvar-router_mpls-bgp_neighbor-1 : 172.17.98.1
+Basisvar-xdsl-password-1 : 
+Basisvar-mpls-vrf_id_spoke-1 : 
+Basisvar-xdsl-xdsl_speed-1 : 12320/1024
+Basisvar-mpls-vrf_name-1 : 04325131:B2B_CARITAS
+Basisvar-line_mpls-contact_person-1 : Sylvia Paltauf
+Basisvar-mpls-mpls_gateway-1 : 
+Basisvar-xdsl-install_termin-1 : 28.12.2018 15:00 - 28.12.2018 17:00
+Basisvar-vull-vull_vlan-1 : 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 '''
 Test paramiko, pxssh etc.
 

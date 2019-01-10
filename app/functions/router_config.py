@@ -11,8 +11,8 @@ def create_config(contract,template_id):
 	template=Template.query.get(template_id)
     
     
-	config=render_template('router_configs/'+'Template_'+template.name+'.txt', contract=contract)
-
+	config=render_template('router_configs/'+'Template_'+template.name+'.html', contract=contract)
+	config=config.replace('\n', '<br />')
 
 	return config
 

@@ -18,6 +18,13 @@
     selector: '#config-textarea',
     plugins: 'code, searchreplace',
     toolbar: 'code, searchreplace',
+    force_br_newlines : true,
+    force_p_newlines : false,
+    forced_root_block : '',
+    convert_newlines_to_brs:'true',
+    keep_styles: false,
+    entity_encoding: "raw",
+    remove_linebreaks : false
     
     
 
@@ -36,9 +43,9 @@
 
 
 <form method="post">
-    <textarea id="config-textarea">
+    <textarea style="white-space: pre;" id="config-textarea">
     	
-{% include '/journals/journal_show_'+journ_id+'.txt' %}
+{% include '/journals/journal_show_'+journ_id+'.html' %}
 
 
 

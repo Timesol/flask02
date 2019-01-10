@@ -8,7 +8,7 @@ from flask_babel import _, get_locale
 from app import db
 from app.main import bp
 from app.main.forms import EditProfileForm, PostForm, LocationForm, NetworkForm,JournalForm, \
-CustomerForm, Post_r_Form, Statistic_Work_Form, DeleteForm, InfoForm,RemoveForm,ScriptForm,TemplateForm
+CustomerForm, Post_r_Form, Statistic_Work_Form, DeleteForm, InfoForm,RemoveForm,ScriptForm,TemplateForm,GetNetworksForm
 from app.models import User, Post, Location, Customer, Network, Post_r, \
 Statistic, Category, Subcategory, Info, Hardware,Script,Template,Journal
 from guess_language import guess_language
@@ -32,6 +32,7 @@ import urllib.parse
 import flask
 import logging
 from app.functions.router_config import create_config
+from app.functions.get_data import bo_data
 
 
 
@@ -470,11 +471,19 @@ def contract(id):
     form_remove=RemoveForm()
     form_script=ScriptForm()
     form_template=TemplateForm()
+    form_get_nets=GetNetworksForm()
     
     form_journal=JournalForm()
 
     form_script.script.choices=scripts_list
     form_template.name.choices=templates_list
+
+    if form_get_nets.validate_on_submit():
+        if form_get_nets.get.data:
+            link=os.environ.get('BO_CONFIG_LINK')+str(contract.contract)
+            id=str(contract.id)
+            dict_data=bo_data(link,id)
+            print(dict_data)
 
     if form_template.validate_on_submit():
         if form_template.submit.data:
@@ -482,7 +491,7 @@ def contract(id):
             u=Journal(description=template.name,user_j=current_user)
             db.session.add(u)
             db.session.commit()
-            link=os.environ.get('JOURNAL_FOLDER')+'journal_show_'+str(u.id)+'.txt'
+            link=os.environ.get('JOURNAL_FOLDER')+'journal_show_'+str(u.id)+'.html'
             u.link=link
             contract.journals.append(u)
             db.session.commit()
@@ -622,7 +631,7 @@ def contract(id):
             u=Journal(description=form_journal.description.data,user_j=current_user)
             db.session.add(u)
             db.session.commit()
-            link=os.environ.get('JOURNAL_FOLDER')+'journal_show_'+str(u.id)+'.txt'
+            link=os.environ.get('JOURNAL_FOLDER')+'journal_show_'+str(u.id)+'.html'
             u.link=link
             contract.journals.append(u)
             db.session.commit()
@@ -643,7 +652,9 @@ def contract(id):
     
 
     return render_template('contract.html',form_script=form_script, contract=contract, 
-        form=form, form_del=form_del, form_info=form_info, infos_t=infos_t, form_remove=form_remove,form_template=form_template,journs=journs.items, form_journal=form_journal)
+        form=form, form_del=form_del, form_info=form_info, infos_t=infos_t, form_remove=form_remove,
+        form_template=form_template,journs=journs.items, form_journal=form_journal,next_url=next_url,
+                           prev_url=prev_url,form_get_nets=form_get_nets)
 
 
 @bp.route('/append_all',methods=['GET', 'POST'])
