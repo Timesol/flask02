@@ -34,33 +34,22 @@ def bo_data(link,id):
             j=i.find('input')
             i=i.find('td', class_='PageViewHeader')
         dict_data[i]=j
-        dict_data.pop(None)
+        
 
     for i in dict_data:
         print(i)
         print(dict_data.get(i))
 
+    for k, v in dict_data.items():
+        if v is None:
+            dict_data[k] = ""
+
+    file='/home/ahoehne/app/templates/bo_nets.html'
+    page=render_template('bo_nets.html', dict_data=dict_data)
+    file= open(file,'w')
+    file.write(page)
+
    
-        
-
-
-    
-
-            
-            
-          
-        
-        
-        
-
-    
-
-
-
- 
-   
-    
-
     return dict_data
 
 
