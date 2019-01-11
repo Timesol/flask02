@@ -485,7 +485,7 @@ def contract(id):
             link=os.environ.get('BO_CONFIG_LINK')+str(contract.contract)
             id=str(contract.id)
             dict_data=bo_data(link,id)
-            print(dict_data)
+            
 
     if form_template.validate_on_submit():
         if form_template.submit.data:
