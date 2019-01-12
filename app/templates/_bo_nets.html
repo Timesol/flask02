@@ -1,13 +1,33 @@
-{% for i in dict_data %}
+{% extends "base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+{% from "macros.html" import netpanel with context %}
+{% from "macros.html" import netpanelbtn with context %}
+{% block app_content %}
+</div>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
 
-<tr>
-{{i}}
-<td>{{dict_data.get(i)}}</td>	
+
+<div id="flex-container-raw_networks" style="width:100%!important;" class="flex-container"> 
+
+{% if tech == 'mpls' %}
+{{netpanel(1,3,'Logindata' )}}
+{{netpanelbtn(2,3,12,'MPLS Data')}}
+{{netpanelbtn(2,12,16,'Linknet')}}
+{{netpanelbtn(2,16,27,'Customernet')}}
+{{netpanelbtn(2,27,99,'Additional Data')}}
+{% endif %}
+
+
+
+</div> <!-- End flex-container-raw_networks -->
+
+{% endblock %}
 
 
 
 
 
-</tr>
 
-{% endfor %}
+
+
+

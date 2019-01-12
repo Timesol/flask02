@@ -1,10 +1,11 @@
 .flex-container {
   display: flex;
-  background: blue;
+ 
   align-content: space-around;
   align-items: flex-start;
   flex-direction: row;
   flex-wrap: wrap;
+
   
 
   
@@ -61,6 +62,13 @@ input[type="file"] {
     display: none;
 }
 
+iframe {
+    display: block;
+    border: none;
+    height: calc(100vh - 30px);
+    width: 100%;
+}
+
 
 #file-button.label{
     padding: 20px;
@@ -87,3 +95,17 @@ height: 600px;
 
 }
 
+
+#flex-container-raw_networks{
+  display: flex;
+  width: 100%;
+  align-content: space-around;
+  align-items: flex-start;
+  flex-direction: row;
+  flex-wrap: wrap;
+  
+  
+  
+
+  
+}

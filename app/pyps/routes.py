@@ -11,6 +11,11 @@ import os
 import requests
 from app import db
 from app.edit.routes import delete
+from flask_wtf import FlaskForm
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, \
+    TextAreaField, SelectField, HiddenField, IntegerField
+from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, \
+    Length, AnyOf, InputRequired
 
 @bp.route('/pyps_index',methods=['GET', 'POST'])
 @login_required
@@ -46,7 +51,26 @@ def index():
             file.write('')
             return redirect(url_for('pyps.index'))
 
-    return render_template('pyps/index.html',form=form,form_template=form_template)
+
+    # form class with static fields
+    class MyForm(FlaskForm):
+        name = StringField('static field')
+        send = SubmitField('Submit')
+
+    record = {'field1': 'label1', 'field2': 'label2'}
+
+# add dynamic fields
+    for key, value in record.items():
+        setattr(MyForm, key, StringField(value))
+
+    form2=MyForm()
+
+    if form2.validate_on_submit():
+        if form2.send.data:
+            for key, value in record.items():
+                print(getattr(form2, key).data)
+
+    return render_template('pyps/index.html',form=form,form_template=form_template, form2=form2,record=record)
 
 
 

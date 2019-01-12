@@ -1,3 +1,4 @@
+from flask import render_template, flash, redirect, url_for, request, g, current_app, json
 import requests
 from requests import Request, Session
 from requests import get
@@ -5,7 +6,7 @@ from requests import post
 from bs4 import BeautifulSoup
 import bs4 as bs
 from flask import session
-
+from flask import Markup
 
 
 
@@ -29,23 +30,26 @@ def bo_data(link,id):
     output=final_page.find_all('tr' )
 
     dict_data={}
+    dict_data_tag={}
     for i in output:
         if i is not None:
             j=i.find('input')
             i=i.find('td', class_='PageViewHeader')
-        dict_data[i]=j
+            if j and i is not None:
+
+               dict_data[i.text]=j.attrs.get('value')
+               dict_data_tag[i.text]=j.attrs.get('name')
         
 
     for i in dict_data:
         print(i)
         print(dict_data.get(i))
 
-    for k, v in dict_data.items():
-        if v is None:
-            dict_data[k] = ""
 
-    file='/home/ahoehne/app/templates/bo_nets.html'
-    page=render_template('bo_nets.html', dict_data=dict_data)
+
+    file='/home/ahoehne/flask01/app/templates/bo_nets.html'
+    page=render_template('_bo_nets.html', dict_data=dict_data, dict_data_tag=dict_data_tag)
+    
     file= open(file,'w')
     file.write(page)
 

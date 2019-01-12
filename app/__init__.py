@@ -46,6 +46,7 @@ def create_app(config_class=Config):
     momentflask.init_app(app)
     babel.init_app(app)
     UPLOAD_FOLDER_app=(app)
+    app.jinja_env.add_extension('jinja2.ext.loopcontrols')
 
     app.elasticsearch = Elasticsearch([app.config['ELASTICSEARCH_URL']]) \
         if app.config['ELASTICSEARCH_URL'] else None

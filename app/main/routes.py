@@ -33,6 +33,8 @@ import flask
 import logging
 from app.functions.router_config import create_config
 from app.functions.get_data import bo_data
+from collections import OrderedDict
+from app.main.list_variables import entries
 
 
 
@@ -740,6 +742,62 @@ def router_config(journal_id):
 
     return render_template('router_config.html',journ=journ, journ_id=journ_id)
 
+
+@bp.route('/bo_nets/<id>',methods=['GET', 'POST'])
+@login_required
+def bo_nets(id):
+
+    contract=Location.query.get(id)
+    link=os.environ.get('BO_CONFIG_LINK')+str(contract.contract)
+    id=str(contract.id)
+    username='ahoehne'
+    password='Katze7436!'
+    s=requests.Session()
+
+    s.auth=(username,password)
+    c=s.get(link)
+    data=s.get(link).content
+    s.cookies=c.cookies
+    #s.headers=c.headers
+    print(c.cookies)
+    print(c.headers)
+    print(c.status_code)
+    final_page = bs.BeautifulSoup(c.content, 'lxml')
+    output=final_page.find_all('tr')
+    
+
+    dict_data=OrderedDict()
+    dict_data_tag=OrderedDict()
+    
+    for k in output:
+        
+      
+        i=k.find('td', class_='PageViewHeader')
+        if i is not None:
+            j=i.find_next_sibling().find_next_sibling().find('input')
+            if j is not None:
+                
+                dict_data[j.attrs.get('name')+'%%'+ i.text]=j.attrs.get('value')
+                dict_data_tag[j.attrs.get('name')+'%%'+ i.text]=j.attrs.get('name')
+
+    entries_to_remove(entries, dict_data)
+
+    for i in dict_data:
+        print(i)
+    tech=contract.technology
+    if 'MPLS' in tech:
+        tech='mpls'
+
+
+        
+    return render_template('_bo_nets.html', dict_data=dict_data, dict_data_tag=dict_data_tag,tech=tech)
+        
+def entries_to_remove(entries, dict_data):
+    for key in entries:
+        if key in dict_data:
+            del dict_data[key]
+
+    
 
 
 

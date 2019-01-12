@@ -27,3 +27,69 @@
 
 
 {%- endmacro %}
+
+{% macro netpanel(id, end,name) -%}
+
+<div id="flex-item-raw-net-{{id}}" class="flex-item">
+<div class="panel panel-info">
+<div class="panel-heading">{{name}}</div> 
+<div class="panel-body">
+
+<table id="table" class="table table-responsive table-sm">
+  <thead>
+  <tr><th scope="col">Name</th><th scope="col">Value</th></tr>
+  </thead>
+
+<tbody>
+
+{% for i in dict_data %}
+
+<tr>
+<td>{{i.split('%%')[1]}}</td>
+
+<td><input size="16" name="{{dict_data_tag.get(i)}}" value="{{dict_data.get(i)}}" /></td> 
+</tr>
+{%- if loop.index >=end %}{% break %}{% endif %}
+{%- endfor %}
+
+
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+{%- endmacro %}
+
+{% macro netpanelbtn(id, start,end,name) -%}
+<div id="flex-item-raw-net-{{id}}" class="flex-item">
+<div   class="panel panel-info">
+<div class="panel-heading">{{name}}</div> 
+<div class="panel-body">
+
+<table id="table" class="table table-responsive table-sm">
+ <thead>
+  <tr><th scope="col">Name</th><th scope="col">Value</th></tr>
+  </thead>
+   <tbody>     
+{% for i in dict_data %}
+
+
+
+{%- if loop.index >start  %}
+
+<tr>
+<td>{{i.split('%%')[1]}}</td>
+
+<td><input size="16" name="{{dict_data_tag.get(i)}}" value="{{dict_data.get(i)}}" /></td> 
+</tr>
+{% endif %}
+{%- if loop.index >=end %}{% break %}{% endif %}
+{%- endfor %}
+
+</tbody>
+</table>
+</div>
+</div> 
+</div> 
+{%- endmacro %}
