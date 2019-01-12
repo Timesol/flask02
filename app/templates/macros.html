@@ -47,7 +47,7 @@
 <tr>
 <td>{{i.split('%%')[1]}}</td>
 
-<td><input size="16" name="{{dict_data_tag.get(i)}}" value="{{dict_data.get(i)}}" /></td> 
+<td>{{ form|attr(i)()}} 
 </tr>
 {%- if loop.index >=end %}{% break %}{% endif %}
 {%- endfor %}
@@ -81,7 +81,7 @@
 <tr>
 <td>{{i.split('%%')[1]}}</td>
 
-<td><input size="16" name="{{dict_data_tag.get(i)}}" value="{{dict_data.get(i)}}" /></td> 
+<td>{{ form|attr(i)()}}</td> 
 </tr>
 {% endif %}
 {%- if loop.index >=end %}{% break %}{% endif %}

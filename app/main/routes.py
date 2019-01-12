@@ -35,6 +35,11 @@ from app.functions.router_config import create_config
 from app.functions.get_data import bo_data
 from collections import OrderedDict
 from app.main.list_variables import entries
+from flask_wtf import FlaskForm
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, \
+    TextAreaField, SelectField, HiddenField, IntegerField
+from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, \
+    Length, AnyOf, InputRequired
 
 
 
@@ -768,8 +773,16 @@ def bo_nets(id):
 
     dict_data=OrderedDict()
     dict_data_tag=OrderedDict()
+    dict_data_send=OrderedDict()
     
     for k in output:
+        r=k.find('input')
+        if r is not None:
+            dict_data_send[(r.attrs.get('name'))]=r.attrs.get('value')
+        q=k.find('select')
+        if q is not None:
+            dict_data_send[q.attrs.get('name')]=q.attrs.get('selected')
+
         
       
         i=k.find('td', class_='PageViewHeader')
@@ -782,15 +795,45 @@ def bo_nets(id):
 
     entries_to_remove(entries, dict_data)
 
-    for i in dict_data:
-        print(i)
+    
     tech=contract.technology
     if 'MPLS' in tech:
         tech='mpls'
 
+    class MyForm(FlaskForm):
+        name = StringField('static field')
+        send = SubmitField('Submit')
+
+    
+
+# add dynamic fields
+    for key, value in dict_data.items():
+        setattr(MyForm, key, StringField(default=value))
+
+    form=MyForm()
+
+    if form.validate_on_submit():
+        if form.send.data:
+            for key, value in dict_data.items():
+                print(getattr(form, key).data)
+                key2=key.split('%%')[0]
+
+                dict_data_send[key2]=getattr(form, key).data
+    
+    s.post(link,data=dict_data_send, headers={'Content-type': 'text/plain; charset=utf-8'})
+
+    for key, value in dict_data_send.items():
+        print(key)
+        print(value)
+
+
+
+
+    
+
 
         
-    return render_template('_bo_nets.html', dict_data=dict_data, dict_data_tag=dict_data_tag,tech=tech)
+    return render_template('_bo_nets.html', dict_data=dict_data, dict_data_tag=dict_data_tag,tech=tech,form=form)
         
 def entries_to_remove(entries, dict_data):
     for key in entries:

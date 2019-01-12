@@ -7,8 +7,9 @@
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
 
 
-<div id="flex-container-raw_networks" style="width:100%!important;" class="flex-container"> 
-
+<div id="flex-container-raw_networks"  class="flex-container"> 
+<form class="flex-container" action="" method="post" novalidate>
+{{ form.hidden_tag() }}
 {% if tech == 'mpls' %}
 {{netpanel(1,3,'Logindata' )}}
 {{netpanelbtn(2,3,12,'MPLS Data')}}
@@ -18,9 +19,9 @@
 {% endif %}
 
 
-
+{{ form.send() }}
 </div> <!-- End flex-container-raw_networks -->
-
+</form>
 {% endblock %}
 
 
