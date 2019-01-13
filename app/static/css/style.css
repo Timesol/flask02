@@ -5,7 +5,7 @@ flex-direction: row;
 
 .flex-container {
   display: flex;
- 
+  
   align-content: space-around;
   align-items: flex-start;
   flex-direction: row;
@@ -19,7 +19,7 @@ flex-direction: row;
 .flex-item{
 
 align-content: space-around;
-margin: 0.5%;
+margin: 0.3%;
 
 
 
@@ -102,6 +102,11 @@ height: 600px;
 }
 
 
+#flex-container-button{
 
+
+background-color: red;
+
+}
 
 

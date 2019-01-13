@@ -40,7 +40,7 @@ from wtforms import StringField, PasswordField, BooleanField, SubmitField, \
     TextAreaField, SelectField, HiddenField, IntegerField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, \
     Length, AnyOf, InputRequired
-
+from app.functions.get_journals import get_bo_journals
 
 
 @bp.route('/proxy', methods=['GET', 'POST'])
@@ -463,9 +463,15 @@ def router_todo():
 @login_required
 
 def contract(id):
+    dict_data={}
+    dict_data_journal={}
 
-    dict_data={'Testkey1':'Value1', 'Testkey2':'Value2'}
+    
     contract=Location.query.get(id)
+
+
+    dict_data_journal=get_bo_journals(contract)
+
     available_scripts=Script.query.all()
 
     scripts_list=[(i.id,i.name) for i in available_scripts]
@@ -663,7 +669,8 @@ def contract(id):
     return render_template('contract.html',form_script=form_script, contract=contract, 
         form=form, form_del=form_del, form_info=form_info, infos_t=infos_t, form_remove=form_remove,
         form_template=form_template,journs=journs.items, form_journal=form_journal,next_url=next_url,
-                           prev_url=prev_url,form_get_nets=form_get_nets,dict_data=dict_data)
+        prev_url=prev_url,form_get_nets=form_get_nets,dict_data=dict_data, 
+        dict_data_journal=dict_data_journal)
 
 
 @bp.route('/append_all',methods=['GET', 'POST'])
@@ -769,11 +776,19 @@ def bo_nets(id):
     print(c.status_code)
     final_page = bs.BeautifulSoup(c.content, 'lxml')
     output=final_page.find_all('tr')
+    output2=final_page.find_all(attrs={'name':True})
+    dict_data_send=OrderedDict()
+    for i in output2:
+        dict_data_send[i.attrs.get('name')]=""
+
+        
     
+  
 
     dict_data=OrderedDict()
     dict_data_tag=OrderedDict()
-    dict_data_send=OrderedDict()
+
+    
     
     for k in output:
         r=k.find('input')
@@ -782,6 +797,11 @@ def bo_nets(id):
         q=k.find('select')
         if q is not None:
             dict_data_send[q.attrs.get('name')]=q.attrs.get('selected')
+        v=k.find('textarea')
+
+        if v is not None:
+            dict_data_send[v.attrs.get('name')]=v.text
+
 
         
       
@@ -795,14 +815,28 @@ def bo_nets(id):
 
     entries_to_remove(entries, dict_data)
 
+
+
+    test=[key for key, value in dict_data.items() if 'Netz(' in key]
+    list_count=list()
+    for i in test:
+        list_count.append(list(dict_data.keys()).index(i))
+
+    number_nets=len(list_count)*10+4
+    print(number_nets)
+
+
+
+
+
     
     tech=contract.technology
-    if 'MPLS' in tech:
-        tech='mpls'
+    
 
     class MyForm(FlaskForm):
         name = StringField('static field')
         send = SubmitField('Submit')
+        add= SubmitField('Add Network')
 
     
 
@@ -814,17 +848,54 @@ def bo_nets(id):
 
     if form.validate_on_submit():
         if form.send.data:
+            print('button not pressed')
+            for key, value in dict_data.items():
+                key2=key.split('%%')[0]
+                dict_data_send[key2]=getattr(form, key).data
+                filtered={k: v for k, v in dict_data_send.items() if k is not None}
+                dict_data_send.clear()
+                dict_data_send.update(filtered)
+                list_data=('cm_install_date','edit','Search','robots')
+                entries_to_remove(list_data, dict_data_send)
+
+
+
+        
+            for i in dict_data_send:
+                print(i)
+                
+                
+
+            s.post(link,data=dict_data_send)
+            flash(_('Config saved!'))
+            return redirect(url_for('main.bo_nets',id=contract.id))
+    
+        if form.add.data:
+            print('button pressed')
+            param_data={'Contract_ID': contract.contract,
+            'Action':'addNetwork'}
+             
             for key, value in dict_data.items():
                 print(getattr(form, key).data)
                 key2=key.split('%%')[0]
-
                 dict_data_send[key2]=getattr(form, key).data
-    
-    s.post(link,data=dict_data_send, headers={'Content-type': 'text/plain; charset=utf-8'})
+            s.post(link,data=dict_data_send, params=param_data)
+            flash(_('Network added!'))
+            return redirect(url_for('main.bo_nets',id=contract.id))
 
-    for key, value in dict_data_send.items():
-        print(key)
-        print(value)
+                
+
+
+
+    
+
+    
+
+    
+    
+
+    
+        
 
 
 
@@ -833,7 +904,9 @@ def bo_nets(id):
 
 
         
-    return render_template('_bo_nets.html', dict_data=dict_data, dict_data_tag=dict_data_tag,tech=tech,form=form)
+    return render_template('_bo_nets.html', dict_data=dict_data, 
+        dict_data_tag=dict_data_tag,tech=tech,form=form, 
+        contract=contract,list_count=list_count,number_nets=number_nets)
         
 def entries_to_remove(entries, dict_data):
     for key in entries:

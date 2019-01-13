@@ -47,7 +47,7 @@
 <tr>
 <td>{{i.split('%%')[1]}}</td>
 
-<td>{{ form|attr(i)()}} 
+<td>{{ form|attr(i)(size="16")}} 
 </tr>
 {%- if loop.index >=end %}{% break %}{% endif %}
 {%- endfor %}
@@ -81,7 +81,7 @@
 <tr>
 <td>{{i.split('%%')[1]}}</td>
 
-<td>{{ form|attr(i)()}}</td> 
+<td>{{ form|attr(i)(size="16")}}</td> 
 </tr>
 {% endif %}
 {%- if loop.index >=end %}{% break %}{% endif %}

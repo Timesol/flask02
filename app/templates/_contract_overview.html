@@ -98,6 +98,35 @@
 </div> <!--end container-contract item -->
 </div> <!--end container-contract -->
 <p></p>
+<div id="flex-container-journals-bo" class="flex-container"> 
+<div id="flex-item_journals-bo" class=flex-item>
+<table class="table  table-responsive">
+<thead>
+ 
+
+</thead>
+
+<tbody>
+
+{% for i in dict_data_journal %}
+<tr>
+ <td><a href="{{i}}">{{dict_data_journal.get(i)}}</a></td> 
+
+</tr>
+
+
+{% endfor %}
+
+</tbody>
+</table>
+
+
+</div>
+
+
+</div>
+
+
 <div id="flex-container-contract-info" class="flex-container"> 
 
 
