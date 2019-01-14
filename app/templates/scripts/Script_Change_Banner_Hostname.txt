@@ -1,0 +1,38 @@
+sleep 2;
+echo configure terminal;
+sleep 1;
+echo "
+banner exec ^C
+======================================================================
+    Matchcode: {{contract.matchcode}}
+    UID: {{contract.sid }}
+    CID: {{contract.contract}}
+======================================================================
+^C
+banner motd ^C
+************************************************************************
+*                                                                      *
+*       THIS SYSTEM IS FOR THE USE OF AUTHORISED USERS ONLY!           *
+*                                                                      *
+*  For unauthorized users all access is prohibited and protected by    *
+*  international law.                                                  *
+*                                                                      *
+*  Individuals using this system are subject to having all of their    *
+*  activities on this system monitored, logged and checked by systems  *
+*  and personnel.                                                      *
+*                                                                      *
+*  When you login to this host you automatically agree with the above  *
+*  mentioned terms!                                                    *
+*                                                                      *
+************************************************************************
+^C
+"
+;
+sleep 1;
+echo -ne '\n' 
+sleep 1;
+echo hostname cid{{contract.contract}}
+sleep 1;
+echo end;
+sleep 1;
+echo write memory;

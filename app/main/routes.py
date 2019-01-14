@@ -242,35 +242,40 @@ def customers():
 @login_required
 
 def locations(customername):
+    cust = Customer.query.filter_by(name=customername).first_or_404()
+    lists=cust.locations
+
+    available_customers=Customer.query.all()
+    customer_list=[(i.id,i.name) for i in available_customers]
+
     available_categorys=Category.query.all()
     category_list=[(i.id,i.name) for i in available_categorys]
 
     available_subcategorys=Subcategory.query.all()
     subcategory_list=[(i.id,i.name) for i in available_subcategorys]
    
-    
-
-    
     form_work=Statistic_Work_Form()
     form_del=DeleteForm()
+    form= LocationForm()
+
+    form_work.category.choices=category_list
+    form_work.subcategory.choices=subcategory_list
+    form.customer.choices = customer_list
     
 
 
     if form_del.validate_on_submit():
         
         if form_del.delete.data:  
-            print('form validate')
             id=form_del.id_del.data
             delete(Location,id)
             return redirect(url_for('main.locations',customername=customername))
 
-    form_work.category.choices=category_list
-    form_work.subcategory.choices=subcategory_list
+    
     
     
 
-    cust = Customer.query.filter_by(name=customername).first_or_404()
-    lists=cust.locations
+    
     if form_work.validate_on_submit():
         statistic_db=Statistic(technology=form_work.technology.data, time=form_work.time.data,customer=form_work.customer.data, contract=form_work.contract.data,
             hardware=form_work.hardware.data, user=form_work.user.data)
@@ -307,15 +312,14 @@ def locations(customername):
         return redirect(url_for('main.locations',customername=customername))
 
 
-    custquerys=Customer.query.all()
-    locquerys=Location.query.all()
+    
+    
             
-    available_customers=Customer.query.all()
-    groups_list=[(i.id,i.name) for i in available_customers]
-    form= LocationForm()
+    
+    
    
 
-    form.customer.choices = groups_list
+    
     if form.validate_on_submit():
         
         location = Location(residence=form.residence.data, technology=form.technology.data,
@@ -328,26 +332,14 @@ def locations(customername):
             db.session.add(hardware)
             location.hardware.append(hardware)
         db.session.commit()
-        
-
-
         db.session.add(location)
-        
         customer=Customer.query.get(form.customer.data)
         customer.locations.append(location)
         db.session.commit()
         flash(_('Your changes have been saved.'))
         return redirect(url_for('main.contract',id=location.id))
 
-
-    
-
-
-
-        
-
-
-    return render_template('locations.html', cust=cust, lists=lists,form_work=form_work, form_del=form_del, form=form, locquerys=locquerys)
+    return render_template('locations.html', cust=cust, lists=lists,form_work=form_work, form_del=form_del, form=form)
     
 
 
@@ -470,7 +462,7 @@ def contract(id):
     contract=Location.query.get(id)
 
 
-    dict_data_journal=get_bo_journals(contract)
+    #dict_data_journal=get_bo_journals(contract)
 
     available_scripts=Script.query.all()
 
@@ -619,7 +611,7 @@ def contract(id):
             script_id=form_script.script.data
             script_name=Script.query.get(script_id).name
             script_name='Script_'+script_name+'.txt'
-            script=render_template('scripts/'+script_name)
+            script=render_template('scripts/'+script_name, contract=contract)
             
 
             test=connector(endcon,jumpcon,userjump,passjump,userend,passend,script,sshServer, sshUsername, sshPassword)
@@ -777,9 +769,25 @@ def bo_nets(id):
     final_page = bs.BeautifulSoup(c.content, 'lxml')
     output=final_page.find_all('tr')
     output2=final_page.find_all(attrs={'name':True})
+    output3=final_page.find_all(attrs={'selected':True})
     dict_data_send=OrderedDict()
+
     for i in output2:
-        dict_data_send[i.attrs.get('name')]=""
+        dict_data_send[i.attrs.get('name')]=i.attrs.get('value', '')
+    
+    for i in output3:
+        dict_data_send[i.parent.attrs.get('name')]=i.attrs.get('value', '')
+    dict_data_send.pop('edit')
+
+    
+
+
+
+
+
+
+
+        
 
         
     
@@ -794,11 +802,7 @@ def bo_nets(id):
         r=k.find('input')
         if r is not None:
             dict_data_send[(r.attrs.get('name'))]=r.attrs.get('value')
-        q=k.find('select')
-        if q is not None:
-            dict_data_send[q.attrs.get('name')]=q.attrs.get('selected')
         v=k.find('textarea')
-
         if v is not None:
             dict_data_send[v.attrs.get('name')]=v.text
 
@@ -852,21 +856,31 @@ def bo_nets(id):
             for key, value in dict_data.items():
                 key2=key.split('%%')[0]
                 dict_data_send[key2]=getattr(form, key).data
-                filtered={k: v for k, v in dict_data_send.items() if k is not None}
-                dict_data_send.clear()
-                dict_data_send.update(filtered)
-                list_data=('cm_install_date','edit','Search','robots')
-                entries_to_remove(list_data, dict_data_send)
+            for i in dict_data_send:
+                try:
+                    print(i + " " + dict_data_send.get(i, ''))
+
+                except:
+                    print('Exception reached')
+                    dict_data_send.pop(i)
+                    print(dict_data_send.get(i, ''))
+            s.post(link, data=dict_data_send)
+     
+
+            
+               
+                
 
 
 
         
-            for i in dict_data_send:
-                print(i)
+            
+                        
+
                 
                 
 
-            s.post(link,data=dict_data_send)
+            
             flash(_('Config saved!'))
             return redirect(url_for('main.bo_nets',id=contract.id))
     
@@ -879,7 +893,7 @@ def bo_nets(id):
                 print(getattr(form, key).data)
                 key2=key.split('%%')[0]
                 dict_data_send[key2]=getattr(form, key).data
-            s.post(link,data=dict_data_send, params=param_data)
+            
             flash(_('Network added!'))
             return redirect(url_for('main.bo_nets',id=contract.id))
 
