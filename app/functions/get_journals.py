@@ -15,8 +15,8 @@ def get_bo_journals(contract):
     print('in Function')
     dict_data_journal={}
 
-    link=os.environ.get('BO_SHOW_LINK')+str(contract.contract)
-    id=str(contract.id)
+    link=os.environ.get('BO_SHOW_LINK')+str(contract)
+   
     username=session['username']
     password=session['password']
     s=requests.Session()

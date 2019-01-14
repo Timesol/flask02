@@ -40,7 +40,7 @@ from wtforms import StringField, PasswordField, BooleanField, SubmitField, \
     TextAreaField, SelectField, HiddenField, IntegerField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, \
     Length, AnyOf, InputRequired
-from app.functions.get_journals import get_bo_journals
+
 
 
 @bp.route('/proxy', methods=['GET', 'POST'])
@@ -462,7 +462,7 @@ def contract(id):
     contract=Location.query.get(id)
 
 
-    #dict_data_journal=get_bo_journals(contract)
+    
 
     available_scripts=Script.query.all()
 
@@ -926,6 +926,10 @@ def entries_to_remove(entries, dict_data):
     for key in entries:
         if key in dict_data:
             del dict_data[key]
+
+
+
+
 
     
 

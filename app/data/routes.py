@@ -18,7 +18,7 @@ from app.edit.routes import delete
 from datetime import date
 from datetime import datetime
 from app.file.routes import expynew, expy
-
+from app.functions.get_journals import get_bo_journals
 
 
 @bp.route('/scraper',methods=['GET', 'POST'])
@@ -349,6 +349,30 @@ def statistic_byTime(sm,sd,sy,em,ed,ey):
         print(i.user)
 
     return stats
+
+
+
+@bp.route('/cors/<path:url>',methods=['GET', 'POST'])
+@login_required
+
+def cors(url):
+
+    s=requests.Session()
+    data=s.get(url).content
+
+    return data
+
+
+@bp.route('/bo_journals/<contract>',methods=['GET', 'POST'])
+@login_required
+
+
+def bo_journals(contract):
+
+    dict_data_journal=get_bo_journals(contract)
+
+
+    return dict_data_journal
 
 
 
