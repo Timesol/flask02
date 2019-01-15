@@ -40,7 +40,8 @@ from wtforms import StringField, PasswordField, BooleanField, SubmitField, \
     TextAreaField, SelectField, HiddenField, IntegerField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, \
     Length, AnyOf, InputRequired
-
+import time
+from app.functions.get_journals import get_bo_journals
 
 
 @bp.route('/proxy', methods=['GET', 'POST'])
@@ -461,6 +462,12 @@ def contract(id):
     
     contract=Location.query.get(id)
 
+    
+   
+    
+
+   
+   
 
     
 
@@ -616,8 +623,8 @@ def contract(id):
 
             test=connector(endcon,jumpcon,userjump,passjump,userend,passend,script,sshServer, sshUsername, sshPassword)
             
-            findresult=test.find('terminal length 0')
-            test=test[findresult::]
+            #findresult=test.find('terminal length 0')
+            #test=test[findresult::]
             print ('Ergebnis '+ test)
             flash(_('Script successfull finished!'))
 
@@ -661,8 +668,7 @@ def contract(id):
     return render_template('contract.html',form_script=form_script, contract=contract, 
         form=form, form_del=form_del, form_info=form_info, infos_t=infos_t, form_remove=form_remove,
         form_template=form_template,journs=journs.items, form_journal=form_journal,next_url=next_url,
-        prev_url=prev_url,form_get_nets=form_get_nets,dict_data=dict_data, 
-        dict_data_journal=dict_data_journal)
+        prev_url=prev_url,form_get_nets=form_get_nets,dict_data=dict_data)
 
 
 @bp.route('/append_all',methods=['GET', 'POST'])
@@ -777,7 +783,10 @@ def bo_nets(id):
     
     for i in output3:
         dict_data_send[i.parent.attrs.get('name')]=i.attrs.get('value', '')
-    dict_data_send.pop('edit')
+    try:
+        dict_data_send.pop('edit')
+    except:
+        print('Exception')
 
     
 
@@ -926,6 +935,24 @@ def entries_to_remove(entries, dict_data):
     for key in entries:
         if key in dict_data:
             del dict_data[key]
+
+
+
+
+@bp.route('/bo_journals/<contract>',methods=['GET', 'POST'])
+@login_required
+
+
+def bo_journals(contract):
+
+    dict_data_journal, dict_data_name, dict_data_date=get_bo_journals(contract)
+
+
+    return render_template('bo_journals.html',dict_data_journal=dict_data_journal
+        ,dict_data_name=dict_data_name, dict_data_date=dict_data_date)
+
+
+
 
 
 

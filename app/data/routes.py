@@ -19,6 +19,7 @@ from datetime import date
 from datetime import datetime
 from app.file.routes import expynew, expy
 from app.functions.get_journals import get_bo_journals
+from flask import session
 
 
 @bp.route('/scraper',methods=['GET', 'POST'])
@@ -244,18 +245,17 @@ def statistics(username):
 
             page = request.args.get('page', 1, type=int)
             stats=statistic_byTime(sm,sd,sy,em,ed,ey)
+            stats=stats.order_by(Statistic.timestamp.desc())
 
 
             
     
                
-            stats=stats.filter(Statistic.user_id_stat==current_user.id).paginate(
-                page, current_app.config['POSTS_PER_PAGE'], False)
-            next_url = url_for('data.statistics',username=current_user.username, page=stats.next_num) \
-                if stats.has_next else None
-            prev_url = url_for('data.statistics',username=current_user.username, page=stats.prev_num) \
-                if stats.has_prev else None
+            
+                
             barchart_byTime(sm,sd,sy,em,ed,ey)
+            return render_template('statistics.html', user=user, stats=stats, form_del=form_del,
+                           form_byTime=form_byTime)
 
 
 
@@ -344,9 +344,7 @@ def statistic_byTime(sm,sd,sy,em,ed,ey):
     
     stats=Statistic.query.filter(Statistic.timestamp <= objDateend).filter(Statistic.timestamp >= objDatestart)
 
-    for i in stats:
-
-        print(i.user)
+    
 
     return stats
 
@@ -356,9 +354,12 @@ def statistic_byTime(sm,sd,sy,em,ed,ey):
 @login_required
 
 def cors(url):
-
+    username=session['username']
+    password=session['password']
     s=requests.Session()
+    s.auth=(username,password)
     data=s.get(url).content
+    
 
     return data
 
@@ -372,7 +373,7 @@ def bo_journals(contract):
     dict_data_journal=get_bo_journals(contract)
 
 
-    return dict_data_journal
+    return json.dumps(dict_data_journal, ensure_ascii=False)
 
 
 

@@ -40,6 +40,8 @@ def connector(endcon ,jumpcon, userjump,passjump,userend,passend,script,sshServe
     #{4}= Username End Connection
     #{5}= Password End Connection
     #{6}= Scriptbody
+
+    print('In Connector Function')
     
     connection = ssh(sshServer, sshUsername, sshPassword)
     test=connection.sendCommand("""eval "{{ sleep 1; echo {2}; sleep 1; echo {3}; sleep 2; echo {0}; sleep 1; echo {4}; sleep 1; echo {5};

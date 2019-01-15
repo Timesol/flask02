@@ -1,0 +1,25 @@
+<div id="flex-container-journals-bo" class="flex-container"> 
+<div id="flex-item_journals-bo" class=flex-item>
+
+<table class="table  table-responsive">
+<thead>
+ 
+
+</thead>
+
+<tbody>
+
+{% for i in dict_data_journal %}
+<tr>
+ <td><a href="{{i}}">{{dict_data_journal.get(i)}}</a></td><td>{{dict_data_name.get(i)}}</td><td>{{dict_data_date.get(i)}}</td> 
+
+</tr>
+
+
+{% endfor %}
+
+</tbody>
+</table>
+</div>
+</div>
+
