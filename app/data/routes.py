@@ -358,7 +358,8 @@ def cors(url):
     password=session['password']
     s=requests.Session()
     s.auth=(username,password)
-    data=s.get(url).content
+    param_data={'sid': 'iB2B5728'}
+    data=s.get(url, params=param_data).content
     
 
     return data

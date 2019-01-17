@@ -4,9 +4,11 @@
  $(document).ready(function(){
 
   var xhttp;
+  var xhttp2;
   if (window.XMLHttpRequest) {
     // code for modern browsers
     xhttp = new XMLHttpRequest();
+    xhttp2 = new XMLHttpRequest();
     } else {
     // code for IE6, IE5
     xhttp = new ActiveXObject("Microsoft.XMLHTTP");
@@ -18,16 +20,43 @@
       
     }
   };
+
   xhttp.open("GET", '{{url_for("main.bo_journals", contract=contract.contract)}}', true);
+  
   xhttp.send();
+ 
 
 
 
 }); 
-
-
-
+ $(document).ready(function(){
   
+  
+  var xhttp2;
+  if (window.XMLHttpRequest) {
+    // code for modern browsers
+    
+    xhttp2 = new XMLHttpRequest();
+    } else {
+    // code for IE6, IE5
+    xhttp2 = new ActiveXObject("Microsoft.XMLHTTP");
+  }
+
+  xhttp2.onreadystatechange =  function() {
+    if (this.readyState == 4 && this.status == 200); {
+      
+      document.getElementById("ilvt-insert").innerHTML = this.responseText;
+      
+      
+    }
+  };
+ window.setTimeout(function() {
+ xhttp2.open("GET", '{{url_for("main.bo_ilvt_view", contract=contract.sid)}}', true);
+ xhttp2.send();
+}, 3000);
+ }); 
+
+
 </script>
 
 

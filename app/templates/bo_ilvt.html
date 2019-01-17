@@ -1,0 +1,88 @@
+<div class="flex-container">
+
+<div id="flex-item-ilvt-{{id}}" class="flex-item">
+<div class="panel panel-info">
+<div class="panel-heading">ILVT-Data</div> 
+<div class="panel-body">
+
+<table id="table" class="table table-responsive table-sm">
+  <thead>
+  <tr><th scope="col">Contract</th>
+      <th scope="col">SID</th>
+      <th scope="col">Status</th>
+      <th scope="col">Product</th>
+      <th scope="col">Productcategory</th>
+      <th scope="col">Node</th>
+      <th scope="col">Line</th>
+      <th scope="col">Konzi</th>
+      <th scope="col">Slot</th>
+      <th scope="col">Port</th>
+      <th scope="col">Slotname</th>
+      <th scope="col">Tasl</th>
+      <th scope="col">AIN/EIN</th>
+  </tr>
+  </thead>
+
+<tbody>
+{% for i in range(items_dict_data_ilvt-1)  %}
+
+<tr>
+<td>{% autoescape false %}{{dict_data_ilvt.get('contract'+((loop.index)|string)).split(':')[1].replace('%%','</br>')}}{% endautoescape %}</td>
+
+
+<td>{% autoescape false %}{{dict_data_ilvt.get('sid'+((loop.index)|string)).split(':')[1].replace('%%','</br>')}}{% endautoescape %}</td>
+
+
+<td>{% autoescape false %}{{dict_data_ilvt.get('status'+((loop.index)|string)).split(':')[1].replace('%%','</br>')}}{% endautoescape %}</td>
+
+
+<td>{% autoescape false %}{{dict_data_ilvt.get('product'+((loop.index)|string)).split(':')[1].replace('%%','</br>')}}{% endautoescape %}</td>
+
+
+<td>{% autoescape false %}{{dict_data_ilvt.get('productcat'+((loop.index)|string)).split(':')[1].replace('%%','</br>')}}{% endautoescape %}</td>
+
+
+
+<td>{% autoescape false %}{{dict_data_ilvt.get('node'+((loop.index)|string)).split(':')[1].replace('%%','</br>')}}{% endautoescape %}</td>
+
+
+<td>{% autoescape false %}{{dict_data_ilvt.get('line'+((loop.index)|string)).split(':')[1].replace('%%','</br>')}}{% endautoescape %}</td>
+
+
+<td>{% autoescape false %}{{dict_data_ilvt.get('konzi'+((loop.index)|string)).split(':')[1].replace('%%','</br>')}}{% endautoescape %}</td>
+
+
+<td>{% autoescape false %}{{dict_data_ilvt.get('slot'+((loop.index)|string)).split(':')[1].replace('%%','</br>')}}{% endautoescape %}</td>
+
+
+<td>{% autoescape false %}{{dict_data_ilvt.get('port'+((loop.index)|string)).split(':')[1].replace('%%','</br>')}}{% endautoescape %}</td>
+
+
+<td>{% autoescape false %}{{dict_data_ilvt.get('slotname'+((loop.index)|string)).split(':')[1].replace('%%','</br>')}}{% endautoescape %}</td>
+
+<td>{% autoescape false %}{{dict_data_ilvt.get('tasl'+((loop.index)|string)).split(':')[1].replace('%%','</br>')}}{% endautoescape %}</td>
+
+<td>{% autoescape false %}{{dict_data_ilvt.get('ain'+((loop.index)|string)).split(':')[1].replace('%%','</br>')}}{% endautoescape %}</td>
+
+
+
+
+
+
+{% endfor %}
+
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+
+
+
+
+
+
+
+
+</div>

@@ -32,7 +32,7 @@ import urllib.parse
 import flask
 import logging
 from app.functions.router_config import create_config
-from app.functions.get_data import bo_data
+from app.functions.get_data import bo_ilvt
 from collections import OrderedDict
 from app.main.list_variables import entries
 from flask_wtf import FlaskForm
@@ -461,6 +461,7 @@ def contract(id):
 
     
     contract=Location.query.get(id)
+    
 
     
    
@@ -950,6 +951,27 @@ def bo_journals(contract):
 
     return render_template('bo_journals.html',dict_data_journal=dict_data_journal
         ,dict_data_name=dict_data_name, dict_data_date=dict_data_date)
+
+
+@bp.route('/bo_ilvt_view/<contract>',methods=['GET', 'POST'])
+@login_required
+
+
+def bo_ilvt_view(contract):
+
+
+    dict_data_ilvt, items_dict_data_ilvt=bo_ilvt(contract)
+
+    return render_template('bo_ilvt.html',dict_data_ilvt=dict_data_ilvt,
+        items_dict_data_ilvt=items_dict_data_ilvt)
+
+
+
+
+
+
+
+
 
 
 
