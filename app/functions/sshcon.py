@@ -44,9 +44,10 @@ def connector(endcon ,jumpcon, userjump,passjump,userend,passend,script,sshServe
     print('In Connector Function')
     
     connection = ssh(sshServer, sshUsername, sshPassword)
-    test=connection.sendCommand("""eval "{{ sleep 1; echo {2}; sleep 1; echo {3}; sleep 1; echo {0}; sleep 1; echo {4}; sleep 1; echo {5}; sleep 3;
+    test=connection.sendCommand("""eval "{{ sleep 1; echo {2}; sleep 1; echo {3}; sleep 1; echo {0}; sleep 1; echo {4}; sleep 1; echo {5}; sleep 1;
+    {6}
+    sleep 20;
     
-    echo cat <<EOF; sleep 1; echo {6}; echo EOF;
 
 
     }}" | {1} """.format(endcon ,jumpcon, userjump,passjump,userend,passend,script))

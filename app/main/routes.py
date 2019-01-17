@@ -606,9 +606,9 @@ def contract(id):
                 jumpcon=form_script.connector.data
                 userjump=session['username']
                 passjump=session['password']
-                endcon=""
-                userend=""
-                passend=""
+                endcon=form_script.connector.data
+                userend=session['username']
+                passend=session['password']
             
                 
                 
@@ -622,11 +622,11 @@ def contract(id):
             script=render_template('scripts/'+script_name, contract=contract)
             
 
-            test=connector(endcon,jumpcon,userjump,passjump,userend,passend,script,sshServer, sshUsername, sshPassword)
+            result=connector(endcon,jumpcon,userjump,passjump,userend,passend,script,sshServer, sshUsername, sshPassword)
             
-            #findresult=test.find('terminal length 0')
-            #test=test[findresult::]
-            print ('Ergebnis '+ test)
+            findresult=result.find('terminal length 0')
+            result=result[findresult::]
+            print ('Ergebnis '+ result)
             flash(_('Script successfull finished!'))
 
         return redirect(url_for('main.contract',id=contract.id, contract=contract, infos_t=infos_t))

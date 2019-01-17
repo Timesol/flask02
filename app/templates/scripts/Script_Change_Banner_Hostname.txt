@@ -1,7 +1,8 @@
+echo 'terminal length 0
 configure terminal;
 banner exec ^C
 ======================================================================
-    Matchcode: {{contract.matchcode}}
+    Matchcode:{{contract.matchcode}}
     UID: {{contract.sid }}
     CID: {{contract.contract}}
 ======================================================================
@@ -19,10 +20,11 @@ banner motd ^C
 *  and personnel.                                                      *
 *                                                                      *
 *  When you login to this host you automatically agree with the above  *
-*  mentioned terms!                                                    *
+*  mentioned rules!                                                    *
 *                                                                      *
 ************************************************************************
 ^C
 hostname cid{{contract.contract}}
 end
-write memory;
+write memory';
+sleep 60;
