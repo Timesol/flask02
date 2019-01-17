@@ -959,11 +959,17 @@ def bo_journals(contract):
 
 def bo_ilvt_view(contract):
 
+    try:
+        dict_data_ilvt, items_dict_data_ilvt=bo_ilvt(contract)
 
-    dict_data_ilvt, items_dict_data_ilvt=bo_ilvt(contract)
-
-    return render_template('bo_ilvt.html',dict_data_ilvt=dict_data_ilvt,
+        return render_template('bo_ilvt.html',dict_data_ilvt=dict_data_ilvt,
         items_dict_data_ilvt=items_dict_data_ilvt)
+
+    except:
+        print('Exception bo_ilvt_view')
+
+
+    return render_template('exception_not_found.html')
 
 
 

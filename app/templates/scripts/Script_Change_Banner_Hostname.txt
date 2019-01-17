@@ -1,7 +1,4 @@
-sleep 2;
-echo configure terminal;
-sleep 1;
-echo "
+configure terminal;
 banner exec ^C
 ======================================================================
     Matchcode: {{contract.matchcode}}
@@ -26,13 +23,6 @@ banner motd ^C
 *                                                                      *
 ************************************************************************
 ^C
-"
-;
-sleep 1;
-echo -ne '\n' 
-sleep 1;
-echo hostname cid{{contract.contract}}
-sleep 1;
-echo end;
-sleep 1;
-echo write memory;
+hostname cid{{contract.contract}}
+end
+write memory;
