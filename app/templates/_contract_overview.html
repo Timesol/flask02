@@ -98,8 +98,9 @@ window.setTimeout(function() {
 
  
 <div id="flex-item-button2" class="flex-item">
-  <button id="router_todo" onclick="router_todo( {{contract.id}} )"  type="button" class="btn btn-info btn-sm " >
-<span></span> Send Routerinfo</button></div> <!-- End Div flex-item-button2 -->
+<button type="button" class="btn btn-info btn-sm"  data-toggle="modal" data-target="#modal-router1">
+<span>Send Routerinfo</span>
+</button></div>
 <div id="flex-item-button3" class="flex-item">
 <button type="button" class="btn btn-info btn-sm"  data-toggle="modal" data-target="#modal-info1">
 <span> Add Note</span>
@@ -119,6 +120,7 @@ window.setTimeout(function() {
 {{modal('Add Note', '-info1', wtf.quick_form(form_info, button_map={'submit2':'success btn btn-sm'},id="testform" ), style="display:none;" )}}
 {{modal('Activate Script', '-script1', wtf.quick_form(form_script, button_map={'send':'success btn btn-sm'},id="scriptform" ),style="display:none;",onclick="loading()" )}}
 {{modal('Create Config', '-template1', wtf.quick_form(form_template, button_map={'submit':'success btn btn-sm'},id="templateform" ), style="display:none;" )}}
+{{modal('Send Router', '-router1', wtf.quick_form(form_router, button_map={'submit_router':'success btn btn-sm'},id="routerform" ), style="display:none;" )}}
 
 
 

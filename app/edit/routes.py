@@ -2,7 +2,7 @@ from flask import render_template, flash, redirect, url_for, request, g, current
 from app.edit import bp
 from flask_login import login_required
 from app import db
-from app.models import Customer,Location,Network,User,Statistic,Hardware
+from app.models import Customer,Location,Network,User,Statistic,Hardware,Post_r
 
 @bp.route('/save',methods=['GET', 'POST'])
 @login_required
@@ -151,3 +151,18 @@ def paste_location():
         db.session.commit()
         flash(_('Your changes have been saved.'))
     return render_template('edit.html', title=_('Edit'), arg=arg, form=form )
+
+
+
+@bp.route('/save_status',methods=['GET', 'POST'])
+@login_required
+
+
+def save_status():
+     id=request.args.get('id')
+     status=request.args.get('status')
+     post=Post_r.query.get(id)
+     post.status=status
+     db.session.commit()
+
+     return json.dumps({'status':'ok'})

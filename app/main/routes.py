@@ -6,7 +6,7 @@ from flask_babel import _, get_locale
 from app import db
 from app.main import bp
 from app.main.forms import EditProfileForm, PostForm, LocationForm, NetworkForm,JournalForm, \
-CustomerForm, Post_r_Form, StatisticForm, DeleteForm, InfoForm,RemoveForm,ScriptForm,TemplateForm,GetNetworksForm
+CustomerForm, Post_r_Form, StatisticForm, DeleteForm, InfoForm,RemoveForm,ScriptForm,TemplateForm,GetNetworksForm, RouterForm
 from app.models import User, Post, Location, Customer, Network, Post_r, \
 Statistic, Category, Subcategory, Info, Hardware,Script,Template,Journal
 from guess_language import guess_language
@@ -307,6 +307,7 @@ def contract(id):
     form_template=TemplateForm()
     form_get_nets=GetNetworksForm()
     form_journal=JournalForm()
+    form_router=RouterForm()
 
     
     form_script.script.choices=scripts_list
@@ -416,6 +417,32 @@ def contract(id):
             file.write(form_journal.body.data)
 
             return redirect(url_for('main.contract',id=contract.id, contract=contract))
+    
+    if form_router.validate_on_submit():
+        if form_router.submit_router.data:
+
+            location=Location.query.get(contract.id)
+            post=render_template('router_todo.txt', location=location)
+            post=str(post)
+            
+            
+            if form_router.file.data:
+                print(form_router.file.data.filename)
+                
+                UPLOAD_FOLDER_CONFIGS=os.environ.get('UPLOAD_FOLDER_CONFIGS')
+                f =form_router.file.data
+                filename = secure_filename(f.filename)
+                f.save(os.path.join(UPLOAD_FOLDER_CONFIGS, filename))
+                add_post=Post_r(body=post, author_r=current_user, npl=form_router.npl.data, status=form_router.status.data,filename=form_router.file.data.filename)
+            else:
+                add_post=Post_r(body=post, author_r=current_user, npl=form_router.npl.data, status=form_router.status.data)
+            db.session.add(add_post)
+            db.session.commit()
+
+
+
+
+    
 
 
     page = request.args.get('page', 1, type=int)
@@ -429,7 +456,7 @@ def contract(id):
     return render_template('contract.html',form_script=form_script, contract=contract, 
         form=form, form_del=form_del, form_info=form_info, infos_t=infos_t, form_remove=form_remove,
         form_template=form_template,journs=journs.items, form_journal=form_journal,next_url=next_url,
-        prev_url=prev_url,form_get_nets=form_get_nets,dict_data=dict_data)
+        prev_url=prev_url,form_get_nets=form_get_nets,dict_data=dict_data,form_router=form_router)
 
 
 @bp.route('/append_all',methods=['GET', 'POST'])

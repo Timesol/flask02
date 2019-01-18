@@ -484,6 +484,12 @@ $(document).ready(function(){
 
 
 document.getElementById("send").setAttribute("data-dismiss","modal");
+document.getElementById("file").setAttribute("class","btn btn-sm btn-primary")
+
+
+
+
+
 
 
 

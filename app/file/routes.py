@@ -26,6 +26,7 @@ def before_request():
 
 
 UPLOAD_FOLDER = os.environ.get('UPLOAD_FOLDER_ENV')
+UPLOAD_FOLDER_CONFIGS = os.environ.get('UPLOAD_FOLDER_CONFIGS')
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'xlsx','cfg'])
 ALLOWED_EXTENSIONS_PANDAS = set(['xlsx'])
 def allowed_file(filename):
@@ -209,4 +210,12 @@ def return_files_user(filename):
     except Exception as e:
         return str(e)
     return render_template('user.html', title=_('user'), filelist=filelist)
+
+
+@bp.route('/return_files_router/<filename>')
+def return_files_router(filename):
+    try:
+        return send_file(UPLOAD_FOLDER_CONFIGS+filename , attachment_filename=filename)
+    except Exception as e:
+        return str(e)
 

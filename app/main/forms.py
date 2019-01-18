@@ -1,7 +1,7 @@
 
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, \
-    TextAreaField, SelectField, HiddenField, IntegerField
+    TextAreaField, SelectField, HiddenField, IntegerField,FileField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, \
     Length, AnyOf, InputRequired
 from flask_babel import _, lazy_gettext as _l
@@ -137,6 +137,18 @@ class JournalForm(FlaskForm):
     description=StringField(_l('Description'))
     body=TextAreaField(_l('Body'))
     submit_journal = SubmitField(_l('Submit'))
+
+
+
+class RouterForm(FlaskForm):
+    status=SelectField('Status',
+        choices=[('todo', 'Todo'),('configroom','Configroom'),('sent','Sent')])
+    npl=SelectField('NPL',
+        choices=[('without_npl', 'No NPL'), ('with_npl','NPL')])
+
+    file=FileField('File Upload')
+    submit_router = SubmitField(_l('Submit'))
+
 
 
 

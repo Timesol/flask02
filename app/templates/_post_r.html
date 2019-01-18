@@ -16,22 +16,33 @@
                 {% endset %}
                 {{ _('%(username)s said %(when)s',
                     username=user_link, when=moment(post_r.timestamp).fromNow()) }}
+                  {%if "without_npl" in post_r.npl%}
+                  <span class="label label-success">{{post_r.npl}}</span>
+
+                {% endif %}
+                 {%if "with_npl" in post_r.npl%}
+                <span class="label label-danger">{{post_r.npl}}</span>
+                  {% endif %}
+                
                 <br>
                 <span id="post{{ post_r.id }}" style="white-space: pre;">{{ post_r.body }}</span>
                 <div class="dropdown" id="dropdown{{post_r.id}}">
-                  <button class="btn btn-link dropdown-toggle" type="button" data-toggle="dropdown" id="drop_button{{post_r.id}}">Todo
+                  <button class="btn btn-link dropdown-toggle" type="button" data-toggle="dropdown" id="drop_button{{post_r.id}}">{{post_r.status.capitalize() }}
                   <span class="caret"></span></button>
                   <ul class="dropdown-menu">
-                    <li><a href="javascript: change_color({{post_r.id}})">Hardwarekammer</a></li>
-                    <li><a href="#">Versendet</a></li>
-                    <li><a href="#">Todo</a></li>
+                    <li><a href="javascript: save_status('{{post_r.id}}', 'configroom');">Configroom</a></li>
+                    <li><a href="javascript: save_status('{{post_r.id}}', 'sent');" class="active">Sent</a></li>
+                    <li><a href="javascript: save_status('{{post_r.id}}','todo');">Todo</a></li>
                   </ul>
                 </div>
-                {% if post_r.language and post_r.language != g.locale %}
-                <br><br>
-                <a href="#">{{ _('Translate') }}</a>
-                {% endif %}
+
+          
                 
+                
+                {% if post_r.filename%}
+                <td><a href="{{ url_for('file.return_files_router', filename=post_r.filename) }}" target="blank">{{post_r.filename}}</a></td>
+         
+                {% endif %}
                 
             </td>
         </tr>

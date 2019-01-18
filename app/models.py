@@ -216,7 +216,7 @@ class Location(db.Model, SearchableMixin):
     hardware= db.relationship('Hardware', backref='location' , lazy='dynamic')
     networks= db.relationship('Network', backref='location' , lazy='dynamic')
     journals= db.relationship('Journal', backref='location' , lazy='dynamic')
-    contract= db.Column(db.String(140))
+    contract= db.Column(db.String(140), unique=True )
     contact=db.Column(db.String(140))
     sid= db.Column(db.String(140))
     matchcode= db.Column(db.String(140))
@@ -256,7 +256,9 @@ class Post_r(db.Model): # ,SearchableMixin needs to be added
     body = db.Column(db.Text)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     user_id2 = db.Column(db.Integer, db.ForeignKey('user.id'))
-    language = db.Column(db.String(5))
+    status=db.Column(db.String(140))
+    npl=db.Column(db.String(12))
+    filename=db.Column(db.String(140))
 
     
     def __repr__(self):
