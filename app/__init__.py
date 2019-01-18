@@ -75,6 +75,9 @@ def create_app(config_class=Config):
     from app.functions import bp as functions_bp
     app.register_blueprint(functions_bp)
 
+    from app.user import bp as user_bp
+    app.register_blueprint(user_bp)
+
 
     if not app.debug and not app.testing:
         if app.config['MAIL_SERVER']:

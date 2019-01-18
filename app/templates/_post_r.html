@@ -2,14 +2,14 @@
         <tr>
             <td width="70px">
                
-                 <a href="{{ url_for('main.user', username=post_r.author_r.username) }}">
+                 <a href="{{ url_for('user.user', username=post_r.author_r.username) }}">
                     <img src="{{ post_r.author_r.avatar(70) }}" />
                 </a>
             </td>
             <td>
                 {% set user_link %}
                    <span class="user_popup">
-                       <a href="{{ url_for('main.user', username=post_r.author_r.username) }}">
+                       <a href="{{ url_for('user.user', username=post_r.author_r.username) }}">
                            {{ post_r.author_r.username }}
                        </a>
                    </span>

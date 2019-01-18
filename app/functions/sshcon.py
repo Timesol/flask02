@@ -1,5 +1,5 @@
 from paramiko import client
-
+from flask import session
 
 class ssh:
     client = None
@@ -25,6 +25,48 @@ class ssh:
                     return str(alldata, "utf8")
         else:
             print("Connection not opened.")
+
+def if_connector(connector,script):
+    sshUsername=session['username']
+    sshPassword=session['password']
+    sshServer = "10.146.140.166"
+    if '%' in connector:                    
+        con=connector.split("%")
+        for i in range(0,len(con),1):
+                                   
+            if 'uim' in con[i]:
+                print (i)
+                con[i]=session['username']
+                con.insert(i+1, session['password'])
+        jumpcon=con[0]
+        userjump=con[1]
+        passjump=con[2]
+        endcon=con[3]
+        userend=con[4]
+        passend=con[5]
+
+    elif ';' in connector:
+
+        con=connector.split(";")
+        jumpcon=con[0]
+        endcon=con[1]
+        userjump=session['username']
+        passjump=session['password']
+        userend=session['username']
+        passend=session['password']    
+    else:
+        print('Here')
+        jumpcon=connector
+        userjump=session['username']
+        passjump=session['password']
+        endcon=connector
+        userend=session['username']
+        passend=session['password']
+
+    result=connector(endcon,jumpcon,userjump,passjump,userend,passend,script,sshServer, sshUsername, sshPassword)
+
+
+    return result
 
 
 
@@ -54,7 +96,7 @@ def connector(endcon ,jumpcon, userjump,passjump,userend,passend,script,sshServe
 
     
 
-    return test
+    return result
 
 
 

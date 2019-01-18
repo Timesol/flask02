@@ -84,7 +84,7 @@ class Post_r_Form(FlaskForm):
     post_r = TextAreaField(_l('Say something'), validators=[DataRequired()])
     submit = SubmitField(_l('Submit'))
 
-class Statistic_Work_Form(FlaskForm):
+class StatisticForm(FlaskForm):
     category=SelectField(u'Category', coerce=int, validators=[InputRequired()])
     technology=StringField(_l('Technology') ,id='stat_technology')
     time=IntegerField(_l('Time') ,id='stat_time')

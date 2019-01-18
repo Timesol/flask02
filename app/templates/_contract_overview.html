@@ -16,7 +16,7 @@
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
       document.getElementById("demo").innerHTML = this.responseText;
-      document.getElementById("spinner").style["display"]="none";
+      document.getElementById("container-loader").style["display"]="none";
       
     }
   };
@@ -29,6 +29,9 @@
 
 
 }); 
+
+
+try{
  $(document).ready(function(){
   
   
@@ -50,12 +53,28 @@
       
     }
   };
+  
  window.setTimeout(function() {
- xhttp2.open("GET", '{{url_for("main.bo_ilvt_view", contract=contract.sid)}}', true);
+ xhttp2.open("GET", '{{url_for("main.bo_ilvt_view", contract=contract.id)}}', true);
  xhttp2.send();
 }, 3000);
  }); 
 
+}
+
+catch(err){
+
+  console.log('Exception')
+}
+
+
+
+
+window.setTimeout(function() {
+
+  document.getElementById("container-loader").style["display"]="none";
+
+}, 5000);
 
 </script>
 
@@ -156,10 +175,13 @@
 </div> <!--end container-contract -->
 <p></p>
 
-<div class="spinner" id="spinner">
-  <div class="cube1"></div>
-  <div class="cube2"></div>
+<div id="container-loader" class="container">
+  <div class="item item-1"></div>
+  <div class="item item-2"></div>
+  <div class="item item-3"></div>
+  <div class="item item-4"></div>
 </div>
+
 <div id="demo" ></div>
 
 

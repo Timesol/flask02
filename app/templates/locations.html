@@ -61,7 +61,7 @@
 
   <tbody>
 
-{% for list in lists %}
+{% for location in locations %}
 
 
 <tr>
@@ -71,15 +71,15 @@
 
 </th>
       
-      <td id="residence_row{{list.id}}">{{list.residence}}</td>
-      <td id="project_row{{list.id}}">{{list.project}}</td>
-      <td id="technology_row{{list.id}}">{{list.technology}}</td>
-      <td id="contract_row{{list.id}}">{{list.contract}}</td>
+      <td id="residence_row{{location.id}}">{{location.residence}}</td>
+      <td id="project_row{{location.id}}">{{location.project}}</td>
+      <td id="technology_row{{location.id}}">{{location.technology}}</td>
+      <td id="contract_row{{location.id}}">{{location.contract}}</td>
      
       
-     <td> <a href="javascript: edit_row({{list.id}});" class="btn btn-info btn-sm" id="edit_button{{list.id}}">
+     <td> <a href="javascript: edit_row({{location.id}});" class="btn btn-info btn-sm" id="edit_button{{location.id}}">
           <span class="glyphicon glyphicon-edit"></span></a>
-          <a style="display:none; "href="javascript: save_row({{list.id}});" class="btn btn-success btn-sm" aria-disabled="true" id ="save_button{{list.id}}">
+          <a style="display:none; "href="javascript: save_row({{location.id}});" class="btn btn-success btn-sm" aria-disabled="true" id ="save_button{{location.id}}">
           <span class="glyphicon glyphicon-floppy-disk"></span>
         </a>
   
@@ -90,20 +90,20 @@
 
 
 
-<td><button id="bmodal2"  onclick="get_data( '{{list.technology}}','{{list.hardware.first().name}}:{{list.hardware.first().sn}}','{{current_user.username}}','{{list.contract}}','{{list.customer.name}}')" type="button" class="btn btn-primary btn-sm"  data-toggle="modal" data-target="#modal-statistic1">
+<td><button id="bmodal2"  onclick="get_data( '{{location.technology}}','{{location.hardware.first().name}}:{{location.hardware.first().sn}}','{{current_user.username}}','{{location.contract}}','{{location.customer.name}}')" type="button" class="btn btn-primary btn-sm"  data-toggle="modal" data-target="#modal-statistic1">
 <span class="glyphicon glyphicon-stats"></span>
 </button>
 
 
-{{modal('Add Statistic', '-statistic1', wtf.quick_form(form_work,button_map={'submit' : 'success btn btn-sm'}), style="display:none;" )}}
+{{modal('Add Statistic', '-statistic1', wtf.quick_form(form_stat,button_map={'submit' : 'success btn btn-sm'}), style="display:none;" )}}
 
 
 
-  <td><a href="{{ url_for('main.contract',id=list.id) }}" class="btn btn-info btn-sm">
+  <td><a href="{{ url_for('main.contract',id=location.id) }}" class="btn btn-info btn-sm">
           <span class="glyphicon glyphicon-info-sign"></span> </a></td>
 <form action="" method="post" style="display:none;">
   {{ form_del.hidden_tag() }}
-<td  id="delete_button{{list.id}}" style="display:none;">{{ form_del.id_del(value=list.id, type="hidden") }}
+<td  id="delete_button{{location.id}}" style="display:none;">{{ form_del.id_del(value=location.id, type="hidden") }}
 {{ wtf.form_field(form_del.delete, class=" btn btn-danger btn-sm") }}</td> 
 </form>
 
@@ -127,16 +127,7 @@
 
 
 
-<div class="container" id="container_locations_sub" style="display:none"> 
-           {% include '_locations.html' %}
 
-        </div> <!--End Div of container container_locations-->
-
-
-        
-   
-
-    </div>  
 
 
 {% endblock %}

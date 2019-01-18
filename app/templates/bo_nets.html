@@ -1,486 +1,64 @@
+{% extends "base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+{% from "macros.html" import netpanel with context %}
+{% from "macros.html" import netpanelbtn with context %}
+{% block app_content %}
+</div>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
 
-<tr>
-<td></td>
-<td><input name="Basisvar-offertemp-contract_binding-1" value="36" /></td>	
-</tr>
+<p></p>
+<div id="flex-container-button"  class="flex-container"> 
+<div id="flex-item-button-net" class="flex-item">
+{{ form.send(class="btn btn-sm btn-success",form="configform") }}
+</div>
 
+<div id="flex-item-button-net3" class="flex-item">
+{{ form.add(class="btn btn-sm btn-primary",form="configform") }}
+</div>
+<div id="flex-item-button-net2" class="flex-item">
+  <a class="btn btn-success btn-sm" href="{{ url_for('main.contract',id=contract.id) }}">Back</a></div>
+</div>
 
-<tr>
-<td>DHCP Start-IP</td>
-<td><input name="Basisvar-router_mpls-dhcp_start_ip-1" value="" /></td>	
-</tr>
 
 
-<tr>
-<td>Passwort</td>
-<td><input name="Basisvar-xdsl-password-1" value="ispa" /></td>	
-</tr>
+</div>
+</div>
+<p></p>
 
 
-<tr>
-<td>WAN/LAN IP-Adresse (Modem)</td>
-<td><input name="Basisvar-xdsl-xdsl_wan_ip-1" value="" /></td>	
-</tr>
+<form id="configform" class="flex-container" action="" method="post" novalidate>
 
 
-<tr>
-<td>PPP Static IP</td>
-<td><input name="Basisvar-mpls_inside_net-static_ip-1" value="" /></td>	
-</tr>
 
+{{ form.hidden_tag() }}
+{% if 'MPLS' in tech %}
+{{netpanel(1,3,'Logindata' )}}
+{{netpanelbtn(2,3,12,'MPLS Data')}}
+{{netpanelbtn(2,12,16,'Linknet')}}
+{{netpanelbtn(2,16,27,'Customernet')}}
+{{netpanelbtn(2,27,99,'Additional Data')}}
+{% endif %}
+{% if 'CIA' in tech %}
+{{netpanel(1,3,'Logindata' )}}
+{%for i in list_count %}
+{{netpanelbtn(2,i,i+10,'Net')}}
+{% endfor %}
+{{netpanelbtn(2,number_nets,99,'IPv6')}}
+{% endif %}
+{% if 'Mobile' in tech %}
+{{netpanel(1,99,'Logindata' )}}
+{% endif %}
 
-<tr>
-<td>DNS-Server2</td>
-<td><input name="Basisvar-router_mpls-dns_server2-1" value="" /></td>	
-</tr>
 
 
-<tr>
-<td>Umschaltezeitfenster</td>
-<td><input name="Basisvar-xdsl-install_termin-1" value="23.01.2012 10:00 - 23.01.2012 12:00" /></td>	
-</tr>
+</form>
+{% endblock %}
 
 
-<tr>
-<td>Radius MaxLogins</td>
-<td><input name="Basisvar-xdsl-radius_max_logins-1" value="" /></td>	
-</tr>
 
 
-<tr>
-<td>Netz</td>
-<td><input name="Basisvar-net_mpls-network-1-net_name-1" value="Kundennetz" /></td>	
-</tr>
 
 
-<tr>
-<td>IP Anzahl</td>
-<td><input name="Basisvar-net_mpls-network-1-net_ip-1" value="256" /></td>	
-</tr>
 
 
-<tr>
-<td>VRF Name Spoke</td>
-<td><input name="Basisvar-mpls-vrf_name_spoke-1" value="" /></td>	
-</tr>
-
-
-<tr>
-<td>MPLS Interface</td>
-<td><input name="Basisvar-mpls-mpls_interface-1" value="" /></td>	
-</tr>
-
-
-<tr>
-<td>Automatische Fertigstellung</td>
-<td><input name="Basisvar-mpls-automatic_completion-1" value="true" /></td>	
-</tr>
-
-
-<tr>
-<td>Daten sichtbar</td>
-<td><input name="Basisvar-net_mpls-net_config_public-1" value="true" /></td>	
-</tr>
-
-
-<tr>
-<td>Stiege</td>
-<td><input name="Basisvar-line_mpls-line_stairway-1" value="" /></td>	
-</tr>
-
-
-<tr>
-<td>Kontaktperson (Tel)</td>
-<td><input name="Basisvar-line_mpls-contact_phone-1" value="0591018808" /></td>	
-</tr>
-
-
-<tr>
-<td>gültige Kollo-Aktion</td>
-<td><input name="Basisvar-xdsl-koloCampaign-1" value="false" /></td>	
-</tr>
-
-
-<tr>
-<td>TA-KundenNr.</td>
-<td><input name="Basisvar-xdsl-ta_clientnr-1" value="" /></td>	
-</tr>
-
-
-<tr>
-<td>Advanced-Serviceklasse in Prozent</td>
-<td><input name="Basisvar-qos-advanced_service_percent-1" value="60" /></td>	
-</tr>
-
-
-<tr>
-<td>HSRP</td>
-<td><input name="Basisvar-router_mpls-hsrp-1" value="true" /></td>	
-</tr>
-
-
-<tr>
-<td>Traffic Limit</td>
-<td><input name="Basisvar-xdsl-traffic_limit-1" value="" /></td>	
-</tr>
-
-
-<tr>
-<td>Vor-Ort Service</td>
-<td><input name="Basisvar-xdsl-installservice-1" value="true" /></td>	
-</tr>
-
-
-<tr>
-<td>Router SerienNr (Slave)</td>
-<td><input name="Basisvar-router_mpls-router_sn-1" value="" /></td>	
-</tr>
-
-
-<tr>
-<td>Netz-Submask</td>
-<td><input name="Basisvar-net_mpls-network-1-net_submask-1" value="255.255.255.0" /></td>	
-</tr>
-
-
-<tr>
-<td>Topologie</td>
-<td><input name="Basisvar-mpls-topology-1" value="any" /></td>	
-</tr>
-
-
-<tr>
-<td>Konzentrator-Submask</td>
-<td><input name="Basisvar-xdsl-xdsl_concentrator_submask-1" value="" /></td>	
-</tr>
-
-
-<tr>
-<td>Stock</td>
-<td><input name="Basisvar-line_mpls-line_floor-1" value="" /></td>	
-</tr>
-
-
-<tr>
-<td>Hausnummer</td>
-<td><input name="Basisvar-line_mpls-line_housenr-1" value="26" /></td>	
-</tr>
-
-
-<tr>
-<td>Router Management IP</td>
-<td><input name="Basisvar-router_mpls-router_management_ip-1" value="172.23.4.101" /></td>	
-</tr>
-
-
-<tr>
-<td>Backupleitung</td>
-<td><input name="Basisvar-mpls-line_backup-1" value="true" /></td>	
-</tr>
-
-
-<tr>
-<td>Router SerienNr (Master)</td>
-<td><input name="Basisvar-router_mpls-router_sn_master-1" value="" /></td>	
-</tr>
-
-
-<tr>
-<td>Router Konfiguration</td>
-<td><input name="Basisvar-router_mpls-router_sn_master-1" value="" /></td>	
-</tr>
-
-
-<tr>
-<td>Bandbreite</td>
-<td><input name="Basisvar-xdsl-xdsl_speed-1" value="" /></td>	
-</tr>
-
-
-<tr>
-<td>BGP-Neighbor IP</td>
-<td><input name="Basisvar-router_mpls-bgp_neighbor-1" value="172.16.11.241" /></td>	
-</tr>
-
-
-<tr>
-<td>VRF Name</td>
-<td><input name="Basisvar-mpls-vrf_name-1" value="forstinger" /></td>	
-</tr>
-
-
-<tr>
-<td>VRF ID Spoke</td>
-<td><input name="Basisvar-mpls-vrf_id_spoke-1" value="" /></td>	
-</tr>
-
-
-<tr>
-<td>PLZ</td>
-<td><input name="Basisvar-line_mpls-line_zipcode-1" value="4810" /></td>	
-</tr>
-
-
-<tr>
-<td>HSRP-IP (Gateway)</td>
-<td><input name="Basisvar-router_mpls-hsrp_gateway-1" value="" /></td>	
-</tr>
-
-
-<tr>
-<td>Netz IP bis</td>
-<td><input name="Basisvar-net_mpls-network-1-net_ip_to-1" value="10.8.4.255" /></td>	
-</tr>
-
-
-<tr>
-<td>TA-Montage</td>
-<td><input name="Basisvar-line_mpls-line_install_date_ta-1" value="" /></td>	
-</tr>
-
-
-<tr>
-<td>DHCP Relay-Server</td>
-<td><input name="Basisvar-router_mpls-dhcp_relay_server-1" value="10.0.103.11" /></td>	
-</tr>
-
-
-<tr>
-<td>Trusted Host IP</td>
-<td><input name="Basisvar-router_mpls-trusted_host_ip-1" value="10.0.102.0" /></td>	
-</tr>
-
-
-<tr>
-<td>Premium-Serviceklasse in Prozent</td>
-<td><input name="Basisvar-qos-premium_service_percent-1" value="20" /></td>	
-</tr>
-
-
-<tr>
-<td>Subnetmask</td>
-<td><input name="Basisvar-mpls_inside_net-subnetmask-1" value="255.255.255.252" /></td>	
-</tr>
-
-
-<tr>
-<td>DHCP Pool-Size</td>
-<td><input name="Basisvar-router_mpls-dhcp_pool_size-1" value="" /></td>	
-</tr>
-
-
-<tr>
-<td>VIP</td>
-<td><input name="Basisvar-net_mpls-network-1-net_vip-1" value="" /></td>	
-</tr>
-
-
-<tr>
-<td>Zentrale</td>
-<td><input name="Basisvar-mpls-headquarters-1" value="true" /></td>	
-</tr>
-
-
-<tr>
-<td>Netz-Gateway</td>
-<td><input name="Basisvar-net_mpls-network-1-net_gateway-1" value="10.8.4.251" /></td>	
-</tr>
-
-
-<tr>
-<td>Konzentrator-Gateway</td>
-<td><input name="Basisvar-xdsl-xdsl_concentrator_gateway-1" value="" /></td>	
-</tr>
-
-
-<tr>
-<td>Standard-Serviceklasse in Prozent</td>
-<td><input name="Basisvar-qos-standard_service_percent-1" value="20" /></td>	
-</tr>
-
-
-<tr>
-<td>DHCP aktiv</td>
-<td><input name="Basisvar-router_mpls-dhcp_active-1" value="true" /></td>	
-</tr>
-
-
-<tr>
-<td>Serviceklasse Premium</td>
-<td><input name="service_class_premium[]" value="voice" /></td>	
-</tr>
-
-
-<tr>
-<td>SNMP-Zugriff</td>
-<td><input name="Basisvar-router_mpls-snmp_access-1" value="true" /></td>	
-</tr>
-
-
-<tr>
-<td>xDSL-Knoten</td>
-<td><input name="Basisvar-xdsl-install_termin-1" value="23.01.2012 10:00 - 23.01.2012 12:00" /></td>	
-</tr>
-
-
-<tr>
-<td>Türnummer</td>
-<td><input name="Basisvar-line_mpls-line_door-1" value="" /></td>	
-</tr>
-
-
-<tr>
-<td>Gateway / WAN IP-Adresse Router</td>
-<td><input name="Basisvar-mpls_inside_net-gateway_virtual_ip-1" value="172.16.11.241" /></td>	
-</tr>
-
-
-<tr>
-<td>MPLS VLAN ID</td>
-<td><input name="Basisvar-mpls-mpls_vlan-1" value="1204" /></td>	
-</tr>
-
-
-<tr>
-<td>MPLS PE</td>
-<td><input name="Basisvar-mpls-mpls_pe-1" value="172.22.4.17 // cgmunden.mpls" /></td>	
-</tr>
-
-
-<tr>
-<td>QoS-Variante (Std/Adv/Pre)</td>
-<td><input name="Basisvar-qos-standard_service_percent-1" value="20" /></td>	
-</tr>
-
-
-<tr>
-<td>ehemalige Vorwahl</td>
-<td><input name="Basisvar-xdsl-prev_phone_areacode-1" value="" /></td>	
-</tr>
-
-
-<tr>
-<td>Strasse</td>
-<td><input name="Basisvar-line_mpls-line_street-1" value="Druckereistraße" /></td>	
-</tr>
-
-
-<tr>
-<td>Ort</td>
-<td><input name="Basisvar-line_mpls-line_city-1" value="Gmunden" /></td>	
-</tr>
-
-
-<tr>
-<td>Read-Only Community</td>
-<td><input name="Basisvar-router_mpls-read_only_community-1" value="forstinger_mpls" /></td>	
-</tr>
-
-
-<tr>
-<td>UZF Mails unterdrücken</td>
-<td><input name="Basisvar-xdsl-suppress_uzf_mail-1" value="true" /></td>	
-</tr>
-
-
-<tr>
-<td>Trusted Host Subnet</td>
-<td><input name="Basisvar-router_mpls-trusted_host_subnet-1" value="255.255.255.0" /></td>	
-</tr>
-
-
-<tr>
-<td>xDSL Kupferdoppeladern</td>
-<td><input name="Basisvar-xdsl-xdsl_kuda-1" value="" /></td>	
-</tr>
-
-
-<tr>
-<td>ehemalige Rufnummer</td>
-<td><input name="Basisvar-xdsl-prev_phone_number-1" value="" /></td>	
-</tr>
-
-
-<tr>
-<td>Kontaktperson</td>
-<td><input name="Basisvar-line_mpls-contact_person-1" value="Stefan Urdl" /></td>	
-</tr>
-
-
-<tr>
-<td>IP des Default Gateways im LAN</td>
-<td><input name="Basisvar-mpls-mpls_gateway-1" value="" /></td>	
-</tr>
-
-
-<tr>
-<td>MPLS VLAN Name</td>
-<td><input name="Basisvar-mpls-mpls_vlan_name-1" value="" /></td>	
-</tr>
-
-
-<tr>
-<td>Next Hop</td>
-<td><input name="Basisvar-net_mpls-network-1-net_nexthop-1" value="" /></td>	
-</tr>
-
-
-<tr>
-<td>Netz-Name</td>
-<td><input name="Basisvar-net_mpls-network-1-net_name-1" value="Kundennetz" /></td>	
-</tr>
-
-
-<tr>
-<td>DNS-Server1</td>
-<td><input name="Basisvar-router_mpls-dns_server1-1" value="" /></td>	
-</tr>
-
-
-<tr>
-<td>Internal BGP-Neighbor IP</td>
-<td><input name="Basisvar-router_mpls-physical_ip-1" value="" /></td>	
-</tr>
-
-
-<tr>
-<td>allgemeiner Netzname</td>
-<td><input name="Basisvar-net_mpls-net_common_name-1" value="MPLS" /></td>	
-</tr>
-
-
-<tr>
-<td>WAN IP-Adresse Router / Netzadresse</td>
-<td><input name="Basisvar-mpls_inside_net-wan_router_ip-1" value="172.16.11.242" /></td>	
-</tr>
-
-
-<tr>
-<td>VRF ID</td>
-<td><input name="Basisvar-mpls-vrf_id-1" value="149" /></td>	
-</tr>
-
-
-<tr>
-<td>Username</td>
-<td><input name="Basisvar-xdsl-username-1" value="804#forstinger@volume" /></td>	
-</tr>
-
-
-<tr>
-<td>Enable Password</td>
-<td><input name="Basisvar-hardware-enable_password-1" value="q0dnil23" /></td>	
-</tr>
-
-
-<tr>
-<td>Domain-Name</td>
-<td><input name="Basisvar-router_mpls-domain_name-1" value="" /></td>	
-</tr>
-
-
-<tr>
-<td>Netz IP von</td>
-<td><input name="Basisvar-net_mpls-network-1-net_ip_from-1" value="10.8.4.0" /></td>	
-</tr>
 

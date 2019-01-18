@@ -1,5 +1,3 @@
-
-
 from datetime import datetime
 from flask import render_template, flash, redirect, url_for, request, g, current_app, json
 from flask_login import login_user, logout_user, current_user, login_required
@@ -8,7 +6,7 @@ from flask_babel import _, get_locale
 from app import db
 from app.main import bp
 from app.main.forms import EditProfileForm, PostForm, LocationForm, NetworkForm,JournalForm, \
-CustomerForm, Post_r_Form, Statistic_Work_Form, DeleteForm, InfoForm,RemoveForm,ScriptForm,TemplateForm,GetNetworksForm
+CustomerForm, Post_r_Form, StatisticForm, DeleteForm, InfoForm,RemoveForm,ScriptForm,TemplateForm,GetNetworksForm
 from app.models import User, Post, Location, Customer, Network, Post_r, \
 Statistic, Category, Subcategory, Info, Hardware,Script,Template,Journal
 from guess_language import guess_language
@@ -23,7 +21,7 @@ import bs4 as bs
 import pandas as pd
 from app.file.routes import expynew
 from app.edit.routes import delete
-from app.functions.sshcon import connector
+from app.functions.sshcon import if_connector
 from flask import session
 from requests import get
 from flask import Response
@@ -44,29 +42,9 @@ import time
 from app.functions.get_journals import get_bo_journals
 
 
-@bp.route('/proxy', methods=['GET', 'POST'])
-def proxy():
-
-    return render_template('proxy.html')
 
 
 
-    
-
-
-
-UPLOAD_FOLDER = os.environ.get('UPLOAD_FOLDER_ENV')
-ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'xlsx','cfg'])
-ALLOWED_EXTENSIONS_PANDAS = set(['xlsx'])
-def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
-
-def allowed_file_pandas(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS_PANDAS
-    return True  
 
 @bp.before_request
 def before_request():
@@ -75,6 +53,10 @@ def before_request():
         db.session.commit()
         g.search_form = SearchForm()
     g.locale = str(get_locale())
+
+
+
+
 
 
 @bp.route('/', methods=['GET', 'POST'])
@@ -105,245 +87,6 @@ def index():
                            prev_url=prev_url)
 
 
-@bp.route('/explore')
-@login_required
-def explore():
-    page = request.args.get('page', 1, type=int)
-    posts = Post.query.order_by(Post.timestamp.desc()).paginate(
-        page, current_app.config['POSTS_PER_PAGE'], False)
-    next_url = url_for('main.explore', page=posts.next_num) \
-        if posts.has_next else None
-    prev_url = url_for('main.explore', page=posts.prev_num) \
-        if posts.has_prev else None
-    return render_template('index.html', title=_('Explore'),
-                           posts=posts.items, next_url=next_url,
-                           prev_url=prev_url)
-
-
-
-
-@bp.route('/user/<username>', methods=['GET', 'POST'])
-@login_required
-def user(username):
-    folder=UPLOAD_FOLDER+current_user.username
-    filelist=[]
-    for x in os.listdir(folder):
-        filelist.append(x)
-    print(list)
-
-    user = User.query.filter_by(username=username).first_or_404()
-    page = request.args.get('page', 1, type=int)
-    posts = user.posts.order_by(Post.timestamp.desc()).paginate(
-        page, current_app.config['POSTS_PER_PAGE'], False)
-    next_url = url_for('main.user', username=user.username, page=posts.next_num) \
-        if posts.has_next else None
-    prev_url = url_for('main.user', username=user.username, page=posts.prev_num) \
-        if posts.has_prev else None
-
-
-
-
-    if request.method == 'POST':
-        # check if the post request has the file part
-        if 'file' not in request.files:
-            flash('No file part')
-            return redirect(request.url)
-        file = request.files['file']
-        # if user does not select file, browser also
-        # submit a empty part without filename
-        if file.filename == '':
-            flash('No selected file')
-            return redirect(request.url)
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            file.save(os.path.join(UPLOAD_FOLDER+current_user.username, filename))
-            flash(_('File uploaded!'))
-            #if allowed_file_pandas(file.filename):
-                #sendpandas(filename)
-                
-          
-
-            
-        return redirect(url_for('main.user',username=user.username, user=user,
-                            filename=filename,filelist=filelist ))
-
-    return render_template('user.html', user=user, posts=posts.items,
-                           next_url=next_url, prev_url=prev_url, filelist=filelist)
-
-
-@bp.route('/edit_profile', methods=['GET', 'POST'])
-@login_required
-def edit_profile():
-    form = EditProfileForm(current_user.username)
-    if form.validate_on_submit():
-        current_user.username = form.username.data
-        current_user.about_me = form.about_me.data
-        db.session.commit()
-        flash(_('Your changes have been saved.'))
-        return redirect(url_for('main.edit_profile'))
-    elif request.method == 'GET':
-        form.username.data = current_user.username
-        form.about_me.data = current_user.about_me
-    return render_template('edit_profile.html', title=_('Edit Profile'),
-                           form=form)
-
-
-@bp.route('/follow/<username>')
-@login_required
-def follow(username):
-    user = User.query.filter_by(username=username).first()
-    if user is None:
-        flash(_('User %(username)s not found.', username=username))
-        return redirect(url_for('main.index'))
-    if user == current_user:
-        flash(_('You cannot follow yourself!'))
-        return redirect(url_for('main.user', username=username))
-    current_user.follow(user)
-    db.session.commit()
-    flash(_('You are following %(username)s!', username=username))
-    return redirect(url_for('main.user', username=username))
-
-
-@bp.route('/unfollow/<username>')
-@login_required
-def unfollow(username):
-    user = User.query.filter_by(username=username).first()
-    if user is None:
-        flash(_('User %(username)s not found.', username=username))
-        return redirect(url_for('main.index'))
-    if user == current_user:
-        flash(_('You cannot unfollow yourself!'))
-        return redirect(url_for('main.user', username=username))
-    current_user.unfollow(user)
-    db.session.commit()
-    flash(_('You are not following %(username)s.', username=username))
-    return redirect(url_for('main.user', username=username))
-
-
-
-@bp.route('/customers',methods=['GET', 'POST'])
-@login_required
-def customers():
-
-    form2= CustomerForm()
-    custquerys=Customer.query.all()
-    
-
-    if form2.validate_on_submit():
-        custname=Customer(name=form2.name.data)
-        db.session.add(custname)
-        db.session.commit()
-        flash(_('Your changes have been saved.'))
-        custquerys=Customer.query.all()
-        return redirect(url_for('main.locations',customername=custname.name))
-
-    return render_template('customers.html', title=_('Customers'), custquerys=custquerys, form2=form2)
-
-@bp.route('/locations/<customername>', methods=['GET', 'POST'])
-@login_required
-
-def locations(customername):
-    cust = Customer.query.filter_by(name=customername).first_or_404()
-    lists=cust.locations
-
-    available_customers=Customer.query.all()
-    customer_list=[(i.id,i.name) for i in available_customers]
-
-    available_categorys=Category.query.all()
-    category_list=[(i.id,i.name) for i in available_categorys]
-
-    available_subcategorys=Subcategory.query.all()
-    subcategory_list=[(i.id,i.name) for i in available_subcategorys]
-   
-    form_work=Statistic_Work_Form()
-    form_del=DeleteForm()
-    form= LocationForm()
-
-    form_work.category.choices=category_list
-    form_work.subcategory.choices=subcategory_list
-    form.customer.choices = customer_list
-    
-
-
-    if form_del.validate_on_submit():
-        
-        if form_del.delete.data:  
-            id=form_del.id_del.data
-            delete(Location,id)
-            return redirect(url_for('main.locations',customername=customername))
-
-    
-    
-    
-
-    
-    if form_work.validate_on_submit():
-        statistic_db=Statistic(technology=form_work.technology.data, time=form_work.time.data,customer=form_work.customer.data, contract=form_work.contract.data,
-            hardware=form_work.hardware.data, user=form_work.user.data)
-
-        db.session.add(statistic_db)
-        db.session.commit()
-        user=User.query.filter_by(username=current_user.username).first()
-        user.statistics.append(statistic_db)
-        db.session.commit()
-
-        category=Category.query.get(form_work.category.data)
-        subcategory=Subcategory.query.get(form_work.subcategory.data)
-
-        category.statistics.append(statistic_db)
-        subcategory.statistics.append(statistic_db)
-        db.session.commit()
-
-
-
-        cat=form_work.category.data
-        scat=Subcategory.query.get(form_work.subcategory.data).name
-        cat=Category.query.get(form_work.category.data).name
-        hard=form_work.hardware.data
-        user_data=form_work.user.data
-        
-        
-        tech=form_work.technology.data
-        cust=form_work.customer.data
-        contr=form_work.contract.data
-        time=form_work.time.data
-
-        now = datetime.today().strftime('%d-%m-%Y')
-        
-        return redirect(url_for('main.locations',customername=customername))
-
-
-    
-    
-            
-    
-    
-   
-
-    
-    if form.validate_on_submit():
-        
-        location = Location(residence=form.residence.data, technology=form.technology.data,
-        project=form.project.data, projectmanager=form.projectmanager.data, contract= form.contract.data,contact=form.contact.data,
-        vrf=form.vrf.data,seller=form.seller.data,sid=form.sid.data,matchcode=form.matchcode.data)
-        if form.hardware.data:
-            hardware=form.hardware.data
-            hardware=hardware.split(":")
-            hardware=Hardware(name=hardware[0], sn=hardware[1])
-            db.session.add(hardware)
-            location.hardware.append(hardware)
-        db.session.commit()
-        db.session.add(location)
-        customer=Customer.query.get(form.customer.data)
-        customer.locations.append(location)
-        db.session.commit()
-        flash(_('Your changes have been saved.'))
-        return redirect(url_for('main.contract',id=location.id))
-
-    return render_template('locations.html', cust=cust, lists=lists,form_work=form_work, form_del=form_del, form=form)
-    
-
-
 
 @bp.route('/search')
 @login_required
@@ -369,31 +112,124 @@ def search():
 
 
 
-@bp.route('/edit',methods=['GET', 'POST'])
+@bp.route('/explore')
 @login_required
+def explore():
+    page = request.args.get('page', 1, type=int)
+    posts = Post.query.order_by(Post.timestamp.desc()).paginate(
+        page, current_app.config['POSTS_PER_PAGE'], False)
+    next_url = url_for('main.explore', page=posts.next_num) \
+        if posts.has_next else None
+    prev_url = url_for('main.explore', page=posts.prev_num) \
+        if posts.has_prev else None
+    return render_template('index.html', title=_('Explore'),
+                           posts=posts.items, next_url=next_url,
+                           prev_url=prev_url)
 
-def edit():
-       
-    var1 = request.args.get('var1',None)
-    arg=Location.query.get(var1)
-    available_customers=Customer.query.all()
-    groups_list=[(i.id,i.name) for i in available_customers]
-    form= LocationForm()
-    form.customer.choices = groups_list
 
 
+@bp.route('/customers',methods=['GET', 'POST'])
+@login_required
+def customers():
+
+    form= CustomerForm()
+    custquerys=Customer.query.all()
+    
 
     if form.validate_on_submit():
-        arg.residence=form.residence.data
-        arg.project=form.project.data
-        arg.projectmanager=form.projectmanager.data
-        arg.hardware=form.hardware.data
-        arg.technology=form.technology.data
+        custname=Customer(name=form.name.data)
+        db.session.add(custname)
         db.session.commit()
         flash(_('Your changes have been saved.'))
-    return render_template('edit.html', title=_('Edit'), arg=arg, form=form )
+        return redirect(url_for('main.locations',customername=custname.name))
+
+    return render_template('customers.html', title=_('Customers'), custquerys=custquerys, form=form)
 
 
+
+@bp.route('/locations/<customername>', methods=['GET', 'POST'])
+@login_required
+
+def locations(customername):
+    customer = Customer.query.filter_by(name=customername).first_or_404()
+    locations=customer.locations
+
+    available_customers=Customer.query.all()
+    customer_list=[(i.id,i.name) for i in available_customers]
+
+    available_categorys=Category.query.all()
+    category_list=[(i.id,i.name) for i in available_categorys]
+
+    available_subcategorys=Subcategory.query.all()
+    subcategory_list=[(i.id,i.name) for i in available_subcategorys]
+   
+    form= LocationForm()
+    form_stat=StatisticForm()
+    form_del=DeleteForm()
+    
+    form.customer.choices = customer_list
+    form_stat.category.choices=category_list
+    form_stat.subcategory.choices=subcategory_list
+    
+    if form_del.validate_on_submit():
+        if form_del.delete.data:  
+            id=form_del.id_del.data
+            delete(Location,id)
+            return redirect(url_for('main.locations',customername=customername))
+
+    
+    if form_stat.validate_on_submit():
+        statistic_db=Statistic(technology=form_stat.technology.data, time=form_stat.time.data,customer=form_stat.customer.data, contract=form_stat.contract.data,
+            hardware=form_stat.hardware.data, user=form_stat.user.data)
+
+        db.session.add(statistic_db)
+        db.session.commit()
+        user=User.query.filter_by(username=current_user.username).first()
+        user.statistics.append(statistic_db)
+        category=Category.query.get(form_stat.category.data)
+        subcategory=Subcategory.query.get(form_stat.subcategory.data)
+
+        category.statistics.append(statistic_db)
+        subcategory.statistics.append(statistic_db)
+        db.session.commit()
+
+        cat=form_stat.category.data
+        scat=Subcategory.query.get(form_stat.subcategory.data).name
+        cat=Category.query.get(form_stat.category.data).name
+        hard=form_stat.hardware.data
+        user_data=form_stat.user.data
+        tech=form_stat.technology.data
+        cust=form_stat.customer.data
+        contr=form_stat.contract.data
+        time=form_stat.time.data
+        now = datetime.today().strftime('%d-%m-%Y')
+        
+        return redirect(url_for('main.locations',customername=customername))
+
+
+    
+    if form.validate_on_submit():
+        
+        location = Location(residence=form.residence.data, technology=form.technology.data,
+        project=form.project.data, projectmanager=form.projectmanager.data, contract= form.contract.data,contact=form.contact.data,
+        vrf=form.vrf.data,seller=form.seller.data,sid=form.sid.data,matchcode=form.matchcode.data)
+
+        if form.hardware.data:
+            hardware=form.hardware.data
+            hardware=hardware.split(":")
+            hardware=Hardware(name=hardware[0], sn=hardware[1])
+            db.session.add(hardware)
+            location.hardware.append(hardware)
+        db.session.commit()
+        db.session.add(location)
+        customer=Customer.query.get(form.customer.data)
+        customer.locations.append(location)
+        db.session.commit()
+        flash(_('Your changes have been saved!'))
+        return redirect(url_for('main.contract',id=location.id))
+
+    return render_template('locations.html', customer=customer, locations=locations,form_stat=form_stat, form_del=form_del, form=form)
+    
 
 
 @bp.route('/router',methods=['GET', 'POST'])
@@ -413,10 +249,6 @@ def router():
         db.session.commit()
         flash(_('Your post is now live!'))
         return redirect(url_for('main.router'))
-
-
-
-
 
     page = request.args.get('page', 1, type=int)
     posts_r = Post_r.query.order_by(Post_r.timestamp.desc()).paginate(
@@ -458,24 +290,11 @@ def router_todo():
 def contract(id):
     dict_data={}
     dict_data_journal={}
-
-    
     contract=Location.query.get(id)
+    infos_t=contract.infos
     
-
-    
-   
-    
-
-   
-   
-
-    
-
     available_scripts=Script.query.all()
-
     scripts_list=[(i.id,i.name) for i in available_scripts]
-
 
     available_templates=Template.query.all()
     templates_list=[(i.id,i.name) for i in available_templates]
@@ -487,9 +306,9 @@ def contract(id):
     form_script=ScriptForm()
     form_template=TemplateForm()
     form_get_nets=GetNetworksForm()
-    
     form_journal=JournalForm()
 
+    
     form_script.script.choices=scripts_list
     form_template.name.choices=templates_list
 
@@ -550,8 +369,7 @@ def contract(id):
             flash(_('Your changes have been saved.'))
 
             return redirect(url_for('main.contract',id=contract.id, contract=contract))
-    location=Location.query.get(id)
-    infos_t=location.infos
+    
 
 
     if form_info.validate_on_submit():
@@ -560,7 +378,7 @@ def contract(id):
             print(form_info.infotext.data)
             info_db=Info(infotext=form_info.infotext.data)
             print(infos_t)
-            location.infos.append(info_db)
+            contract.infos.append(info_db)
             
             db.session.commit()
             flash(_('Your changes have been saved.'))
@@ -569,61 +387,12 @@ def contract(id):
     if form_script.validate_on_submit():
 
         if form_script.send.data:
-            sshUsername=session['username']
-            sshPassword=session['password']
-            sshServer = "10.146.140.166"
-            if '%'in form_script.connector.data:
-                
-                con=form_script.connector.data.split("%")
-                for i in range(0,len(con),1):
-                    print(str(i) + con[i])
-                    
-                    if 'uim' in con[i]:
-                        print (i)
-                        con[i]=session['username']
-                        con.insert(i+1, session['password'])
-                jumpcon=con[0]
-                userjump=con[1]
-                passjump=con[2]
-                endcon=con[3]
-                userend=con[4]
-                passend=con[5]
-                
-
-                
-    
-            elif  ';' in form_script.connector.data:      
-                con=form_script.connector.data.split(";")
-                jumpcon=con[0]
-                endcon=con[1]
-                userjump=session['username']
-                passjump=session['password']
-                userend=session['username']
-                passend=session['password']
-
-            else:
-                print('Here')
-                jumpcon=form_script.connector.data
-                userjump=session['username']
-                passjump=session['password']
-                endcon=form_script.connector.data
-                userend=session['username']
-                passend=session['password']
-            
-                
-                
-
-               
-
-            
             script_id=form_script.script.data
             script_name=Script.query.get(script_id).name
             script_name='Script_'+script_name+'.txt'
             script=render_template('scripts/'+script_name, contract=contract)
-            
-
-            result=connector(endcon,jumpcon,userjump,passjump,userend,passend,script,sshServer, sshUsername, sshPassword)
-            
+            connector=form_script.connector.data
+            result=if_connector(connector,script)  
             findresult=result.find('terminal length 0')
             result=result[findresult::]
             print ('Ergebnis '+ result)
@@ -632,14 +401,7 @@ def contract(id):
         return redirect(url_for('main.contract',id=contract.id, contract=contract, infos_t=infos_t))
 
   
-    page = request.args.get('page', 1, type=int)
-
-    journs = contract.journals.order_by(Journal.timestamp.desc()).paginate(
-        page, current_app.config['POSTS_PER_PAGE'], False)
-    next_url = url_for('main.contract',id=contract.id, page=journs.next_num) \
-        if journs.has_next else None
-    prev_url = url_for('main.contract',id=contract.id, page=journs.prev_num ) \
-        if journs.has_prev else None
+    
 
     if form_journal.validate_on_submit():
         if form_journal.submit_journal.data:
@@ -656,15 +418,13 @@ def contract(id):
             return redirect(url_for('main.contract',id=contract.id, contract=contract))
 
 
-    
-
-
-
-
-
-
-
-    
+    page = request.args.get('page', 1, type=int)
+    journs = contract.journals.order_by(Journal.timestamp.desc()).paginate(
+        page, current_app.config['POSTS_PER_PAGE'], False)
+    next_url = url_for('main.contract',id=contract.id, page=journs.next_num) \
+        if journs.has_next else None
+    prev_url = url_for('main.contract',id=contract.id, page=journs.prev_num ) \
+        if journs.has_prev else None
 
     return render_template('contract.html',form_script=form_script, contract=contract, 
         form=form, form_del=form_del, form_info=form_info, infos_t=infos_t, form_remove=form_remove,
@@ -694,11 +454,6 @@ def append_all():
 
 
 
-
-
-
-
-
 @bp.route('/append_info',methods=['GET', 'POST'])
 @login_required
 
@@ -717,17 +472,6 @@ def append_info():
     db.session.commit()
 
     return json.dumps({'status':'OK'});
-
-
-
-
-
-
-
-
-
-
-
 
 
 @bp.route('/journal_show/<id>',methods=['GET', 'POST'])
@@ -778,6 +522,8 @@ def bo_nets(id):
     output2=final_page.find_all(attrs={'name':True})
     output3=final_page.find_all(attrs={'selected':True})
     dict_data_send=OrderedDict()
+    dict_data=OrderedDict()
+    dict_data_tag=OrderedDict()
 
     for i in output2:
         dict_data_send[i.attrs.get('name')]=i.attrs.get('value', '')
@@ -790,21 +536,6 @@ def bo_nets(id):
         print('Exception')
 
     
-
-
-
-
-
-
-
-        
-
-        
-    
-  
-
-    dict_data=OrderedDict()
-    dict_data_tag=OrderedDict()
 
     
     
@@ -875,23 +606,7 @@ def bo_nets(id):
                     dict_data_send.pop(i)
                     print(dict_data_send.get(i, ''))
             s.post(link, data=dict_data_send)
-     
-
-            
-               
-                
-
-
-
-        
-            
-                        
-
-                
-                
-
-            
-            flash(_('Config saved!'))
+            lash(_('Config saved!'))
             return redirect(url_for('main.bo_nets',id=contract.id))
     
         if form.add.data:
@@ -907,31 +622,11 @@ def bo_nets(id):
             flash(_('Network added!'))
             return redirect(url_for('main.bo_nets',id=contract.id))
 
-                
-
-
-
-    
-
-    
-
-    
-    
-
-    
-        
-
-
-
-
-    
-
-
-        
-    return render_template('_bo_nets.html', dict_data=dict_data, 
+    return render_template('bo_nets.html', dict_data=dict_data, 
         dict_data_tag=dict_data_tag,tech=tech,form=form, 
         contract=contract,list_count=list_count,number_nets=number_nets)
         
+
 def entries_to_remove(entries, dict_data):
     for key in entries:
         if key in dict_data:
@@ -945,31 +640,33 @@ def entries_to_remove(entries, dict_data):
 
 
 def bo_journals(contract):
+    try:
 
-    dict_data_journal, dict_data_name, dict_data_date=get_bo_journals(contract)
+        dict_data_journal, dict_data_name, dict_data_date=get_bo_journals(contract)
 
 
-    return render_template('bo_journals.html',dict_data_journal=dict_data_journal
-        ,dict_data_name=dict_data_name, dict_data_date=dict_data_date)
+        return render_template('bo_journals.html',dict_data_journal=dict_data_journal
+            ,dict_data_name=dict_data_name, dict_data_date=dict_data_date)
+
+    except:
+        return render_template('blank.html')
 
 
 @bp.route('/bo_ilvt_view/<contract>',methods=['GET', 'POST'])
 @login_required
 
 
+
+
 def bo_ilvt_view(contract):
-
+    contract=Location.query.get(contract)
     try:
-        dict_data_ilvt, items_dict_data_ilvt=bo_ilvt(contract)
-
+        dict_data_ilvt, items_dict_data_ilvt=bo_ilvt(contract.sid)
         return render_template('bo_ilvt.html',dict_data_ilvt=dict_data_ilvt,
         items_dict_data_ilvt=items_dict_data_ilvt)
 
     except:
-        print('Exception bo_ilvt_view')
-
-
-    return render_template('exception_not_found.html')
+        return render_template('blank.html')
 
 
 

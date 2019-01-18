@@ -5,7 +5,7 @@
 
 {% from "macros.html" import modal with context %}
 
- {% for error in form2.name.errors %}
+ {% for error in form.name.errors %}
            
 <div class="alert alert-danger" role="alert">
   {{ error }}
@@ -33,7 +33,7 @@
 <span>Add Customer</span>
 </button>
 
-{{modal('Add Customer', '-customer1', wtf.quick_form(form2,button_map={'submit' : 'success btn btn-sm'}), style="display:none;" )}}
+{{modal('Add Customer', '-customer1', wtf.quick_form(form,button_map={'submit' : 'success btn btn-sm'}), style="display:none;" )}}
 
 
 <p></p>

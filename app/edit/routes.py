@@ -104,3 +104,50 @@ def delete(table, id):
     db.session.delete(object)
     db.session.commit()
     flash('Object deleted')
+
+
+
+
+@bp.route('/edit_profile', methods=['GET', 'POST'])
+@login_required
+def edit_profile():
+    form = EditProfileForm(current_user.username)
+    if form.validate_on_submit():
+        current_user.username = form.username.data
+        current_user.about_me = form.about_me.data
+        db.session.commit()
+        flash(_('Your changes have been saved.'))
+        return redirect(url_for('main.edit_profile'))
+    elif request.method == 'GET':
+        form.username.data = current_user.username
+        form.about_me.data = current_user.about_me
+    return render_template('edit_profile.html', title=_('Edit Profile'),
+                           form=form)
+
+
+
+# Still used ????
+
+@bp.route('/paste_location',methods=['GET', 'POST'])
+@login_required
+
+def paste_location():
+       
+    var1 = request.args.get('var1',None)
+    arg=Location.query.get(var1)
+    available_customers=Customer.query.all()
+    groups_list=[(i.id,i.name) for i in available_customers]
+    form= LocationForm()
+    form.customer.choices = groups_list
+
+
+
+    if form.validate_on_submit():
+        arg.residence=form.residence.data
+        arg.project=form.project.data
+        arg.projectmanager=form.projectmanager.data
+        arg.hardware=form.hardware.data
+        arg.technology=form.technology.data
+        db.session.commit()
+        flash(_('Your changes have been saved.'))
+    return render_template('edit.html', title=_('Edit'), arg=arg, form=form )

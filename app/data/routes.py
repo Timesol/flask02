@@ -1,7 +1,7 @@
 from bs4 import BeautifulSoup
 from flask import render_template, flash, redirect, url_for, request, g, current_app, json
 from app.models import User, Post, Location, Customer, Network, Post_r, Statistic, Category, Subcategory, Info, Hardware
-from app.main.forms import EditProfileForm, PostForm, LocationForm, NetworkForm, CustomerForm, Post_r_Form, Statistic_Work_Form, DeleteForm, InfoForm,RemoveForm, StatbyTimeForm
+from app.main.forms import EditProfileForm, PostForm, LocationForm, NetworkForm, CustomerForm, Post_r_Form, StatisticForm, DeleteForm, InfoForm,RemoveForm, StatbyTimeForm
 from requests import Request, Session
 import bs4 as bs
 import pandas as pd
