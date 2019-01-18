@@ -105,79 +105,136 @@ height: 600px;
 #flex-container-button{
 
 
-
 }
-#container-loader{
+/**
+ * Document defaults
+ */
+
+
+
+/* The loader container */
+.loader {
   position: relative;
-  width: 200px;
-  height: 200px;
-  top: 0;
-  bottom: 0;
+  top: 40px;
+  left: 100px;
   
-  right: 350px;
-  margin: auto;
+  width: 300px;
+  height: 300px;
+  
+  margin-top: -100px;
+  margin-left: -100px;
+  
+  perspective: 100px;
+  transform-type: preserve-3d;
+  
+  animation: loader 6s cubic-bezier(0,0,1,1) infinite;
 }
 
-.item {
+/* Loader animation */
+@keyframes loader {
+  0% {
+    transform: rotateX(30deg) rotateZ(0deg);
+  }
+  100% {
+    transform: rotateX(30deg) rotateZ(-360deg);
+  }
+}
+
+
+/* The dot */
+.dot {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 10;
+
   width: 20px;
   height: 20px;
-  position: absolute;
+  
+  margin-top: -90px;
+  margin-left: -10px;
+
+  border-radius: 10px;
+
+  background-color: #1e3f57;
+
+  transform-type: preserve-3d;
+  transform-origin: 50% 90px;
+  transform: rotateZ(30deg);
+
+  animation: dot1 1.5s cubic-bezier(.6,0,.4,1) infinite;
 }
 
-.item-1 {
-  background-color: #FA5667;
-  top: 0;
-  left: 0;
-  z-index: 1;
-  animation: item-1_move 1.8s cubic-bezier(.6,.01,.4,1) infinite;
+.dot:nth-child(2) {
+  transform: rotateZ(15deg);
+  animation-name: dot2;
+  animation-delay: 150ms;
+  background-color: #2d556d;
 }
 
-.item-2 {
-  background-color: #7A45E5;
-  top: 0;
-  right: 0;
-  animation: item-2_move 1.8s cubic-bezier(.6,.01,.4,1) infinite;
+.dot:nth-child(3) {
+  transform: rotateZ(0deg);
+  animation-name: dot3;
+  animation-delay: 300ms;
+  background-color: #447891;
 }
 
-.item-3 {
-  background-color: #1B91F7;
-  bottom: 0;
-  right: 0;
-  z-index: 1;
-  animation: item-3_move 1.8s cubic-bezier(.6,.01,.4,1) infinite;
+.dot:nth-child(4) {
+  transform: rotateZ(-15deg);
+  animation-name: dot4;
+  animation-delay: 450ms;
+  background-color: #5998b2;
 }
 
-.item-4 {
-  background-color: #FAC24C;
-  bottom: 0;
-  left: 0;
-  animation: item-4_move 1.8s cubic-bezier(.6,.01,.4,1) infinite;
+.dot:nth-child(5) {
+  transform: rotateZ(-30deg);
+  animation-name: dot5;
+  animation-delay: 600ms;
+  background-color: #6bb2cd;
 }
 
-@keyframes item-1_move {
-  0%, 100% {transform: translate(0, 0)} 
-  25% {transform: translate(0, 100px)} 
-  50% {transform: translate(100px, 100px)} 
-  75% {transform: translate(100px, 0)} 
+/* Dot animations */
+@keyframes dot1 {
+  0% {
+    transform: rotateZ(30deg) rotateX(10deg);
+  }
+  95%, 100% {
+    transform: rotateZ(390deg) rotateX(10deg);
+  }
 }
 
-@keyframes item-2_move {
-  0%, 100% {transform: translate(0, 0)} 
-  25% {transform: translate(-100px, 0)} 
-  50% {transform: translate(-100px, 100px)} 
-  75% {transform: translate(0, 100px)} 
+@keyframes dot2 {
+  0% {
+    transform: rotateZ(15deg) rotateX(10deg);
+  }
+  95%, 100% {
+    transform: rotateZ(375deg) rotateX(10deg);
+  }
 }
 
-@keyframes item-3_move {
-  0%, 100% {transform: translate(0, 0)} 
-  25% {transform: translate(0, -100px)} 
-  50% {transform: translate(-100px, -100px)} 
-  75% {transform: translate(-100px, 0)} 
+@keyframes dot3 {
+  0% {
+    transform: rotateZ(0deg) rotateX(10deg);
+  }
+  95%, 100% {
+    transform: rotateZ(360deg) rotateX(10deg);
+  }
 }
 
-@keyframes item-4_move {
-  0%, 100% {transform: translate(0, 0)} 
-  25% {transform: translate(100px, 0)} 
-  50% {transform: translate(100px, -100px)} 
-  75% {transform: translate(0, -100px)} 
+@keyframes dot4 {
+  0% {
+    transform: rotateZ(-15deg) rotateX(10deg);
+  }
+  95%, 100% {
+    transform: rotateZ(345deg) rotateX(10deg);
+  }
+}
+
+@keyframes dot5 {
+  0% {
+    transform: rotateZ(-30deg) rotateX(10deg);
+  }
+  95%, 100% {
+    transform: rotateZ(330deg) rotateX(10deg);
+  }
 }

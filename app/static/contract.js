@@ -479,7 +479,14 @@ function append_all(info, customer){
 }
 
 
+$(document).ready(function(){
 
 
+
+document.getElementById("send").setAttribute("data-dismiss","modal");
+
+
+
+});
 
 
