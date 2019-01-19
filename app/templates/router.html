@@ -1,15 +1,68 @@
 {% extends "base.html" %}
 {% import 'bootstrap/wtf.html' as wtf %}
 
-{% block app_content %}
+
+
+{% block scripts %}
+
+{{ super() }}
 <script type="text/javascript" src="{{url_for('static', filename='router.js')}}"></script>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/daterangepicker.css') }}">
+<script type="text/javascript" src="{{url_for('static', filename='moment.min.js')}}"></script>
+<script type="text/javascript" src="{{url_for('static', filename='daterangepicker.js')}}"></script>
+<script type="text/javascript">
+$(function() {
+
+    var start = momentdt().subtract(29, 'days');
+    var end = momentdt().add(1,'days');
+
+    function cb(start, end) {
+        $('#daterange input').html(start.format('MM/DD/YYYY') + ' - ' + end.format('MM/DD/YYYY'));
+    }
+
+    $('#daterange').daterangepicker({
+        startDate: start,
+        endDate: end,
+        ranges: {
+           'Today': [momentdt(), momentdt().add(1,'days')],
+           'Yesterday': [momentdt().subtract(1, 'days'), momentdt().subtract(1, 'days')],
+           'Last 7 Days': [momentdt().subtract(6, 'days'), momentdt().add(1,'days')],
+           'Last 30 Days': [momentdt().subtract(29, 'days'), momentdt()],
+           'This Month': [momentdt().startOf('month'), momentdt().endOf('month')],
+           'Last Month': [momentdt().subtract(1, 'month').startOf('month'), momentdt().subtract(1, 'month').endOf('month')]
+        }
+    }, cb);
+
+    cb(start, end);
+
+});
+</script>
 
 
-<h1>{{ _('Hi, %(username)s!', username=current_user.username) }}</h1>
-{% if form %}
-{{ wtf.quick_form(form) }}
-<br>
-{% endif %}
+
+
+{% endblock %}
+{% block app_content %}
+
+<div id="flex-container-button" class="flex-container"> 
+  
+<div id="flex-item-button" class="flex-item">
+<form action="" method="post" >
+{{ form_byTime.hidden_tag() }}
+{{ form_byTime.daterange(size=32) }}
+{{ form_byTime.status(class="btn form-control",style="width:100px;") }}
+{{ form_byTime.npl(class="btn form-control",style="width:100px;") }}
+{{ form_byTime.show(class="btn btn-success btn-sm") }}
+{{ form_byTime.create( class="btn btn-primary btn-sm") }}
+
+</form>
+
+
+
+
+</div>
+</div>
+
 {% for post_r in posts_r %}
     {% include '_post_r.html' %}
 {% endfor %}

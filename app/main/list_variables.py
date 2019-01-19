@@ -103,6 +103,8 @@ entries=['Basisvar-access-client_street-1%%Strasse',
 'Basisvar-client-client_zipcode-1%%PLZ',
 'Basisvar-client-client_city-1%%Ort',
 'Basisvar-client-client_phoneareacode-1%%Ortsvorwahl',
-'Basisvar-client-client_phonenumber-1%%Rufnummer'
+'Basisvar-client-client_phonenumber-1%%Rufnummer',
+'Basisvar-cia-circiut_id-1%%Circiut-ID(1)',
+'Basisvar-cia-circiut_id-2%%Circiut-ID(2)'
 ]
 

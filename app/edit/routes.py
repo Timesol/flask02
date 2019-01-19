@@ -161,6 +161,7 @@ def paste_location():
 def save_status():
      id=request.args.get('id')
      status=request.args.get('status')
+     print(status)
      post=Post_r.query.get(id)
      post.status=status
      db.session.commit()

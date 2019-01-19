@@ -25,33 +25,44 @@
 </div>
 <p></p>
 
-
+<div class="panel panel-info">
+<div class="panel-heading">Configuration</div> 
+<div class="panel-body">
 <form id="configform" class="flex-container" action="" method="post" novalidate>
 
 
 
+
 {{ form.hidden_tag() }}
+
 {% if 'MPLS' in tech %}
 {{netpanel(1,3,'Logindata' )}}
 {{netpanelbtn(2,3,12,'MPLS Data')}}
 {{netpanelbtn(2,12,16,'Linknet')}}
-{{netpanelbtn(2,16,27,'Customernet')}}
-{{netpanelbtn(2,27,99,'Additional Data')}}
+{%for i in list_count %}
+{{netpanelbtn(2,i+1,i+10,'Net')}}
+{% endfor %}
+{{netpanelbtn(2,number_nets+13,99,'Additional Data')}}
 {% endif %}
+
+
 {% if 'CIA' in tech %}
 {{netpanel(1,3,'Logindata' )}}
 {%for i in list_count %}
-{{netpanelbtn(2,i,i+10,'Net')}}
+{{netpanelbtn(2,i+1,i+10,'Net')}}
 {% endfor %}
 {{netpanelbtn(2,number_nets,99,'IPv6')}}
 {% endif %}
+
 {% if 'Mobile' in tech %}
 {{netpanel(1,99,'Logindata' )}}
 {% endif %}
 
 
-
 </form>
+</div>
+</div>
+
 {% endblock %}
 
 

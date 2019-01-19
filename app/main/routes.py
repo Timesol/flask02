@@ -6,7 +6,8 @@ from flask_babel import _, get_locale
 from app import db
 from app.main import bp
 from app.main.forms import EditProfileForm, PostForm, LocationForm, NetworkForm,JournalForm, \
-CustomerForm, Post_r_Form, StatisticForm, DeleteForm, InfoForm,RemoveForm,ScriptForm,TemplateForm,GetNetworksForm, RouterForm
+CustomerForm, Post_r_Form, StatisticForm, DeleteForm, InfoForm,RemoveForm,ScriptForm, \
+TemplateForm,GetNetworksForm, RouterForm,RouterbyTimeForm
 from app.models import User, Post, Location, Customer, Network, Post_r, \
 Statistic, Category, Subcategory, Info, Hardware,Script,Template,Journal
 from guess_language import guess_language
@@ -40,6 +41,7 @@ from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, \
     Length, AnyOf, InputRequired
 import time
 from app.functions.get_journals import get_bo_journals
+from datetime import datetime
 
 
 
@@ -238,17 +240,35 @@ def locations(customername):
 
 def router():
     form = Post_r_Form()
+    form_byTime=RouterbyTimeForm()
     if form.validate_on_submit():
-        #check language of post 
-        language = guess_language(form.post_r.data)
-        if language == 'UNKNOWN' or len(language) > 5:
-            language = ''
 
-        post_r = Post_r(body=form.post_r.data,author_r=current_user ,language=language)
+        post_r = Post_r(body=form.post_r.data,author_r=current_user)
         db.session.add(post_r)
         db.session.commit()
-        flash(_('Your post is now live!'))
+        flash(_('Routerinfos saved!'))
         return redirect(url_for('main.router'))
+
+    if form_byTime.validate_on_submit():
+        if form_byTime.show.data:
+            time=form_byTime.daterange.data
+            status=form_byTime.status.data
+            npl=form_byTime.npl.data
+            time = time.split(" - ")
+            start=time[0].split("/")
+            endig=time[1].split("/")
+            sm=start[0]
+            sd=start[1]
+            sy=start[2]
+            em=endig[0]
+            ed=endig[1]
+            ey=endig[2]
+
+            routers=router_byTime(sm,sd,sy,em,ed,ey,status,npl)
+            routers=routers.order_by(Post_r.timestamp.desc())
+            return render_template('router.html', title=_('Router') ,posts_r=routers, 
+                            form=form, form_byTime=form_byTime)
+
 
     page = request.args.get('page', 1, type=int)
     posts_r = Post_r.query.order_by(Post_r.timestamp.desc()).paginate(
@@ -260,7 +280,7 @@ def router():
 
 
     return render_template('router.html', title=_('Router') ,posts_r=posts_r.items, next_url=next_url,
-                           prev_url=prev_url, form=form)
+                           prev_url=prev_url, form=form, form_byTime=form_byTime)
 
 
 @bp.route('/router_todo',methods=['GET', 'POST'])
@@ -428,12 +448,15 @@ def contract(id):
             
             if form_router.file.data:
                 print(form_router.file.data.filename)
+                date=datetime.today().strftime('%d-%m-%Y')
                 
                 UPLOAD_FOLDER_CONFIGS=os.environ.get('UPLOAD_FOLDER_CONFIGS')
                 f =form_router.file.data
                 filename = secure_filename(f.filename)
+                filename=filename.split('.')
+                filename=filename[0]+'_'+date+'.'+filename[1]
                 f.save(os.path.join(UPLOAD_FOLDER_CONFIGS, filename))
-                add_post=Post_r(body=post, author_r=current_user, npl=form_router.npl.data, status=form_router.status.data,filename=form_router.file.data.filename)
+                add_post=Post_r(body=post, author_r=current_user, npl=form_router.npl.data, status=form_router.status.data,filename=filename)
             else:
                 add_post=Post_r(body=post, author_r=current_user, npl=form_router.npl.data, status=form_router.status.data)
             db.session.add(add_post)
@@ -593,9 +616,13 @@ def bo_nets(id):
     list_count=list()
     for i in test:
         list_count.append(list(dict_data.keys()).index(i))
+    if len(list_count)==0:
+        list_count.append(1)
+
 
     number_nets=len(list_count)*10+4
     print(number_nets)
+    
 
 
 
@@ -633,18 +660,19 @@ def bo_nets(id):
                     dict_data_send.pop(i)
                     print(dict_data_send.get(i, ''))
             s.post(link, data=dict_data_send)
-            lash(_('Config saved!'))
-            return redirect(url_for('main.bo_nets',id=contract.id))
+            flash(_('Config saved!'))
+            return redirect(url_for('main.contract',id=contract.id))
     
         if form.add.data:
             print('button pressed')
             param_data={'Contract_ID': contract.contract,
-            'Action':'addNetwork'}
+            'Action':'addNetwork' ,'addNetworkType':'net_mpls'}
              
             for key, value in dict_data.items():
                 print(getattr(form, key).data)
                 key2=key.split('%%')[0]
                 dict_data_send[key2]=getattr(form, key).data
+            s.post(link, params=param_data, data=dict_data_send)
             
             flash(_('Network added!'))
             return redirect(url_for('main.bo_nets',id=contract.id))
@@ -673,9 +701,10 @@ def bo_journals(contract):
 
 
         return render_template('bo_journals.html',dict_data_journal=dict_data_journal
-            ,dict_data_name=dict_data_name, dict_data_date=dict_data_date)
+            ,dict_data_name=dict_data_name, dict_data_date=dict_data_date,contract=contract)
 
     except:
+        print('Exception')
         return render_template('blank.html')
 
 
@@ -697,7 +726,44 @@ def bo_ilvt_view(contract):
 
 
 
+def router_byTime(sm,sd,sy,em,ed,ey,status,npl):
+    print(sm,sd,sy,em,ed,ey)
 
+    start=sm+"/"+sd+"/"+sy
+    end=em+"/"+ed+"/"+ey
+    
+    objDatestart = datetime.strptime(start, '%m/%d/%Y')
+    objDateend = datetime.strptime(end, '%m/%d/%Y')
+    
+    if status =='all' and npl=='all':
+        routers=Post_r.query.filter(Post_r.timestamp <= objDateend).filter(Post_r.timestamp >= objDatestart)
+    elif status =='all' and npl !='all':
+        
+        routers=Post_r.query.filter(Post_r.timestamp <= objDateend).filter(Post_r.timestamp >= objDatestart).filter(Post_r.npl==npl)
+    elif status !='all' and npl =='all':
+        
+        routers=Post_r.query.filter(Post_r.timestamp <= objDateend).filter(Post_r.timestamp >= objDatestart).filter(Post_r.status==status)    
+    else:
+        routers=Post_r.query.filter(Post_r.timestamp <= objDateend).filter(Post_r.timestamp >= objDatestart).filter(Post_r.npl==npl,Post_r.status==status)
+        
+
+
+
+    
+
+    return routers
+
+
+
+@bp.route('/add_journals/<contract>',methods=['GET', 'POST'])
+@login_required
+
+
+
+
+def add_journals(contract):
+    
+    return render_template('add_journal.html', contract=contract)
 
 
 

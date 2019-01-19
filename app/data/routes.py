@@ -162,18 +162,6 @@ def scraper():
 
 
 
-
-@bp.route('/test')
-
-def test():
-    
-    
-
-
-    
-    return render_template('test.html', name = 'new_plot', url ='/home/ahoehne/flask02/app/static/images/new_plot.png')
-
-
 @bp.route('/scripter',methods=['GET', 'POST'])
 @login_required
 

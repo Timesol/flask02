@@ -1,20 +1,5 @@
-function change_color(id){
-
-
-document.getElementById("drop_button"+id).innerHTML="Hardwarekammer"
-
-
-
-
-
-
-
-}
-
 function save_status(id,status){
-	status=status.charAt(0).toUpperCase() + status.slice(1);
 
-	document.getElementById("drop_button"+id).innerHTML=status
 
     $.ajax({
       url: '/save_status',
@@ -28,12 +13,9 @@ function save_status(id,status){
         console.log(error);
       }
     });
-  
 
 
+  status=status.charAt(0).toUpperCase() + status.slice(1);
 
-
-
-
-
-}
+  document.getElementById("drop_button"+id).innerHTML=status
+  }

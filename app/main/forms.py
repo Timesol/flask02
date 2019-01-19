@@ -129,6 +129,17 @@ class StatbyTimeForm(FlaskForm):
     create = SubmitField(_l('Create'))
 
 
+class RouterbyTimeForm(FlaskForm):
+
+    daterange = StringField(_l('Daterange'))
+    status=SelectField('Status',
+        choices=[('all', 'All'),('todo', 'Todo'),('configroom','Configroom'),('sent','Sent')])
+    npl=SelectField('NPL',
+        choices=[('all', 'All'),('without_npl', 'No NPL'), ('with_npl','NPL')])
+    show = SubmitField(_l('Show'))
+    create = SubmitField(_l('Create'))
+
+
 class TemplateForm(FlaskForm):
     name=SelectField(u'Template', coerce=int, validators=[InputRequired()], id='sel_template')
     submit = SubmitField(_l('Submit'))

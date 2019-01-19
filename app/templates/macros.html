@@ -30,14 +30,13 @@
 
 {% macro netpanel(id, end,name) -%}
 
-<div id="flex-item-raw-net-{{id}}" class="flex-item">
-<div class="panel panel-info">
-<div class="panel-heading">{{name}}</div> 
-<div class="panel-body">
+<div id="flex-item-raw-net-{{id}}" class="flex-item margin-advanced">
+
+
 
 <table id="table" class="table table-responsive table-sm">
   <thead>
-  <tr><th scope="col">Name</th><th scope="col">Value</th></tr>
+  <tr>{{name}}</tr>
   </thead>
 
 <tbody>
@@ -56,20 +55,16 @@
 </tbody>
 </table>
 </div>
-</div>
-</div>
+
 
 {%- endmacro %}
 
 {% macro netpanelbtn(id, start,end,name) -%}
-<div id="flex-item-raw-net-{{id}}" class="flex-item">
-<div   class="panel panel-info">
-<div class="panel-heading">{{name}}</div> 
-<div class="panel-body">
+<div id="flex-item-raw-net-{{id}}" class="flex-item margin-advanced">
 
 <table id="table" class="table table-responsive table-sm">
  <thead>
-  <tr><th scope="col">Name</th><th scope="col">Value</th></tr>
+  <tr>{{name}}</tr>
   </thead>
    <tbody>     
 {% for i in dict_data %}
@@ -89,9 +84,8 @@
 
 </tbody>
 </table>
-</div>
-</div> 
-</div> 
+ </div>
+
 {%- endmacro %}
 
 

@@ -1,3 +1,7 @@
+{% block scripts_router %}
+
+
+
  <table class="table table-hover">
         <tr>
             <td width="70px">
@@ -31,10 +35,11 @@
                   <span class="caret"></span></button>
                   <ul class="dropdown-menu">
                     <li><a href="javascript: save_status('{{post_r.id}}', 'configroom');">Configroom</a></li>
-                    <li><a href="javascript: save_status('{{post_r.id}}', 'sent');" class="active">Sent</a></li>
+                    <li><a href="javascript: save_status('{{post_r.id}}', 'sent');">Sent</a></li>
                     <li><a href="javascript: save_status('{{post_r.id}}','todo');">Todo</a></li>
                   </ul>
                 </div>
+               
 
           
                 
@@ -46,4 +51,8 @@
                 
             </td>
         </tr>
+
 </table>
+
+
+{% endblock %}
