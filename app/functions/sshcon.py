@@ -26,12 +26,12 @@ class ssh:
         else:
             print("Connection not opened.")
 
-def if_connector(connector,script):
+def if_connector(connector_var,script):
     sshUsername=session['username']
     sshPassword=session['password']
     sshServer = "10.146.140.166"
-    if '%' in connector:                    
-        con=connector.split("%")
+    if '%' in connector_var:                    
+        con=connector_var.split("%")
         for i in range(0,len(con),1):
                                    
             if 'uim' in con[i]:
@@ -45,9 +45,9 @@ def if_connector(connector,script):
         userend=con[4]
         passend=con[5]
 
-    elif ';' in connector:
+    elif ';' in connector_var:
 
-        con=connector.split(";")
+        con=connector_var.split(";")
         jumpcon=con[0]
         endcon=con[1]
         userjump=session['username']
@@ -56,10 +56,10 @@ def if_connector(connector,script):
         passend=session['password']    
     else:
         print('Here')
-        jumpcon=connector
+        jumpcon=connector_var
         userjump=session['username']
         passjump=session['password']
-        endcon=connector
+        endcon=connector_var
         userend=session['username']
         passend=session['password']
 
@@ -86,7 +86,7 @@ def connector(endcon ,jumpcon, userjump,passjump,userend,passend,script,sshServe
     print('In Connector Function')
     
     connection = ssh(sshServer, sshUsername, sshPassword)
-    test=connection.sendCommand("""eval "{{ sleep 1; echo {2}; sleep 1; echo {3}; sleep 1; echo {0}; sleep 1; echo {4}; sleep 1; echo {5}; sleep 1;
+    result=connection.sendCommand("""eval "{{ sleep 1; echo {2}; sleep 1; echo {3}; sleep 1; echo {0}; sleep 1; echo {4}; sleep 1; echo {5}; sleep 1;
     {6}
     sleep 20;
     

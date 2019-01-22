@@ -1,4 +1,4 @@
-import os
+import glob,os
 from os import listdir
 from os.path import isfile, join
 from flask import send_file
@@ -16,6 +16,8 @@ import openpyxl
 from openpyxl import load_workbook
 from app.pandaex import  sendpandas
 from app.file.forms import SearchForm
+import re
+import random
 
 @bp.before_app_request
 def before_request():
@@ -103,12 +105,10 @@ def return_files(filename):
 
 
 
-def expy(cat,scat,hard,user,tech,cust,contr,time,date):
+def expy(cat,scat,hard,user,tech,cust,contr,time,date,num):
     
-    folder=os.environ.get('EXCEL_FOLDER_ENV')+current_user.username+'/'+'statistic_'+date+"_"+current_user.username+'.xlsx'
-    
+    folder=os.environ.get('EXCEL_FOLDER_ENV')+current_user.username+'/'+'statistic_'+date+"_"+current_user.username+'__'+str(num)+'.xlsx'
     sheet=cat
-    print(cat)
     srcfile = openpyxl.load_workbook(folder,read_only=False)
     sheetname = srcfile.get_sheet_by_name(sheet)
     save("A",tech, sheetname)
@@ -124,41 +124,19 @@ def expy(cat,scat,hard,user,tech,cust,contr,time,date):
 
 
 def expynew(date):
-    
-    folder=os.environ.get('EXCEL_FOLDER_ENV')+current_user.username+'/'+'statistic_'+date+"_"+current_user.username+'.xlsx'
-    
-   
-    empty_row=0
-    
-    wb = openpyxl.Workbook()
-    
-    wb.save(folder)
-    sheetname_original = wb.get_sheet_by_name('Sheet')
+    list_number=[0,]
+    folder=os.environ.get('EXCEL_FOLDER_ENV')+current_user.username+'/'
+    for fname in os.listdir(folder):
+        if date and '__' in fname:
+            list_number.append(int(fname.split('__')[1].split('.')[0]))
 
-    sheetname_original.title='Review'
-    review=wb.get_sheet_by_name('Review')
-    
+    num=max(list_number)+1
+    folder=os.environ.get('EXCEL_FOLDER_ENV')+current_user.username+'/'+'statistic_'+date+"_"+current_user.username+'__'+str(num)+'.xlsx'
+    template=os.environ.get('EXCEL_FOLDER_ENV')+'default-1.xlsx'
+    wb = openpyxl.load_workbook(template,read_only=False)
     wb.save(folder)
-    wb.create_sheet('Installation')
-    wb.create_sheet('Commissioning')
-    wb.create_sheet('Dismantling')
-    wb.create_sheet('CIA')
-    wb.create_sheet('MPLS')
-    wb.create_sheet('Disruption')
-    wb.save(folder)
-    
-    data=[('Technology', 'Customer','Contract','Hardware','Time','Employee','Subcategory','Additional Info')]
-    for isheet in wb.sheetnames:
 
-        if isheet == 'Review':
-            continue
-        
-        isheet = wb.get_sheet_by_name(isheet)
-        for row in data:
-           isheet.append(row)
-        
-
-    wb.save(folder)
+    return num 
 
     
     
@@ -216,6 +194,15 @@ def return_files_user(filename):
 def return_files_router(filename):
     try:
         return send_file(UPLOAD_FOLDER_CONFIGS+filename , attachment_filename=filename)
+    except Exception as e:
+        return str(e)
+
+
+@bp.route('/return_files_download/<filename>')
+def return_files_download(filename):
+    try:
+        return send_file(os.environ.get('EXCEL_FOLDER_ENV')+current_user.username+'/'+filename)
+
     except Exception as e:
         return str(e)
 

@@ -5,6 +5,21 @@
 
 {% block app_content %}
 
+
+ {% for error in form.contract.errors %}
+           
+<div class="alert alert-danger" role="alert">
+  {{ error }}
+</div>
+
+
+
+
+
+         
+
+ {% endfor %}
+
 <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
 <script type="text/javascript" src="{{url_for('static', filename='locations.js')}}"></script>
@@ -95,7 +110,7 @@
 </button>
 
 
-{{modal('Add Statistic', '-statistic1', wtf.quick_form(form_stat,button_map={'submit' : 'success btn btn-sm'}), style="display:none;" )}}
+{{modal('Add Statistic', '-statistic1', wtf.quick_form(form_stat,button_map={'save' : 'success btn btn-sm'}), style="display:none;" )}}
 
 
 

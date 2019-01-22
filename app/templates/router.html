@@ -27,7 +27,7 @@ $(function() {
            'Today': [momentdt(), momentdt().add(1,'days')],
            'Yesterday': [momentdt().subtract(1, 'days'), momentdt().subtract(1, 'days')],
            'Last 7 Days': [momentdt().subtract(6, 'days'), momentdt().add(1,'days')],
-           'Last 30 Days': [momentdt().subtract(29, 'days'), momentdt()],
+           'Last 30 Days': [momentdt().subtract(29, 'days'), momentdt().add(1,'days')],
            'This Month': [momentdt().startOf('month'), momentdt().endOf('month')],
            'Last Month': [momentdt().subtract(1, 'month').startOf('month'), momentdt().subtract(1, 'month').endOf('month')]
         }

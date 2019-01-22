@@ -52,8 +52,13 @@ class LocationForm(FlaskForm):
     matchcode=StringField(_l('Matchcode'))
     seller=StringField(_l('Seller'))
     vrf=StringField(_l('VRF'))
-    contract=StringField(_l('Contract ID'))
+    contract=StringField(_l('Contract ID'), validators=[DataRequired()])
     submit = SubmitField(_l('Submit'))
+
+    def validate_contract(self, contract):
+        location = Location.query.filter_by(contract=contract.data).first()
+        if location is not None:
+            raise ValidationError(_('Contract already in use!'))
 
 
 class NetworkForm(FlaskForm):
@@ -94,7 +99,7 @@ class StatisticForm(FlaskForm):
     user=StringField(_l('User'), id='stat_user')
     subcategory=SelectField(u'Subcategory', coerce=int, validators=[InputRequired()], id='stat_subcategory')
     
-    submit = SubmitField(_l('Submit'))
+    save = SubmitField(_l('Save'))
 
 class DeleteForm(FlaskForm):
     id_del=IntegerField(_l('ID_DEL'), validators=[DataRequired()])

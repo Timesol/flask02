@@ -17,6 +17,11 @@
 
 
 </div>
+<div id="flex-item-button" class="flex-item">
+  {% if download %}
+  <td><a href="{{ url_for('file.return_files_download', filename='statistic_'+date+'_'+current_user.username+'__'+num+'.xlsx') }}" target="blank">Downloadlink</a></td>
+  {% endif %}
+</div>
 </div>
 
 <p></p>

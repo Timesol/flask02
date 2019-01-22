@@ -1,20 +1,41 @@
 {% extends "base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+{% from "macros.html" import modal with context %}
 
 {% block app_content %}
+
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+ <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+<script type="text/javascript" src="{{url_for('static', filename='locations.js')}}"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="{{url_for('static', filename='jquery.js')}}">\x3C/script>')</script>
+
+<div id="flex-container-location-button" class="flex-container"> 
+<div id="flex-item-location-button" class="flex-item">
+
+<!--Button to Open the Modal -->
+<button type="button" class="btn btn-info btn-sm"  data-toggle="modal" data-target="#modal-location1">
+<span>Add Location</span>
+</button>
+
+{{modal('Add Location', '-location1', wtf.quick_form(form, button_map={'submit' : 'success btn btn-sm'}),'Get BO', style="display:inline;", onclick="scraper()")}}
+
+<a id="button_back" href="{{ url_for('main.customers') }}" class="btn btn-success btn-sm"> <span class="glyphicon glyphicon glyphicon-left"> </span> Back </a>
+
+
+
+</div>
+</div>
+
     <h1>{{ _('Search Results') }}</h1>
     {% for post in posts %}
         {% include '_post.html' %}
     {% endfor %}
 
-  
-    {% for i in location %}
-    {% if i.residence %}
 
-    test
-    {% endif %}
-    <a href="{{ url_for('main.contract',id=i.id) }}">{{i.residence}}</a>
+    
 
-    {% endfor %}
+
 
 
 

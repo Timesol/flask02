@@ -1,3 +1,20 @@
+function get_data(technology, hardware,user,contract,customer){
+
+
+console.log(hardware)
+
+  
+  document.getElementById('stat_technology').value = technology;
+  document.getElementById('stat_hardware').value = hardware;
+  document.getElementById('stat_customer').value = customer;
+  document.getElementById('stat_user').value = user;
+  document.getElementById('stat_contract').value = contract;
+  
+  
+
+   
+
+}
 
 
 
@@ -483,8 +500,10 @@ $(document).ready(function(){
 
 
 
-document.getElementById("send").setAttribute("data-dismiss","modal");
+
 document.getElementById("file").setAttribute("class","btn btn-sm btn-primary")
+var label = $("label:contains('File Upload')");
+label.addClass("btn btn-primary btn-sm");
 
 
 
@@ -494,5 +513,16 @@ document.getElementById("file").setAttribute("class","btn btn-sm btn-primary")
 
 
 });
+
+
+$('#send').click(function() {
+
+
+ $('#modal-script1').modal('hide');
+
+
+
+});
+
 
 

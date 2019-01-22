@@ -175,6 +175,7 @@ def scripter():
 @bp.route('/statistics/<username>' ,methods=['GET', 'POST'])
 @login_required
 def statistics(username):
+    date=datetime.today().strftime('%d-%m-%Y')
     form_del=DeleteForm()
     form_byTime=StatbyTimeForm()
     
@@ -243,7 +244,7 @@ def statistics(username):
                 
             barchart_byTime(sm,sd,sy,em,ed,ey)
             return render_template('statistics.html', user=user, stats=stats, form_del=form_del,
-                           form_byTime=form_byTime)
+                           form_byTime=form_byTime,date=date)
 
 
 
@@ -266,11 +267,12 @@ def statistics(username):
 
                 page = request.args.get('page', 1, type=int)
                 stats=statistic_byTime(sm,sd,sy,em,ed,ey)
-                date=datetime.today().strftime('%d-%m-%Y')
+                
 
-                expynew(date)
+                num=expynew(date)
+                num=str(num)
                 for i in stats:
-                    expy(i.category.name,i.subcategory.name,i.hardware,i.user,i.technology,i.customer,i.contract,i.time,date)
+                    expy(i.category.name,i.subcategory.name,i.hardware,i.user,i.technology,i.customer,i.contract,i.time,date,num)
 
                         
     
@@ -282,12 +284,15 @@ def statistics(username):
                 prev_url = url_for('data.statistics',username=current_user.username, page=stats.prev_num) \
                     if stats.has_prev else None
                 barchart_byTime(sm,sd,sy,em,ed,ey)
+                download=True
+                return render_template('statistics.html', user=user, stats=stats.items, form_del=form_del,next_url=next_url,
+                           prev_url=prev_url,form_byTime=form_byTime,date=date,download=download,num=num)
 
 
 
              
         return render_template('statistics.html', user=user, stats=stats.items, form_del=form_del,next_url=next_url,
-                           prev_url=prev_url,form_byTime=form_byTime)
+                           prev_url=prev_url,form_byTime=form_byTime,date=date,num=num)
 
 
 
@@ -316,7 +321,7 @@ def statistics(username):
 
 
     return render_template('statistics.html', user=user, stats=stats.items, form_del=form_del,next_url=next_url,
-                           prev_url=prev_url,form_byTime=form_byTime)
+                           prev_url=prev_url,form_byTime=form_byTime,date=date)
 
 
 

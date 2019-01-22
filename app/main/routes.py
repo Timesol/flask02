@@ -90,7 +90,7 @@ def index():
 
 
 
-@bp.route('/search')
+@bp.route('/search', methods=['GET', 'POST'])
 @login_required
 def search():
     if not g.search_form.validate():
@@ -101,6 +101,36 @@ def search():
     location, total=Location.search(g.search_form.q.data,page,current_app.config['POSTS_PER_PAGE'])
     loc=location.first()
 
+    available_customers=Customer.query.all()
+    customer_list=[(i.id,i.name) for i in available_customers]
+
+    
+    
+
+    
+    
+    form= LocationForm()
+    form.customer.choices = customer_list
+    if form.validate_on_submit():
+            
+            location = Location(residence=form.residence.data, technology=form.technology.data,
+            project=form.project.data, projectmanager=form.projectmanager.data, contract= form.contract.data,contact=form.contact.data,
+            vrf=form.vrf.data,seller=form.seller.data,sid=form.sid.data,matchcode=form.matchcode.data)
+    
+            if form.hardware.data:
+                hardware=form.hardware.data
+                hardware=hardware.split(":")
+                hardware=Hardware(name=hardware[0], sn=hardware[1])
+                db.session.add(hardware)
+                location.hardware.append(hardware)
+            db.session.commit()
+            db.session.add(location)
+            customer=Customer.query.get(form.customer.data)
+            customer.locations.append(location)
+            db.session.commit()
+            flash(_('Your changes have been saved!'))
+            return redirect(url_for('main.contract',id=location.id))
+
     if loc is not None:
         return redirect(url_for('main.contract',id=loc.id))
 
@@ -110,7 +140,7 @@ def search():
     prev_url = url_for('main.search', q=g.search_form.q.data, page=page - 1) \
         if page > 1 else None
     return render_template('search.html', title=_('Search'), posts=posts,location=location,
-                           next_url=next_url, prev_url=prev_url)
+                           next_url=next_url, prev_url=prev_url, form=form)
 
 
 
@@ -181,6 +211,17 @@ def locations(customername):
 
     
     if form_stat.validate_on_submit():
+
+        
+        dict_class=form_stat.__dict__
+        list_class=[]
+        for i in dict_class:
+            datat=getattr(form_stat, i)
+            print(datat.data)
+            if '_' not in i:
+                list_class.append(i)
+        
+            
         statistic_db=Statistic(technology=form_stat.technology.data, time=form_stat.time.data,customer=form_stat.customer.data, contract=form_stat.contract.data,
             hardware=form_stat.hardware.data, user=form_stat.user.data)
 
@@ -190,21 +231,10 @@ def locations(customername):
         user.statistics.append(statistic_db)
         category=Category.query.get(form_stat.category.data)
         subcategory=Subcategory.query.get(form_stat.subcategory.data)
-
         category.statistics.append(statistic_db)
         subcategory.statistics.append(statistic_db)
         db.session.commit()
 
-        cat=form_stat.category.data
-        scat=Subcategory.query.get(form_stat.subcategory.data).name
-        cat=Category.query.get(form_stat.category.data).name
-        hard=form_stat.hardware.data
-        user_data=form_stat.user.data
-        tech=form_stat.technology.data
-        cust=form_stat.customer.data
-        contr=form_stat.contract.data
-        time=form_stat.time.data
-        now = datetime.today().strftime('%d-%m-%Y')
         
         return redirect(url_for('main.locations',customername=customername))
 
@@ -319,6 +349,13 @@ def contract(id):
     available_templates=Template.query.all()
     templates_list=[(i.id,i.name) for i in available_templates]
 
+    available_categorys=Category.query.all()
+    category_list=[(i.id,i.name) for i in available_categorys]
+
+    available_subcategorys=Subcategory.query.all()
+    subcategory_list=[(i.id,i.name) for i in available_subcategorys]
+
+
     form=NetworkForm()
     form_del=DeleteForm()
     form_info=InfoForm()
@@ -328,10 +365,13 @@ def contract(id):
     form_get_nets=GetNetworksForm()
     form_journal=JournalForm()
     form_router=RouterForm()
+    form_stat=StatisticForm()
 
     
     form_script.script.choices=scripts_list
     form_template.name.choices=templates_list
+    form_stat.category.choices=category_list
+    form_stat.subcategory.choices=subcategory_list
 
     if form_get_nets.validate_on_submit():
         if form_get_nets.get.data:
@@ -412,8 +452,8 @@ def contract(id):
             script_name=Script.query.get(script_id).name
             script_name='Script_'+script_name+'.txt'
             script=render_template('scripts/'+script_name, contract=contract)
-            connector=form_script.connector.data
-            result=if_connector(connector,script)  
+            connector_var=form_script.connector.data
+            result=if_connector(connector_var,script)  
             findresult=result.find('terminal length 0')
             result=result[findresult::]
             print ('Ergebnis '+ result)
@@ -463,6 +503,36 @@ def contract(id):
             db.session.commit()
 
 
+    if form_stat.validate_on_submit():
+         if form_stat.save.data:
+            statistic_db=Statistic(technology=form_stat.technology.data, time=form_stat.time.data,customer=form_stat.customer.data, contract=form_stat.contract.data,
+                hardware=form_stat.hardware.data, user=form_stat.user.data)
+    
+            db.session.add(statistic_db)
+            db.session.commit()
+            user=User.query.filter_by(username=current_user.username).first()
+            user.statistics.append(statistic_db)
+            category=Category.query.get(form_stat.category.data)
+            subcategory=Subcategory.query.get(form_stat.subcategory.data)
+    
+            category.statistics.append(statistic_db)
+            subcategory.statistics.append(statistic_db)
+            db.session.commit()
+    
+            cat=form_stat.category.data
+            scat=Subcategory.query.get(form_stat.subcategory.data).name
+            cat=Category.query.get(form_stat.category.data).name
+            hard=form_stat.hardware.data
+            user_data=form_stat.user.data
+            tech=form_stat.technology.data
+            cust=form_stat.customer.data
+            contr=form_stat.contract.data
+            time=form_stat.time.data
+            now = datetime.today().strftime('%d-%m-%Y')
+            
+            return redirect(url_for('main.contract',id=contract.id))
+
+
 
 
     
@@ -479,7 +549,8 @@ def contract(id):
     return render_template('contract.html',form_script=form_script, contract=contract, 
         form=form, form_del=form_del, form_info=form_info, infos_t=infos_t, form_remove=form_remove,
         form_template=form_template,journs=journs.items, form_journal=form_journal,next_url=next_url,
-        prev_url=prev_url,form_get_nets=form_get_nets,dict_data=dict_data,form_router=form_router)
+        prev_url=prev_url,form_get_nets=form_get_nets,dict_data=dict_data,form_router=form_router,
+        form_stat=form_stat)
 
 
 @bp.route('/append_all',methods=['GET', 'POST'])
