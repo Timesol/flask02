@@ -42,6 +42,8 @@ from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, \
 import time
 from app.functions.get_journals import get_bo_journals
 from datetime import datetime
+import inspect
+import wtforms
 
 
 
@@ -214,16 +216,27 @@ def locations(customername):
 
         
         dict_class=form_stat.__dict__
-        list_class=[]
+        dict_class2={}
         for i in dict_class:
-            datat=getattr(form_stat, i)
-            print(datat.data)
+            
             if '_' not in i:
-                list_class.append(i)
+                
+                data=getattr(form_stat, i)
+                
+                try:
+                    dict_class2[i]=data.data
+                except:
+                    print('wrong type')
+
+        dict_class2.pop('save')
+        dict_class2.pop('category')
+        dict_class2.pop('subcategory')
+
+
         
             
-        statistic_db=Statistic(technology=form_stat.technology.data, time=form_stat.time.data,customer=form_stat.customer.data, contract=form_stat.contract.data,
-            hardware=form_stat.hardware.data, user=form_stat.user.data)
+                
+        statistic_db=Statistic(**dict_class2)
 
         db.session.add(statistic_db)
         db.session.commit()
