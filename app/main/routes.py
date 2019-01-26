@@ -44,7 +44,8 @@ from app.functions.get_journals import get_bo_journals
 from datetime import datetime
 import inspect
 import wtforms
-
+from sqlalchemy.inspection import inspect
+from app.functions.save_db import add_cols
 
 
 
@@ -171,9 +172,18 @@ def customers():
     
 
     if form.validate_on_submit():
+
+
+
+
         custname=Customer(name=form.name.data)
         db.session.add(custname)
         db.session.commit()
+
+
+
+
+
         flash(_('Your changes have been saved.'))
         return redirect(url_for('main.locations',customername=custname.name))
 
@@ -214,39 +224,8 @@ def locations(customername):
     
     if form_stat.validate_on_submit():
 
-        
-        dict_class=form_stat.__dict__
-        dict_class2={}
-        for i in dict_class:
-            
-            if '_' not in i:
-                
-                data=getattr(form_stat, i)
-                
-                try:
-                    dict_class2[i]=data.data
-                except:
-                    print('wrong type')
 
-        dict_class2.pop('save')
-        dict_class2.pop('category')
-        dict_class2.pop('subcategory')
-
-
-        
-            
-                
-        statistic_db=Statistic(**dict_class2)
-
-        db.session.add(statistic_db)
-        db.session.commit()
-        user=User.query.filter_by(username=current_user.username).first()
-        user.statistics.append(statistic_db)
-        category=Category.query.get(form_stat.category.data)
-        subcategory=Subcategory.query.get(form_stat.subcategory.data)
-        category.statistics.append(statistic_db)
-        subcategory.statistics.append(statistic_db)
-        db.session.commit()
+        add_cols(Statistic, form_stat, User, Category, Subcategory)
 
         
         return redirect(url_for('main.locations',customername=customername))
