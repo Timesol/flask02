@@ -172,20 +172,9 @@ def customers():
     
 
     if form.validate_on_submit():
-
-
-
-
-        custname=Customer(name=form.name.data)
-        db.session.add(custname)
-        db.session.commit()
-
-
-
-
-
+        obj_data=add_cols(Customer, form)
         flash(_('Your changes have been saved.'))
-        return redirect(url_for('main.locations',customername=custname.name))
+        return redirect(url_for('main.locations',customername=obj_data.name))
 
     return render_template('customers.html', title=_('Customers'), custquerys=custquerys, form=form)
 
@@ -225,7 +214,8 @@ def locations(customername):
     if form_stat.validate_on_submit():
 
 
-        add_cols(Statistic, form_stat, User, Category, Subcategory)
+        obj_data=add_cols(Statistic, form_stat, User, Category, Subcategory)
+        flash(_('Your changes have been saved!'))
 
         
         return redirect(url_for('main.locations',customername=customername))
@@ -234,23 +224,12 @@ def locations(customername):
     
     if form.validate_on_submit():
         
-        location = Location(residence=form.residence.data, technology=form.technology.data,
-        project=form.project.data, projectmanager=form.projectmanager.data, contract= form.contract.data,contact=form.contact.data,
-        vrf=form.vrf.data,seller=form.seller.data,sid=form.sid.data,matchcode=form.matchcode.data)
 
-        if form.hardware.data:
-            hardware=form.hardware.data
-            hardware=hardware.split(":")
-            hardware=Hardware(name=hardware[0], sn=hardware[1])
-            db.session.add(hardware)
-            location.hardware.append(hardware)
-        db.session.commit()
-        db.session.add(location)
-        customer=Customer.query.get(form.customer.data)
-        customer.locations.append(location)
-        db.session.commit()
+        obj_data=add_cols(Location, form, Customer, custom_field=Hardware )
+        
+      
         flash(_('Your changes have been saved!'))
-        return redirect(url_for('main.contract',id=location.id))
+        return redirect(url_for('main.contract',id=obj_data.id))
 
     return render_template('locations.html', customer=customer, locations=locations,form_stat=form_stat, form_del=form_del, form=form)
     

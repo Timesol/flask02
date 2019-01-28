@@ -55,10 +55,13 @@ from sqlalchemy.inspection import inspect
 
 
 
-def add_cols(main_db, form_instance,*sub_dbs):
+def add_cols( main_db, form_instance,*sub_dbs, custom_field=None):
     strings_in_db=[]
     foreignkeys_in_db=[]
-    list_buttons=['save','submit','send','delete']
+    list_buttons=['save','submit','send','delete','hardware']
+    
+    
+
     db_name=main_db.__name__
    
                
@@ -141,12 +144,16 @@ def add_cols(main_db, form_instance,*sub_dbs):
         
 
     for i in dblist:
+
         if i == User:
             user=User.query.filter_by(username=current_user.username).first()
             getattr(user, db_name_string).append(obj_data)
+        else:
+            k=getattr(form_instance, str(i.__name__).lower()).data
+            print(k)
 
-        y=getattr(i, 'query').get(form_instance.category.data)
-        getattr(y, db_name_string).append(obj_data)
+            y=getattr(i, 'query').get(k)
+            getattr(y, db_name_string).append(obj_data)
 
        
     db.session.commit()
@@ -165,7 +172,7 @@ def add_cols(main_db, form_instance,*sub_dbs):
 
 
 
-    return 'works'
+    return obj_data
 
 
 
@@ -173,6 +180,18 @@ def entries_to_remove(entries, dict_data):
     for key in entries:
         if key in dict_data:
             del dict_data[key]
+
+
+def non_custom_entry(main_db, form_instance):
+
+    if getattr(form_instance, 'hardware').data:
+            form=form_instance
+            hardware=form.hardware.data
+            hardware=hardware.split(":")
+            hardware=Hardware(name=hardware[0], sn=hardware[1])
+            db.session.add(hardware)
+            location.hardware.append(hardware)
+            db.session.commit()
 
 
 
